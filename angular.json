@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "m1p13mean-front": {
+    "front": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -17,7 +17,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/m1p13mean-front",
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -26,7 +25,9 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/styles.css", "node_modules/@fortawesome/fontawesome-free/css/all.min.css"]
+            "styles": [
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -56,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "m1p13mean-front:build:production"
+              "buildTarget": "front:build:production"
             },
             "development": {
-              "buildTarget": "m1p13mean-front:build:development"
+              "buildTarget": "front:build:development"
             }
           },
           "defaultConfiguration": "development"
