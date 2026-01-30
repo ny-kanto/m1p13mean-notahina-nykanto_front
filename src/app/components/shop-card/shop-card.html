@@ -1,4 +1,4 @@
-<div class="shop-card">
+<div class="shop-card" tabindex="0">
   <div class="shop-image">
     <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500" alt="Boutique">
     <span class="category-tag">{{ boutique.categorie }}</span>
@@ -8,19 +8,23 @@
   <div class="shop-info">
     <div class="header-info">
       <h3>{{ boutique.nom }}</h3>
-      <span class="floor-tag">Étage {{ boutique.etage }}</span>
+      <span class="floor-tag">
+        <i class="fas fa-building"></i> Étage {{ boutique.etage }}
+      </span>
     </div>
 
     <div class="details">
       <p class="horaires">
-        🕒 {{ boutique.horaires.ouverture }} - {{ boutique.horaires.fermeture }}
+        <i class="far fa-clock"></i> {{ boutique.horaires.ouverture }} - {{ boutique.horaires.fermeture }}
       </p>
       <p class="contact">
-        📧 {{ boutique.contact.email }} <br>
-        📞 {{ boutique.contact.tel }}
+        <i class="far fa-envelope"></i> {{ boutique.contact.email }} <br>
+        <i class="fas fa-phone"></i> {{ boutique.contact.tel }}
       </p>
     </div>
 
-    <button class="btn-view">Consulter les articles</button>
+    <button class="btn-view">
+      <i class="fas fa-shopping-bag"></i> Consulter les articles
+    </button>
   </div>
 </div>

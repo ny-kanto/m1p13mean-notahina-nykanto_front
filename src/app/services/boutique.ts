@@ -8,7 +8,7 @@ import { Boutique } from '../interface/boutique';
   providedIn: 'root'
 })
 export class BoutiqueService {
-  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
+  private apiUrl = 'http://localhost:3000/boutiques';
 
   constructor(private http: HttpClient) { }
 

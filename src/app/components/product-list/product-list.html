@@ -1,0 +1,220 @@
+<!-- Header avec bouton Ajouter -->
+<div class="header-section">
+  <div class="header-left">
+    <h1><i class="fas fa-boxes"></i> Liste des Produits</h1>
+    <p class="subtitle">{{ products.length }} produit(s) au total</p>
+  </div>
+  <div class="header-right">
+    <button class="btn-add" (click)="openAddModal()">
+      <i class="fas fa-plus-circle"></i> Ajouter un produit
+    </button>
+  </div>
+</div>
+
+<!-- État de chargement -->
+@if (isLoading) {
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Chargement des produits...</p>
+  </div>
+}
+
+<!-- Message d'erreur -->
+@if (errorMessage && !isLoading) {
+  <div class="error-state">
+    <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+    <h3>Erreur</h3>
+    <p>{{ errorMessage }}</p>
+    <button class="btn-retry" (click)="loadProducts()">
+      <i class="fas fa-redo"></i> Réessayer
+    </button>
+  </div>
+}
+
+<!-- Tableau des produits -->
+@if (!isLoading && !errorMessage) {
+  <div class="table-container">
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-tag"></i> Nom</th>
+          <th>Prix Unitaire (Ar)</th>
+          <th><i class="fas fa-boxes"></i> Stock</th>
+          <th><i class="fas fa-cogs"></i> Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products; track product._id) {
+          <tr class="product-row">
+            <!-- Nom -->
+            <td class="td-name">
+              <strong>{{ product.nom }}</strong>
+            </td>
+
+            <!-- Prix -->
+            <td class="td-price">
+              <span class="price-tag">{{ product.prix }}</span>
+            </td>
+
+            <!-- Stock -->
+            <td class="td-stock">
+              <span class="stock-badge" [ngClass]="getStockClass(product.stock)">
+                {{ product.stock }}
+              </span>
+            </td>
+
+            <!-- Actions -->
+            <td class="td-actions">
+              <div class="action-buttons">
+                <!-- Bouton Détails -->
+                <button
+                  class="btn-icon btn-details"
+                  (click)="viewDetails(product)"
+                  title="Voir les détails"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+
+                <!-- Bouton Modifier -->
+                <button class="btn-icon btn-edit" (click)="openEditModal(product)" title="Modifier">
+                  <i class="fas fa-edit"></i>
+                </button>
+
+                <!-- Bouton Supprimer -->
+                <button
+                  class="btn-icon btn-delete"
+                  (click)="deleteProduct(product)"
+                  title="Supprimer"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+
+        <!-- Message si aucun produit -->
+        @if (products.length === 0) {
+          <tr class="empty-row">
+            <td colspan="4" class="text-center">
+              <div class="empty-state">
+                <p><i class="fas fa-inbox"></i> Aucun produit pour le moment</p>
+                <button class="btn-add-small" (click)="openAddModal()">
+                  <i class="fas fa-plus"></i> Ajouter le premier produit
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}
+
+<!-- MODAL pour Ajouter / Modifier -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <!-- Header Modal -->
+      <div class="modal-header">
+        <h2>
+          @if (modalMode === 'add') {
+            <i class="fas fa-plus-circle"></i> Ajouter un produit
+          } @else {
+            <i class="fas fa-edit"></i> Modifier le produit
+          }
+        </h2>
+        <button class="btn-close" (click)="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Body Modal - Formulaire -->
+      <div class="modal-body">
+        <form (ngSubmit)="submitForm()">
+          <!-- Nom du produit -->
+          <div class="form-group">
+            <label for="nom"> <i class="fas fa-tag"></i> Nom du produit * </label>
+            <input
+              type="text"
+              id="nom"
+              [(ngModel)]="productForm.nom"
+              name="nom"
+              required
+              placeholder="Ex: Pantalon Oversize"
+            />
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="description"> <i class="fas fa-align-left"></i> Description </label>
+            <textarea
+              id="description"
+              [(ngModel)]="productForm.description"
+              name="description"
+              rows="3"
+              placeholder="Décrivez le produit..."
+            ></textarea>
+          </div>
+
+          <!-- Prix et Stock -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="prix"> Prix (Ar) * </label>
+              <input
+                type="number"
+                id="prix"
+                [(ngModel)]="productForm.prix"
+                name="prix"
+                step="0.01"
+                min="0"
+                required
+                placeholder="30000"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="stock"> <i class="fas fa-boxes"></i> Stock * </label>
+              <input
+                type="number"
+                id="stock"
+                [(ngModel)]="productForm.stock"
+                name="stock"
+                min="0"
+                required
+                placeholder="60"
+              />
+            </div>
+          </div>
+
+          <!-- Upload Image -->
+          <div class="form-group">
+            <label for="image"> <i class="fas fa-image"></i> Image du produit (max 5) </label>
+            <input
+              type="file"
+              id="images"
+              name="images"
+              accept="image/*"
+              multiple
+              (change)="onImagesSelected($event)"
+            />
+            <p class="help-text">
+              <i class="fas fa-info-circle"></i>
+              Vous pouvez sélectionner plusieurs images en maintenant Ctrl/Cmd
+            </p>
+          </div>
+
+          <!-- Boutons du formulaire -->
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="closeModal()">
+              <i class="fas fa-times"></i> Annuler
+            </button>
+            <button type="submit" class="btn-submit">
+              <i class="fas fa-check"></i> {{ modalMode === 'add' ? 'Ajouter' : 'Modifier' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

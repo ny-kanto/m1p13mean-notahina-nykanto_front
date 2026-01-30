@@ -1,0 +1,5 @@
+<div class="shop-grid">
+  @for (item of shops; track item._id ?? $index) {
+    <app-shop-card [boutique]="item"></app-shop-card>
+  }
+</div>
