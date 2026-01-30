@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "front": {
+    "m1p13mean-front": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -57,10 +57,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "front:build:production"
+              "buildTarget": "m1p13mean-front:build:production"
             },
             "development": {
-              "buildTarget": "front:build:development"
+              "buildTarget": "m1p13mean-front:build:development"
             }
           },
           "defaultConfiguration": "development"
