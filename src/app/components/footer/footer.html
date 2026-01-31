@@ -1,0 +1,101 @@
+<!-- footer.component.html -->
+<footer class="footer">
+  <div class="footer-container">
+
+    <!-- Section 1 : À propos -->
+    <div class="footer-section">
+      <h3><i class="fas fa-building"></i> Akoor Shopping</h3>
+      <p class="footer-description">
+        Votre centre commercial de référence à Madagascar.
+        Découvrez nos boutiques, nos promotions et vivez une expérience shopping unique.
+      </p>
+      <div class="social-links">
+        @for (social of socialLinks; track social.url) {
+          <a
+            [href]="social.url"
+            [title]="social.label"
+            class="social-icon"
+            target="_blank"
+          >
+            <i [class]="social.icon"></i>
+          </a>
+        }
+      </div>
+    </div>
+
+    <!-- Section 2 : Liens rapides -->
+    <div class="footer-section">
+      <h3><i class="fas fa-link"></i> Liens rapides</h3>
+      <ul class="footer-links">
+        @for (link of quickLinks; track link.route) {
+          <li>
+            <a [routerLink]="link.route">
+              <i class="fas fa-chevron-right"></i>
+              {{ link.label }}
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <!-- Section 3 : Contact -->
+    <div class="footer-section">
+      <h3><i class="fas fa-envelope"></i> Contact</h3>
+      <ul class="contact-info">
+        <li>
+          <i class="fas fa-map-marker-alt"></i>
+          Antananarivo, Madagascar
+        </li>
+        <li>
+          <i class="fas fa-phone"></i>
+          +261 34 XX XXX XX
+        </li>
+        <li>
+          <i class="fas fa-envelope"></i>
+          contact@akoor.mg
+        </li>
+        <li>
+          <i class="fas fa-clock"></i>
+          Lun - Sam : 9h - 20h
+        </li>
+      </ul>
+    </div>
+
+    <!-- Section 4 : Développeurs -->
+    <div class="footer-section">
+      <h3><i class="fas fa-code"></i> Développé par</h3>
+      <div class="developers">
+        @for (student of students; track student.name) {
+          <div class="developer-card">
+            <div class="developer-avatar">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+            <div class="developer-info">
+              <p class="developer-name">{{ student.name }}</p>
+              <p class="developer-role">{{ student.role }}</p>
+            </div>
+          </div>
+        }
+      </div>
+      <p class="project-info">
+        <i class="fas fa-graduation-cap"></i>
+        Projet MEAN - Master 1 P13
+      </p>
+    </div>
+
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer-bottom">
+    <div class="footer-container">
+      <p class="copyright">
+        &copy; {{ currentYear }} Akoor Shopping Center. Tous droits réservés.
+      </p>
+      <p class="tech-stack">
+        Développé avec
+        <i class="fas fa-heart text-red"></i>
+        en MEAN Stack (MongoDB, Express, Angular, Node.js)
+      </p>
+    </div>
+  </div>
+</footer>
