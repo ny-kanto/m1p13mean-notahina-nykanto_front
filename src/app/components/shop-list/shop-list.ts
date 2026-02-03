@@ -3,11 +3,15 @@ import { Boutique } from '../../interface/boutique';
 import { BoutiqueService } from '../../services/boutique';
 import { CommonModule } from '@angular/common';
 import { ShopCardComponent } from '../shop-card/shop-card';
+import { Footer } from "../footer/footer";
+import { HeaderCenter } from "../header-center/header-center";
+import { HeaderBoutique } from "../header-boutique/header-boutique";
+import { HeaderClient } from '../header-client/header-client';
 
 @Component({
   selector: 'app-shop-list',
   standalone: true,
-  imports: [CommonModule, ShopCardComponent],
+  imports: [CommonModule, ShopCardComponent, Footer, HeaderCenter, HeaderBoutique, HeaderClient],
   templateUrl: './shop-list.html',
   styleUrl: './shop-list.css',
 })

@@ -1,0 +1,168 @@
+<!-- product-detail.component.html -->
+<div class="product-detail-container">
+
+  <!-- Bouton retour -->
+  <button class="btn-back" (click)="goBack()">
+    <i class="fas fa-arrow-left"></i>
+    Retour à la liste
+  </button>
+
+  <!-- État de chargement -->
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement du produit...</p>
+    </div>
+  }
+
+  <!-- Message d'erreur -->
+  @if (errorMessage && !isLoading) {
+    <div class="error-state">
+      <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+      <h3>Erreur</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn-retry" (click)="loadProduct()">
+        <i class="fas fa-redo"></i> Réessayer
+      </button>
+    </div>
+  }
+
+  <!-- Détails du produit -->
+  @if (product && !isLoading && !errorMessage) {
+    <div class="product-detail-content">
+
+      <!-- Colonne gauche : Galerie d'images -->
+      <div class="product-gallery">
+
+        <!-- Image principale -->
+        <div class="main-image-container">
+          @if (product.images && product.images.length > 0) {
+            <img
+              [src]="product.images[selectedImageIndex]"
+              [alt]="product.nom"
+              class="main-image"
+            >
+
+            <!-- Boutons navigation -->
+            @if (product.images.length > 1) {
+              <button class="nav-btn prev-btn" (click)="previousImage()">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="nav-btn next-btn" (click)="nextImage()">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            }
+          } @else {
+            <img
+              src="https://via.placeholder.com/600x600?text=Aucune+image"
+              alt="Pas d'image"
+              class="main-image"
+            >
+          }
+        </div>
+
+        <!-- Miniatures -->
+        @if (product.images && product.images.length > 1) {
+          <div class="thumbnails">
+            @for (image of product.images; track $index) {
+              <div
+                class="thumbnail"
+                [class.active]="selectedImageIndex === $index"
+                (click)="selectImage($index)"
+              >
+                <img [src]="image" [alt]="product.nom + ' - Image ' + ($index + 1)">
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Colonne droite : Informations -->
+      <div class="product-info">
+
+        <!-- Nom du produit -->
+        <h1 class="product-name">{{ product.nom }}</h1>
+
+        <!-- Prix -->
+        <div class="product-price">
+          <span class="price-amount">{{ product.prix }}</span>
+          <span class="currency">Ar</span>
+        </div>
+
+        <!-- Disponibilité -->
+        <div class="availability">
+          <span class="availability-badge" [ngClass]="getStockClass()">
+            <i class="fas fa-box"></i>
+            {{ getStockText() }}
+          </span>
+        </div>
+
+        <!-- Séparateur -->
+        <hr class="divider">
+
+        <!-- Description -->
+        <div class="product-description">
+          <h3><i class="fas fa-align-left"></i> Description</h3>
+          @if (product.description) {
+            <p>{{ product.description }}</p>
+          } @else {
+            <p class="no-description">Aucune description disponible</p>
+          }
+        </div>
+
+        <!-- Détails techniques -->
+        <div class="product-details">
+          <h3><i class="fas fa-info-circle"></i> Détails</h3>
+          <ul class="details-list">
+            <li>
+              <span class="detail-label">Référence :</span>
+              <span class="detail-value">{{ product._id }}</span>
+            </li>
+            <li>
+              <span class="detail-label">Stock disponible :</span>
+              <span class="detail-value">{{ product.stock }} unités</span>
+            </li>
+            <li>
+              <span class="detail-label">Prix unitaire :</span>
+              <span class="detail-value">{{ product.prix }} Ar</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Séparateur -->
+        <hr class="divider">
+
+        <!-- Actions -->
+        <div class="product-actions">
+          <button class="btn-primary">
+            <i class="fas fa-shopping-cart"></i>
+            Ajouter au panier
+          </button>
+          <button class="btn-secondary">
+            <i class="fas fa-heart"></i>
+            Ajouter aux favoris
+          </button>
+        </div>
+
+        <!-- Informations supplémentaires -->
+        <div class="additional-info">
+          <div class="info-item">
+            <i class="fas fa-truck"></i>
+            <span>Livraison disponible</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-undo"></i>
+            <span>Retour sous 7 jours</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Paiement sécurisé</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  }
+
+</div>

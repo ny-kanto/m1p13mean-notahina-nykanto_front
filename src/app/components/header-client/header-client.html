@@ -1,0 +1,85 @@
+<!-- header-client.component.html -->
+<header class="header header-client">
+  <div class="header-container">
+
+    <!-- Logo et nom -->
+    <div class="header-left">
+      <div class="logo">
+        <i class="fas fa-shopping-bag"></i>
+      </div>
+      <div class="brand">
+        <h1>{{ centreName }}</h1>
+      </div>
+    </div>
+
+    <!-- Navigation principale -->
+    <nav class="header-nav">
+      @for (item of menuItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <!-- Actions utilisateur -->
+    <div class="header-right">
+
+      <!-- Panier -->
+      <button class="btn-icon" title="Mon panier">
+        <i class="fas fa-shopping-cart"></i>
+        @if (cartItemsCount > 0) {
+          <span class="badge">{{ cartItemsCount }}</span>
+        }
+      </button>
+
+      <!-- Favoris -->
+      <button class="btn-icon" title="Mes favoris">
+        <i class="fas fa-heart"></i>
+      </button>
+
+      <!-- Menu utilisateur -->
+      <div class="user-menu-container">
+        <button class="user-button" (click)="toggleUserMenu()">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <span class="user-name">Mon compte</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <!-- Dropdown -->
+        @if (showUserMenu) {
+          <div class="user-dropdown">
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-user-circle"></i>
+              Mon profil
+            </a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-box"></i>
+              Mes commandes
+            </a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-heart"></i>
+              Mes favoris
+            </a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-cog"></i>
+              Paramètres
+            </a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Déconnexion
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</header>

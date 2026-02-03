@@ -1,3 +1,9 @@
+<!-- <app-header-center></app-header-center> -->
+
+<!-- <app-header-boutique></app-header-boutique> -->
+
+<app-header-client></app-header-client>
+
 <div class="shop-grid">
   @for (item of shops; track item._id ?? $index) {
     <app-shop-card [boutique]="item"></app-shop-card>

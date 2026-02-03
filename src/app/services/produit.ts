@@ -8,7 +8,7 @@ import { Produit } from '../interface/produit';
   providedIn: 'root',
 })
 export class ProduitService {
-  private apiUrl = 'http://localhost:3000/produits';
+  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/produits';
 
   constructor(private http: HttpClient) {}
 

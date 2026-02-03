@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Produit } from '../../interface/produit';
 import { ProduitService } from '../../services/produit';
 import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -46,6 +46,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private productService: ProduitService,
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -204,7 +205,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
           this.closeModal();
           this.cdr.detectChanges();
-          alert('✅ Produit modifié avec succès !');
+          //   alert('✅ Produit modifié avec succès !');
         },
         error: (error) => {
           console.error('Erreur:', error);
@@ -214,38 +215,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Supprimer un produit
-   */
-  deleteProduct(product: Produit): void {
-    if (!product._id) return;
-
-    const confirmation = confirm(`Voulez-vous vraiment supprimer "${product.nom}" ?`);
-    if (!confirmation) return;
-
-    this.productService
-      .deleteProduct(product._id)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: () => {
-          console.log('Produit supprimé');
-          this.products = this.products.filter((p) => p._id !== product._id);
-          alert('✅ Produit supprimé avec succès !');
-        },
-        error: (error) => {
-          console.error('Erreur:', error);
-          alert('❌ Erreur lors de la suppression');
-        },
-      });
-  }
-
-  /**
-   * Voir les détails (navigation future)
+   * Voir les détails
    */
   viewDetails(product: Produit): void {
-    console.log('Voir détails de:', product);
-    alert(`Détails de: ${product.nom}\nPrix: ${product.prix}€\nStock: ${product.stock}`);
-    // TODO: Navigation vers page détails
-    // this.router.navigate(['/produits', product._id]);
+    console.log('Navigation vers détails de:', product);
+    // Navigation vers la page détails
+    this.router.navigate(['/produit-boutique', product._id]);
   }
 
   /**

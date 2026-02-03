@@ -1,0 +1,71 @@
+<!-- header-boutique.component.html -->
+<header class="header header-boutique">
+  <div class="header-container">
+
+    <!-- Logo et nom de la boutique -->
+    <div class="header-left">
+      <div class="logo">
+        <i class="fas fa-store"></i>
+      </div>
+      <div class="brand">
+        <h1>{{ shopName }}</h1>
+        <span class="role-badge">Boutique</span>
+      </div>
+    </div>
+
+    <!-- Navigation principale -->
+    <nav class="header-nav">
+      @for (item of menuItems; track item.route) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          <i [class]="item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <!-- Actions utilisateur -->
+    <div class="header-right">
+
+      <!-- Notifications -->
+      <button class="btn-icon" title="Notifications">
+        <i class="fas fa-bell"></i>
+        <span class="badge">5</span>
+      </button>
+
+      <!-- Menu utilisateur -->
+      <div class="user-menu-container">
+        <button class="user-button" (click)="toggleUserMenu()">
+          <div class="user-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <span class="user-name">Gérant</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+
+        <!-- Dropdown -->
+        @if (showUserMenu) {
+          <div class="user-dropdown">
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-user-circle"></i>
+              Mon profil
+            </a>
+            <a href="#" class="dropdown-item">
+              <i class="fas fa-cog"></i>
+              Paramètres
+            </a>
+            <hr class="dropdown-divider">
+            <button class="dropdown-item" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i>
+              Déconnexion
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</header>
