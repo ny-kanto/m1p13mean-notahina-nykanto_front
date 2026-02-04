@@ -5,11 +5,12 @@ import { catchError, retry } from 'rxjs/operators';
 import { Boutique } from '../interface/boutique';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BoutiqueService {
+  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Récupérer toutes les boutiques
@@ -17,7 +18,7 @@ export class BoutiqueService {
   getBoutiques(): Observable<Boutique[]> {
     return this.http.get<Boutique[]>(this.apiUrl).pipe(
       retry(2), // Réessaye 2 fois en cas d'erreur
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
@@ -25,54 +26,48 @@ export class BoutiqueService {
    * Récupérer une boutique par ID
    */
   getBoutiqueById(id: string): Observable<Boutique> {
-    return this.http.get<Boutique>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.get<Boutique>(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
   }
 
   /**
    * Filtrer les boutiques par catégorie
    */
   getBoutiquesByCategorie(categorie: string): Observable<Boutique[]> {
-    return this.http.get<Boutique[]>(`${this.apiUrl}?categorie=${categorie}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Boutique[]>(`${this.apiUrl}?categorie=${categorie}`)
+      .pipe(catchError(this.handleError));
   }
 
   /**
    * Filtrer les boutiques par étage
    */
   getBoutiquesByEtage(etage: number): Observable<Boutique[]> {
-    return this.http.get<Boutique[]>(`${this.apiUrl}?etage=${etage}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Boutique[]>(`${this.apiUrl}?etage=${etage}`)
+      .pipe(catchError(this.handleError));
   }
 
   /**
    * Créer une nouvelle boutique
    */
   createBoutique(boutique: Boutique): Observable<Boutique> {
-    return this.http.post<Boutique>(this.apiUrl, boutique).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<Boutique>(this.apiUrl, boutique).pipe(catchError(this.handleError));
   }
 
   /**
    * Mettre à jour une boutique
    */
   updateBoutique(id: string, boutique: Partial<Boutique>): Observable<Boutique> {
-    return this.http.put<Boutique>(`${this.apiUrl}/${id}`, boutique).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .put<Boutique>(`${this.apiUrl}/${id}`, boutique)
+      .pipe(catchError(this.handleError));
   }
 
   /**
    * Supprimer une boutique
    */
   deleteBoutique(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.delete(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
   }
 
   /**

@@ -10,6 +10,7 @@ import { ProduitFiltre } from '../interface/produit-filtre';
   providedIn: 'root',
 })
 export class ProduitService {
+  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/produits';
 
   constructor(private http: HttpClient) {}
 
