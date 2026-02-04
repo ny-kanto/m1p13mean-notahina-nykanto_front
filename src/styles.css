@@ -1,6 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
 :root {
-    --primary-red: #de1c36;
-    --secondary-red: #831421;
-    --primary-beige: #faf7f2;
+  --primary-red: #de1c36;
+  --secondary-red: #831421;
+  --primary-beige: #faf7f2;
+  --forest-green: #2d5016;
+  --nature-green: #4a7c59;
+  --light-green: #d4edda;
+
+  --text-dark: #2d3436;
+  --text-light: #636e72;
+  --border-color: #e0e0e0;
 }
