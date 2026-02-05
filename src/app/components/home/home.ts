@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeaderHomeComponent } from "../header-home/header-home";
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderHomeComponent],
+  imports: [CommonModule, RouterModule, HeaderHomeComponent, Footer],
   templateUrl: './home.html',
   styleUrls: ['./home.css']
 })

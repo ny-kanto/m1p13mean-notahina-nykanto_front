@@ -1,9 +1,162 @@
-/* Container principal */
+/* ============================================
+   PAGE HEADER (style Westfield)
+   ============================================ */
+.page-header {
+  background: white;
+  padding: 120px 0 60px 0;
+  border-bottom: 2px solid var(--primary-beige);
+}
+
+.container-page {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.page-title {
+  font-size: 6rem;
+  font-weight: 900;
+  text-align: center;
+  margin: 0 0 20px 0;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.page-subtitle {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--text-medium);
+  margin: 0 0 50px 0;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   CONTRÔLES (filtres et vue)
+   ============================================ */
+.page-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  padding-bottom: 30px;
+  border-bottom: 2px solid var(--primary-beige);
+}
+
+.controls-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn-filter {
+  background: white;
+  border: 2px solid #e0e0e0;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-dark);
+}
+
+.btn-filter:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  background: rgba(222, 28, 54, 0.05);
+}
+
+.btn-filter i {
+  font-size: 1rem;
+}
+
+.result-count {
+  font-size: 0.95rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.controls-right {
+  display: flex;
+  gap: 8px;
+}
+
+.view-toggle {
+  width: 45px;
+  height: 45px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-toggle:hover,
+.view-toggle.active {
+  background: var(--primary-red);
+  border-color: var(--primary-red);
+  color: white;
+}
+
+/* ============================================
+   FILTRE ALPHABET (style Westfield)
+   ============================================ */
+.alphabet-filter {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.letter-btn {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-medium);
+  transition: all 0.3s ease;
+}
+
+.letter-btn:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateY(-2px);
+}
+
+.letter-btn.active {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  border-color: var(--primary-red);
+  color: white;
+  box-shadow: 0 4px 12px rgba(222, 28, 54, 0.3);
+}
+
+/* ============================================
+   GRILLE DES BOUTIQUES
+   ============================================ */
 .shop-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 32px;
-  padding: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 35px;
+  padding: 60px 40px;
   max-width: 1400px;
   margin: 0 auto;
   animation: fadeIn 0.6s ease-in-out;
@@ -21,45 +174,6 @@
 }
 
 /* ============================================
-   RESPONSIVE DESIGN
-   ============================================ */
-
-/* Large screens (3 colonnes) */
-@media (min-width: 1200px) {
-  .shop-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 36px;
-    padding: 50px;
-  }
-}
-
-/* Medium screens (2 colonnes) */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .shop-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
-    padding: 35px;
-  }
-}
-
-/* Tablets */
-@media (max-width: 767px) {
-  .shop-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-    padding: 20px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .shop-grid {
-    padding: 16px;
-    gap: 20px;
-  }
-}
-
-/* ============================================
    ANIMATIONS DES CARTES (stagger effect)
    ============================================ */
 .shop-grid app-shop-card {
@@ -68,12 +182,12 @@
 
 /* Délai progressif pour chaque carte */
 .shop-grid app-shop-card:nth-child(1) { animation-delay: 0.1s; }
-.shop-grid app-shop-card:nth-child(2) { animation-delay: 0.2s; }
-.shop-grid app-shop-card:nth-child(3) { animation-delay: 0.3s; }
-.shop-grid app-shop-card:nth-child(4) { animation-delay: 0.4s; }
-.shop-grid app-shop-card:nth-child(5) { animation-delay: 0.5s; }
-.shop-grid app-shop-card:nth-child(6) { animation-delay: 0.6s; }
-.shop-grid app-shop-card:nth-child(n+7) { animation-delay: 0.7s; }
+.shop-grid app-shop-card:nth-child(2) { animation-delay: 0.15s; }
+.shop-grid app-shop-card:nth-child(3) { animation-delay: 0.2s; }
+.shop-grid app-shop-card:nth-child(4) { animation-delay: 0.25s; }
+.shop-grid app-shop-card:nth-child(5) { animation-delay: 0.3s; }
+.shop-grid app-shop-card:nth-child(6) { animation-delay: 0.35s; }
+.shop-grid app-shop-card:nth-child(n+7) { animation-delay: 0.4s; }
 
 @keyframes slideUp {
   from {
@@ -87,15 +201,167 @@
 }
 
 /* ============================================
-   ÉTAT VIDE (si aucune boutique)
+   ÉTAT DE CHARGEMENT
    ============================================ */
-.shop-grid:empty::before {
-  content: 'Aucune boutique disponible';
+.loading-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 200px;
-  font-size: 1.2rem;
-  color: #95a5a6;
-  grid-column: 1 / -1;
+  justify-content: center;
+  padding: 100px 40px;
+  text-align: center;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid var(--primary-beige);
+  border-top: 5px solid var(--primary-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 25px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  font-weight: 600;
+}
+
+/* ============================================
+   ÉTAT VIDE
+   ============================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 40px;
+  text-align: center;
+}
+
+.empty-state i {
+  font-size: 5rem;
+  color: var(--text-light);
+  margin-bottom: 25px;
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text-dark);
+  margin: 0 0 15px 0;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: var(--text-medium);
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Large screens (4 colonnes) */
+@media (min-width: 1400px) {
+  .shop-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    padding: 60px 20px;
+  }
+}
+
+/* Medium-Large screens (3 colonnes) */
+@media (min-width: 1024px) and (max-width: 1399px) {
+  .shop-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 35px;
+    padding: 50px 40px;
+  }
+}
+
+/* Medium screens (2 colonnes) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .shop-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    padding: 40px 30px;
+  }
+
+  .page-title {
+    font-size: 3rem;
+  }
+
+  .alphabet-filter {
+    gap: 6px;
+  }
+
+  .letter-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablets et Mobile */
+@media (max-width: 767px) {
+  .page-header {
+    padding: 100px 0 40px 0;
+  }
+
+  .container-page {
+    padding: 0 20px;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+    margin-bottom: 30px;
+  }
+
+  .page-controls {
+    flex-direction: column;
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .controls-left {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-filter {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .controls-right {
+    justify-content: center;
+  }
+
+  .alphabet-filter {
+    gap: 5px;
+  }
+
+  .letter-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+
+  .shop-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 30px 20px;
+  }
 }

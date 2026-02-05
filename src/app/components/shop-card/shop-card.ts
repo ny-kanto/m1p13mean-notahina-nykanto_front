@@ -10,14 +10,28 @@ import { Boutique } from '../../interface/boutique';
   styleUrls: ['./shop-card.css']
 })
 export class ShopCardComponent {
-  // On reçoit l'objet boutique complet
-  @Input({ required: true }) boutique!: Boutique;
+  @Input() boutique!: Boutique;
 
-  // Méthode pour choisir la couleur du badge selon le statut
-  getStatusClass() {
-    return {
-      'status-open': this.boutique.statut === 'Ouvert',
-      'status-closed': this.boutique.statut === 'Fermé'
-    };
+  /**
+   * Retourne la classe CSS pour le statut
+   */
+  getStatusClass(): string {
+    return this.boutique.statut === 'Ouvert' ? 'status-open' : 'status-closed';
+  }
+
+  /**
+   * Retourne l'image par défaut si aucune image
+   */
+  getShopImage(): string {
+    return this.boutique.image || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500';
+  }
+
+  /**
+   * Navigation vers les produits de la boutique
+   */
+  viewProducts(): void {
+    console.log('Voir les produits de:', this.boutique.nom);
+    // TODO: Implémenter la navigation
+    // this.router.navigate(['/boutique', this.boutique._id, 'produits']);
   }
 }

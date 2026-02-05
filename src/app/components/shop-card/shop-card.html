@@ -1,11 +1,27 @@
-<div class="shop-card" tabindex="0">
+<div class="shop-card" tabindex="0" (click)="viewProducts()">
+
+  <!-- Image avec badges -->
   <div class="shop-image">
-    <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500" alt="Boutique">
-    <span class="category-tag">{{ boutique.categorie }}</span>
-    <span class="status-badge" [ngClass]="getStatusClass()">{{ boutique.statut }}</span>
+    <img [src]="getShopImage()" [alt]="boutique.nom">
+
+    <!-- Badge catégorie (top right) -->
+    <!-- <span class="category-tag">{{ boutique.categorie }}</span> -->
+
+    <!-- Badge statut (bottom left) -->
+    <span class="status-badge" [ngClass]="getStatusClass()">
+      {{ boutique.statut }}
+    </span>
+
+    <!-- Icône favori (top left) -->
+    <button class="favorite-btn" (click)="$event.stopPropagation()" title="Ajouter aux favoris">
+      <i class="far fa-heart"></i>
+    </button>
   </div>
 
+  <!-- Informations de la boutique -->
   <div class="shop-info">
+
+    <!-- Header avec nom et étage -->
     <div class="header-info">
       <h3>{{ boutique.nom }}</h3>
       <span class="floor-tag">
@@ -13,18 +29,24 @@
       </span>
     </div>
 
-    <div class="details">
+    <!-- Détails (horaires et contact) -->
+    <!-- <div class="details">
       <p class="horaires">
-        <i class="far fa-clock"></i> {{ boutique.horaires.ouverture }} - {{ boutique.horaires.fermeture }}
+        <i class="far fa-clock"></i>
+        {{ boutique.horaires.ouverture }} - {{ boutique.horaires.fermeture }}
       </p>
       <p class="contact">
-        <i class="far fa-envelope"></i> {{ boutique.contact.email }} <br>
+        <i class="far fa-envelope"></i> {{ boutique.contact.email }}<br>
         <i class="fas fa-phone"></i> {{ boutique.contact.tel }}
       </p>
-    </div>
+    </div> -->
 
-    <button class="btn-view">
-      <i class="fas fa-shopping-bag"></i> Consulter les articles
-    </button>
+    <!-- Bouton d'action -->
+    <!-- <button class="btn-view" (click)="viewProducts(); $event.stopPropagation()">
+      <i class="fas fa-shopping-bag"></i>
+      Consulter les articles
+    </button> -->
+
   </div>
+
 </div>
