@@ -1,0 +1,31 @@
+<div class="main-viewport">
+  <div class="signup-container">
+    <h2>Inscription</h2>
+    <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      
+      <div class="field-group">
+        <label>Nom</label>
+        <input formControlName="nom" type="text" placeholder="Nom" />
+      </div>
+
+      <div class="field-group">
+        <label>Prénom</label>
+        <input formControlName="prenom" type="text" placeholder="Prénom" />
+      </div>
+
+      <div class="field-group">
+        <label>Email</label>
+        <input formControlName="email" type="email" placeholder="Email" />
+      </div>
+
+      <div class="field-group">
+        <label>Mot de passe</label>
+        <input formControlName="password" type="password" placeholder="Mot de passe" />
+      </div>
+
+      <button type="submit">S'inscrire</button>
+    </form>
+
+    <p *ngIf="message" class="status-message">{{ message }}</p>
+  </div>
+</div>
