@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Produit } from '../interface/produit';
+import { PaginationReponse } from '../interface/pagination-reponse';
+import { ProduitFiltre } from '../interface/produit-filtre';
 
 @Injectable({
   providedIn: 'root',
@@ -13,12 +15,44 @@ export class ProduitService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Récupérer les produits d'une boutique
+   * Récupérer les produits d'une boutique avec pagination et filtres
    */
-  getProductsByBoutique(boutiqueId: string): Observable<Produit[]> {
-    return this.http
-      .get<Produit[]>(`${this.apiUrl}/boutique/${boutiqueId}`)
-      .pipe(catchError(this.handleError));
+  getProductsByBoutique(
+    boutiqueId: string,
+    page: number = 1,
+    limit: number = 10,
+    filters?: ProduitFiltre,
+  ): Observable<PaginationReponse> {
+    let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
+
+    // Ajouter les filtres s'ils sont définis
+    if (filters) {
+      if (filters.search && filters.search.trim()) {
+        params = params.set('search', filters.search.trim());
+      }
+
+      if (filters.minPrice !== undefined && filters.minPrice !== null) {
+        params = params.set('minPrice', filters.minPrice.toString());
+      }
+
+      if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
+        params = params.set('maxPrice', filters.maxPrice.toString());
+      }
+
+      if (filters.stockStatus && filters.stockStatus !== 'all') {
+        params = params.set('stockStatus', filters.stockStatus);
+      }
+
+      if (filters.sortBy) {
+        params = params.set('sortBy', filters.sortBy);
+      }
+
+      if (filters.sortOrder) {
+        params = params.set('sortOrder', filters.sortOrder);
+      }
+    }
+
+    return this.http.get<PaginationReponse>(`${this.apiUrl}/boutique/${boutiqueId}`, { params });
   }
 
   /**

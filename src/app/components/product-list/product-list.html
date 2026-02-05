@@ -2,7 +2,7 @@
 <div class="header-section">
   <div class="header-left">
     <h1><i class="fas fa-boxes"></i> Liste des Produits</h1>
-    <p class="subtitle">{{ products.length }} produit(s) au total</p>
+    <p class="subtitle">{{ totalItems }} produit(s) au total</p>
   </div>
   <div class="header-right">
     <button class="btn-add" (click)="openAddModal()">
@@ -10,6 +10,105 @@
     </button>
   </div>
 </div>
+
+<!-- Barre de recherche et filtres -->
+<div class="search-filter-section">
+  <!-- Barre de recherche -->
+  <div class="search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input
+      type="text"
+      class="search-input"
+      placeholder="Rechercher un produit..."
+      [(ngModel)]="filters.search"
+      (ngModelChange)="onSearchChange($event)"
+    />
+    @if (filters.search) {
+      <button class="clear-search" (click)="filters.search = ''; onSearchChange('')">
+        <i class="fas fa-times"></i>
+      </button>
+    }
+  </div>
+
+  <!-- Bouton pour afficher/masquer les filtres avancés -->
+  <button class="btn-toggle-filters" (click)="toggleFilters()" [class.active]="showFilters">
+    <i class="fas fa-filter"></i>
+    Filtres
+    @if (hasActiveFilters()) {
+      <span class="filter-badge">{{ hasActiveFilters() ? '•' : '' }}</span>
+    }
+  </button>
+</div>
+
+<!-- Panneau des filtres avancés -->
+@if (showFilters) {
+  <div class="filters-panel">
+    <div class="filters-grid">
+      <!-- Filtre par prix -->
+      <div class="filter-group">
+        <label><i class="fas fa-money-bill-wave"></i> Prix (Ar)</label>
+        <div class="price-range">
+          <input
+            type="number"
+            placeholder="Min"
+            [(ngModel)]="filters.minPrice"
+            min="0"
+            step="1000"
+          />
+          <span class="range-separator">-</span>
+          <input
+            type="number"
+            placeholder="Max"
+            [(ngModel)]="filters.maxPrice"
+            min="0"
+            step="1000"
+          />
+        </div>
+      </div>
+
+      <!-- Filtre par stock -->
+      <div class="filter-group">
+        <label><i class="fas fa-boxes"></i> État du stock</label>
+        <select [(ngModel)]="filters.stockStatus">
+          <option value="all">Tous</option>
+          <option value="ok">En stock (≥10)</option>
+          <option value="low">Stock faible (1-9)</option>
+          <option value="empty">Rupture (0)</option>
+        </select>
+      </div>
+
+      <!-- Filtre par tri -->
+      <div class="filter-group">
+        <label><i class="fas fa-sort"></i> Trier par</label>
+        <select [(ngModel)]="filters.sortBy">
+          <option [value]="undefined">Par défaut</option>
+          <option value="nom">Nom</option>
+          <option value="prix">Prix</option>
+          <option value="stock">Stock</option>
+        </select>
+      </div>
+
+      <!-- Ordre de tri -->
+      <div class="filter-group">
+        <label><i class="fas fa-sort-amount-down"></i> Ordre</label>
+        <select [(ngModel)]="filters.sortOrder">
+          <option value="asc">Croissant</option>
+          <option value="desc">Décroissant</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Boutons d'action des filtres -->
+    <div class="filter-actions">
+      <button class="btn-reset-filters" (click)="resetFilters()">
+        <i class="fas fa-redo"></i> Réinitialiser
+      </button>
+      <button class="btn-apply-filters" (click)="applyFilters()">
+        <i class="fas fa-check"></i> Appliquer
+      </button>
+    </div>
+  </div>
+}
 
 <!-- État de chargement -->
 @if (isLoading) {
@@ -34,12 +133,38 @@
 <!-- Tableau des produits -->
 @if (!isLoading && !errorMessage) {
   <div class="table-container">
+    <!-- Sélecteur de limite par page -->
+    <div class="table-controls">
+      <div class="items-per-page">
+        <label>Afficher:</label>
+        <select [(ngModel)]="limit" (change)="changeLimit(limit)">
+          <option [value]="5">5</option>
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="50">50</option>
+        </select>
+        <span>par page</span>
+      </div>
+      <div class="page-info">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </div>
+    </div>
+
     <table class="product-table">
       <thead>
         <tr>
-          <th><i class="fas fa-tag"></i> Nom</th>
-          <th>Prix Unitaire (Ar)</th>
-          <th><i class="fas fa-boxes"></i> Stock</th>
+          <th (click)="changeSorting('nom')" class="sortable">
+            <i class="fas fa-tag"></i> Nom
+            <i [class]="getSortIcon('nom')"></i>
+          </th>
+          <th (click)="changeSorting('prix')" class="sortable">
+            Prix Unitaire (Ar)
+            <i [class]="getSortIcon('prix')"></i>
+          </th>
+          <th (click)="changeSorting('stock')" class="sortable">
+            <i class="fas fa-boxes"></i> Stock
+            <i [class]="getSortIcon('stock')"></i>
+          </th>
           <th><i class="fas fa-cogs"></i> Actions</th>
         </tr>
       </thead>
@@ -79,15 +204,6 @@
                 <button class="btn-icon btn-edit" (click)="openEditModal(product)" title="Modifier">
                   <i class="fas fa-edit"></i>
                 </button>
-
-                <!-- Bouton Supprimer -->
-                <!-- <button
-                  class="btn-icon btn-delete"
-                  (click)="deleteProduct(product)"
-                  title="Supprimer"
-                >
-                  <i class="fas fa-trash-alt"></i>
-                </button> -->
               </div>
             </td>
           </tr>
@@ -98,16 +214,85 @@
           <tr class="empty-row">
             <td colspan="4" class="text-center">
               <div class="empty-state">
-                <p><i class="fas fa-inbox"></i> Aucun produit pour le moment</p>
-                <button class="btn-add-small" (click)="openAddModal()">
-                  <i class="fas fa-plus"></i> Ajouter le premier produit
-                </button>
+                @if (hasActiveFilters()) {
+                  <p><i class="fas fa-search"></i> Aucun produit ne correspond à vos critères</p>
+                  <button class="btn-reset-small" (click)="resetFilters()">
+                    <i class="fas fa-redo"></i> Réinitialiser les filtres
+                  </button>
+                } @else {
+                  <p><i class="fas fa-inbox"></i> Aucun produit pour le moment</p>
+                  <button class="btn-add-small" (click)="openAddModal()">
+                    <i class="fas fa-plus"></i> Ajouter le premier produit
+                  </button>
+                }
               </div>
             </td>
           </tr>
         }
       </tbody>
     </table>
+
+    <!-- Contrôles de pagination -->
+    @if (totalPages > 1) {
+      <div class="pagination-controls">
+        <div class="pagination-info">
+          Affichage de {{ (currentPage - 1) * limit + 1 }} à {{ Math.min(currentPage * limit, totalItems) }} sur {{ totalItems }} produits
+        </div>
+
+        <div class="pagination-buttons">
+          <!-- Bouton Première page -->
+          <button
+            class="btn-page"
+            [disabled]="currentPage === 1"
+            (click)="goToPage(1)"
+            title="Première page"
+          >
+            <i class="fas fa-angle-double-left"></i>
+          </button>
+
+          <!-- Bouton Précédent -->
+          <button
+            class="btn-page"
+            [disabled]="currentPage === 1"
+            (click)="previousPage()"
+            title="Page précédente"
+          >
+            <i class="fas fa-angle-left"></i>
+          </button>
+
+          <!-- Numéros de page -->
+          @for (pageNum of getPageNumbers(); track pageNum) {
+            <button
+              class="btn-page-number"
+              [class.active]="pageNum === currentPage"
+              (click)="goToPage(pageNum)"
+            >
+              {{ pageNum }}
+            </button>
+          }
+
+          <!-- Bouton Suivant -->
+          <button
+            class="btn-page"
+            [disabled]="currentPage === totalPages"
+            (click)="nextPage()"
+            title="Page suivante"
+          >
+            <i class="fas fa-angle-right"></i>
+          </button>
+
+          <!-- Bouton Dernière page -->
+          <button
+            class="btn-page"
+            [disabled]="currentPage === totalPages"
+            (click)="goToPage(totalPages)"
+            title="Dernière page"
+          >
+            <i class="fas fa-angle-double-right"></i>
+          </button>
+        </div>
+      </div>
+    }
   </div>
 }
 
