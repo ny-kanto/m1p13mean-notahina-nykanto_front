@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private API_URL = 'http://localhost:3000/auth';
+
+//   private API_URL = 'http://localhost:3000/auth';
+  private API_URL = 'https://m1p13mean-notahina-nykanto-back.onrender.com/signup';
 
   constructor(private http: HttpClient) {}
 

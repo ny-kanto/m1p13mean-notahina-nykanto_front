@@ -1,0 +1,250 @@
+<app-header></app-header>
+<!-- HERO SECTION - Plein écran avec carousel -->
+<section class="hero-fullscreen">
+  @for (slide of heroSlides; track $index) {
+    <div class="hero-slide" [class.active]="currentSlide === $index">
+
+      <!-- Image de fond -->
+      <div class="hero-bg">
+        <img [src]="slide.image" [alt]="slide.title">
+        <div class="hero-overlay"></div>
+      </div>
+
+      <!-- Contenu -->
+      <div class="hero-content">
+        <h1 class="hero-title">{{ slide.title }}</h1>
+        <p class="hero-subtitle">{{ slide.subtitle }}</p>
+        <a [routerLink]="slide.buttonLink" class="btn-hero">
+          {{ slide.buttonText }}
+        </a>
+      </div>
+
+    </div>
+  }
+
+  <!-- Navigation -->
+  <button class="hero-nav prev" (click)="previousSlide()">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <button class="hero-nav next" (click)="nextSlide()">
+    <i class="fas fa-chevron-right"></i>
+  </button>
+
+  <!-- Pause/Play -->
+  <button class="hero-pause">
+    <i class="fas fa-pause"></i>
+  </button>
+
+  <!-- Indicateurs -->
+  <div class="hero-indicators">
+    @for (slide of heroSlides; track $index) {
+      <button
+        [class.active]="currentSlide === $index"
+        (click)="goToSlide($index)"
+      ></button>
+    }
+  </div>
+</section>
+
+<!-- SECTION PRÉSENTATION -->
+<section class="intro-section">
+  <div class="container">
+    <div class="intro-content">
+      <h2 class="section-title-main">
+        Bienvenue chez <span class="text-red">Akoor Shopping</span>
+      </h2>
+      <p class="intro-text">
+        Implanté au cœur d'Antananarivo, <strong>Akoor Shopping</strong> est une
+        destination shopping majeure à Madagascar. Ce centre commercial sittre aussi
+        bien les habitants de la capitale que ceux de Melun, Combs-la-Ville ou des
+        communes voisines, grâce à sa facilité d'accès et la richesse de son offre.
+        On y vient pour découvrir les dernières tendances, regrouper ses achats ou
+        partager un moment agréable en famille ou entre amis.
+      </p>
+      <a routerLink="/about" class="link-underline">Voir plus</a>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION CAROUSEL BOUTIQUES -->
+<section class="section-light">
+  <div class="container">
+
+    <div class="section-header-inline">
+      <h2 class="section-title">Nos boutiques phares</h2>
+      <div class="carousel-nav-buttons">
+        <button class="nav-carousel" (click)="scrollShops('left')">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="nav-carousel" (click)="scrollShops('right')">
+          <i class="fas fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Carousel horizontal -->
+    <div class="shops-carousel">
+      @for (shop of featuredShops; track shop.name) {
+        <div class="shop-card-modern">
+          <div class="shop-image-wrapper">
+            <img [src]="shop.image" [alt]="shop.name">
+            <div class="shop-overlay">
+              <h3 class="shop-name-overlay">{{ shop.name }}</h3>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <div class="section-footer-button">
+      <a routerLink="/boutiques" class="btn-outlined-red">
+        Voir nos boutiques
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION SERVICES (3 cartes) -->
+<section class="section-white">
+  <div class="container">
+
+    <h2 class="section-title-center">SERVICES DANS VOTRE CENTRE</h2>
+    <p class="section-subtitle-center">Tout ce dont vous avez besoin pour une visite plaisir.</p>
+
+    <a routerLink="/services" class="btn-outlined-red-small">Découvrez nos services</a>
+
+    <!-- Grille 3 colonnes -->
+    <div class="services-grid-modern">
+      @for (service of services; track service.title) {
+        <div class="service-card-modern" [style.background]="service.bgColor">
+          <div class="service-image-container">
+            <img [src]="service.image" [alt]="service.title">
+          </div>
+          <div class="service-info">
+            <h3 [class.text-white]="service.bgColor !== 'white'">{{ service.title }}</h3>
+            <p [class.text-white]="service.bgColor !== 'white'">{{ service.description }}</p>
+            <a [routerLink]="service.link" class="service-link"
+               [class.text-white]="service.bgColor !== 'white'">
+              En savoir plus
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION ACTUALITÉS -->
+<section class="section-light">
+  <div class="container">
+
+    <div class="section-header-centered">
+      <h2 class="section-title-big">ACTUALITÉS ET ÉVÉNEMENTS</h2>
+      <p class="section-description">Tenez-vous au courant des dernières actualités et événements.</p>
+      <a routerLink="/actualites" class="btn-red">Voir nos actualités</a>
+    </div>
+
+    <!-- Grid actualités -->
+    <div class="news-grid">
+
+      <!-- Grande carte à gauche -->
+      <div class="news-card-large">
+        <div class="news-image">
+          <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=800" alt="Actualité">
+          <button class="news-favorite">
+            <i class="far fa-heart"></i>
+          </button>
+        </div>
+        <div class="news-content">
+          <span class="news-date">4 févr. 2026</span>
+          <h3 class="news-title">Célébrez la Saint-Valentin avec Akoor</h3>
+          <a routerLink="/actualites/1" class="news-link">En savoir plus</a>
+        </div>
+      </div>
+
+      <!-- Petites cartes à droite -->
+      <div class="news-list">
+        @for (item of news; track item.title) {
+          <div class="news-card-small">
+            <span class="news-date-small">{{ item.date }}</span>
+            <h4 class="news-title-small">{{ item.title }}</h4>
+            <a [routerLink]="item.link" class="news-link-small">En savoir plus</a>
+            <div class="news-thumb">
+              <img [src]="item.image" [alt]="item.title">
+              <button class="news-favorite-small">
+                <i class="far fa-heart"></i>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION SOCIAL MEDIA (style Westfield) -->
+<section class="social-section">
+  <div class="social-content">
+
+    <!-- Photos Instagram simulées -->
+    <div class="social-photos">
+      <div class="social-photo">
+        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400" alt="Instagram">
+      </div>
+      <div class="social-photo">
+        <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400" alt="Instagram">
+      </div>
+    </div>
+
+    <!-- Texte central -->
+    <div class="social-text">
+      <h2 class="social-title">À bientôt</h2>
+      <p class="social-handle">@AKOOR<br>SHOPPING</p>
+      <div class="social-icons">
+        <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+      </div>
+    </div>
+
+    <!-- Plus de photos -->
+    <div class="social-photos">
+      <div class="social-photo">
+        <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=400" alt="Instagram">
+      </div>
+      <div class="social-photo">
+        <img src="https://images.unsplash.com/photo-1519558260268-cde7e03a0152?w=400" alt="Instagram">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scroll indicator -->
+  <button class="scroll-indicator">
+    <i class="fas fa-chevron-down"></i>
+  </button>
+</section>
+
+<!-- SECTION NEWSLETTER (style minimaliste) -->
+<section class="newsletter-minimal">
+  <div class="container-small">
+    <h3 class="newsletter-title">Restez informé</h3>
+    <p class="newsletter-description">
+      Inscrivez-vous pour recevoir nos dernières actualités et offres exclusives
+    </p>
+    <form class="newsletter-form-minimal">
+      <input
+        type="email"
+        placeholder="Votre adresse email"
+        class="newsletter-input-minimal"
+      >
+      <button type="submit" class="newsletter-btn-minimal">
+        S'inscrire
+      </button>
+    </form>
+  </div>
+</section>
