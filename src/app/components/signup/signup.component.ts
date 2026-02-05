@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -16,7 +17,7 @@ export class SignupComponent implements OnInit {
 
   message: string = '';
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.signupForm = this.fb.group({
@@ -35,15 +36,16 @@ export class SignupComponent implements OnInit {
 
     const payload = this.signupForm.value;
 
-    this.http.post('http://localhost:3000/auth/signup', payload)
-      .subscribe({
-        next: (res: any) => {
+    this.authService.register(payload)
+    .subscribe({
+      next: (res: any) => {
           this.message = res.message || 'Compte créé';
         },
         error: (err) => {
           this.message = err.error?.message || 'Erreur lors de la création';
         }
-      });
+    });
+
   }
 
 
