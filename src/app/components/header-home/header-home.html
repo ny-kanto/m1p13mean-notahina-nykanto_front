@@ -1,0 +1,118 @@
+<header class="header" [class.scrolled]="isScrolled">
+  <div class="header-container">
+
+    <!-- Logo à gauche -->
+    <div class="header-logo">
+      <a routerLink="/" class="logo-link">
+        <div class="logo-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">AKOOR</span>
+          <span class="logo-subtitle">Shopping</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Barre de recherche au centre -->
+    <div class="header-search">
+      <form class="search-form" (submit)="onSearch(); $event.preventDefault()">
+        <div class="search-wrapper" [class.focused]="isSearchFocused">
+          <i class="fas fa-search search-icon"></i>
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Que recherchez-vous aujourd'hui ?"
+            [(ngModel)]="searchQuery"
+            name="search"
+            (focus)="onSearchFocus()"
+            (blur)="onSearchBlur()"
+          />
+          @if (searchQuery) {
+            <button
+              type="button"
+              class="search-clear"
+              (click)="clearSearch()"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          }
+          <button type="submit" class="search-submit">
+            <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Actions à droite -->
+    <div class="header-actions">
+      <!-- Compte utilisateur -->
+      <a routerLink="/login" class="header-action-btn" title="Mon compte">
+        <i class="fas fa-user"></i>
+        <span class="action-text">Compte</span>
+      </a>
+
+      <!-- Menu burger mobile -->
+      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
+        <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<!-- Menu mobile overlay -->
+@if (isMobileMenuOpen) {
+  <div class="mobile-menu-overlay" (click)="closeMobileMenu()">
+    <div class="mobile-menu" (click)="$event.stopPropagation()">
+
+      <!-- Barre de recherche mobile -->
+      <div class="mobile-search">
+        <form (submit)="onSearch(); closeMobileMenu(); $event.preventDefault()">
+          <div class="search-wrapper-mobile">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              [(ngModel)]="searchQuery"
+              name="searchMobile"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Navigation mobile -->
+      <nav class="mobile-nav">
+        <a routerLink="/" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <i class="fas fa-home"></i>
+          <span>Accueil</span>
+        </a>
+        <a routerLink="/boutiques" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <i class="fas fa-store"></i>
+          <span>Boutiques</span>
+        </a>
+        <a routerLink="/services" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <i class="fas fa-concierge-bell"></i>
+          <span>Services</span>
+        </a>
+        <a routerLink="/actualites" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <i class="fas fa-newspaper"></i>
+          <span>Actualités</span>
+        </a>
+        <a routerLink="/contact" class="mobile-nav-link" (click)="closeMobileMenu()">
+          <i class="fas fa-envelope"></i>
+          <span>Contact</span>
+        </a>
+      </nav>
+
+      <!-- Action mobile -->
+      <div class="mobile-actions">
+        <a routerLink="/login" class="mobile-action-btn" (click)="closeMobileMenu()">
+          <i class="fas fa-user"></i>
+          <span>Mon compte</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+}
