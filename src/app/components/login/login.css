@@ -1,0 +1,133 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0f0c29; /* Fond sombre pour faire ressortir le rouge */
+  overflow: hidden;
+  position: relative;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Les "Blobs" rouges animés en fond */
+.blob {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, #ff0000 0%, #8b0000 100%);
+  filter: blur(80px);
+  border-radius: 50%;
+  z-index: 0;
+  animation: move 20s infinite alternate;
+  opacity: 0.6;
+}
+
+.blob.second {
+  right: -10%;
+  top: -10%;
+  background: #ff4d4d;
+  animation-duration: 15s;
+}
+
+/* La carte en Glassmorphism */
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.login-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 2rem;
+  h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+  p { opacity: 0.7; }
+}
+
+/* Inputs stylisés */
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+
+  input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 10px 0;
+    color: white;
+    font-size: 1.1rem;
+    outline: none;
+    transition: 0.3s;
+
+    &:focus ~ label, &:not(:placeholder-shown) ~ label {
+      top: -20px;
+      font-size: 0.8rem;
+      color: #ff4d4d;
+    }
+    
+    &:focus ~ .bar { width: 100%; }
+  }
+
+  label {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    color: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    transition: 0.3s;
+  }
+
+  .bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ff0000;
+    transition: 0.5s ease;
+  }
+}
+
+/* // Bouton avec effet fluide */
+.btn-login {
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  background: #ff0000;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: 0.4s;
+
+  span { position: relative; z-index: 2; }
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+    background: #e60000;
+  }
+}
+
+@keyframes move {
+  from { transform: translate(-10%, -10%) rotate(0deg); }
+  to { transform: translate(10%, 10%) rotate(360deg); }
+}
+
+@media (max-width: 480px) {
+  .login-card { margin: 20px; padding: 2rem; }
+}
