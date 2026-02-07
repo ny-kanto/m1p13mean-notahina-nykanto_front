@@ -11,6 +11,7 @@ export interface Boutique {
     ouverture: string;
     fermeture: string;
   };
+  image?: string;
   statut: 'Ouvert' | 'Fermé';
   created_at?: Date | string;
 }
