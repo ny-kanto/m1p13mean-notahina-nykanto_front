@@ -1,90 +1,102 @@
+// boutique.service.ts (Angular - Frontend)
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { BoutiqueFiltre } from '../interface/boutique-filtre';
+import { PaginationReponse } from '../interface/pagination-reponse';
 import { Boutique } from '../interface/boutique';
+import { Categorie } from '../interface/categorie';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BoutiqueService {
-  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
+  private apiUrl = 'http://localhost:3000/boutiques';
+  private categoriesUrl = 'http://localhost:3000/categories';
 
   constructor(private http: HttpClient) {}
 
   /**
-   * Récupérer toutes les boutiques
+   * Récupérer toutes les boutiques avec pagination et filtres
    */
-  getBoutiques(): Observable<Boutique[]> {
-    return this.http.get<Boutique[]>(this.apiUrl).pipe(
-      retry(2), // Réessaye 2 fois en cas d'erreur
-      catchError(this.handleError),
+  getAllBoutiques(
+    filters: BoutiqueFiltre = {},
+    page: number = 1,
+    limit: number = 12, // cohérent avec le backend
+  ): Observable<PaginationReponse<Boutique>> {
+
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('limit', limit.toString());
+
+    if (filters.search) {
+      params = params.set('search', filters.search);
+    }
+
+    if (filters.categorie) {
+      params = params.set('categorie', filters.categorie);
+    }
+
+    if (filters.etage !== undefined && filters.etage !== '') {
+      params = params.set('etage', filters.etage);
+    }
+
+    if (filters.ouvert !== undefined && filters.ouvert !== '') {
+      params = params.set('ouvert', String(filters.ouvert));
+    }
+
+    if (filters.sortBy) {
+      params = params.set('sortBy', filters.sortBy);
+    }
+
+    if (filters.order) {
+      params = params.set('order', filters.order);
+    }
+
+    return this.http.get<PaginationReponse<Boutique>>(this.apiUrl, { params });
+  }
+
+  getBoutiqueById(id: string): Observable<{ success: boolean; data: Boutique }> {
+    return this.http.get<{ success: boolean; data: Boutique }>(
+      `${this.apiUrl}/${id}`
     );
   }
 
-  /**
-   * Récupérer une boutique par ID
-   */
-  getBoutiqueById(id: string): Observable<Boutique> {
-    return this.http.get<Boutique>(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
+  createBoutique(
+    formData: FormData,
+  ): Observable<{ success: boolean; data: Boutique; message: string }> {
+    return this.http.post<{ success: boolean; data: Boutique; message: string }>(
+      this.apiUrl,
+      formData
+    );
   }
 
-  /**
-   * Filtrer les boutiques par catégorie
-   */
-  getBoutiquesByCategorie(categorie: string): Observable<Boutique[]> {
-    return this.http
-      .get<Boutique[]>(`${this.apiUrl}?categorie=${categorie}`)
-      .pipe(catchError(this.handleError));
+  updateBoutique(
+    id: string,
+    formData: FormData,
+  ): Observable<{ success: boolean; data: Boutique; message: string }> {
+    return this.http.put<{ success: boolean; data: Boutique; message: string }>(
+      `${this.apiUrl}/${id}`,
+      formData
+    );
   }
 
-  /**
-   * Filtrer les boutiques par étage
-   */
-  getBoutiquesByEtage(etage: number): Observable<Boutique[]> {
-    return this.http
-      .get<Boutique[]>(`${this.apiUrl}?etage=${etage}`)
-      .pipe(catchError(this.handleError));
+  deleteBoutique(id: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(
+      `${this.apiUrl}/${id}`
+    );
   }
 
-  /**
-   * Créer une nouvelle boutique
-   */
-  createBoutique(boutique: Boutique): Observable<Boutique> {
-    return this.http.post<Boutique>(this.apiUrl, boutique).pipe(catchError(this.handleError));
+  searchBoutiques(
+    criteria: any,
+  ): Observable<{ success: boolean; data: Boutique[]; count: number }> {
+    return this.http.post<{ success: boolean; data: Boutique[]; count: number }>(
+      `${this.apiUrl}/search`,
+      criteria
+    );
   }
 
-  /**
-   * Mettre à jour une boutique
-   */
-  updateBoutique(id: string, boutique: Partial<Boutique>): Observable<Boutique> {
-    return this.http
-      .put<Boutique>(`${this.apiUrl}/${id}`, boutique)
-      .pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Supprimer une boutique
-   */
-  deleteBoutique(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
-  }
-
-  /**
-   * Gestion des erreurs HTTP
-   */
-  private handleError(error: HttpErrorResponse) {
-    let errorMessage = 'Une erreur est survenue';
-
-    if (error.error instanceof ErrorEvent) {
-      // Erreur côté client
-      errorMessage = `Erreur: ${error.error.message}`;
-    } else {
-      // Erreur côté serveur
-      errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
-    }
-
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+  getAllCategories(): Observable<Categorie[]> {
+    return this.http.get<Categorie[]>(this.categoriesUrl);
   }
 }
