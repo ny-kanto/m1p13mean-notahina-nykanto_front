@@ -1,0 +1,127 @@
+<app-header></app-header>
+
+<div class="shop-detail-container">
+  <!-- ÉTAT CHARGEMENT -->
+  @if (isLoading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Chargement...</p>
+    </div>
+  }
+
+  <!-- MESSAGE ERREUR -->
+  @if (errorMessage && !isLoading) {
+    <div class="error-state">
+      <i class="fas fa-exclamation-triangle"></i>
+      <p>{{ errorMessage }}</p>
+      <button class="btn-primary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Retour à la liste
+      </button>
+    </div>
+  }
+
+  <!-- CONTENU BOUTIQUE -->
+  @if (boutique && !isLoading) {
+    <!-- HEADER NAVIGATION -->
+    <div class="header-nav">
+      <button class="btn-back" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Retour
+      </button>
+    </div>
+
+    <!-- LAYOUT PRINCIPAL (2 colonnes) -->
+    <div class="main-layout">
+      <!-- COLONNE GAUCHE : Infos principales -->
+      <div class="left-column">
+        <!-- NOM & STATUT -->
+        <div class="shop-header">
+          <h1 class="shop-name">{{ boutique.nom }}</h1>
+          <div class="shop-meta">
+            <span class="etage-badge">{{ getEtageLabel() }}</span>
+          </div>
+        </div>
+
+        <!-- BOUTONS ACTIONS -->
+        <div class="actions-row">
+          <button class="btn-action-secondary" (click)="goBack()">
+            <i class="fas fa-map-marked-alt"></i>
+            Voir sur la carte
+          </button>
+        </div>
+
+        <!-- STATUT -->
+        <div class="status-section">
+          <div class="status-indicator" [ngClass]="getStatutClass()">
+            <i class="fas" [ngClass]="getStatutIcon()"></i>
+            {{ getStatutLabel() }}
+          </div>
+        </div>
+
+        <div class="schedule-section">
+          @for (jour of joursOrdered; track jour.key) {
+            <div class="schedule-row" [ngClass]="{ 'today-row': isToday(jour.key) }">
+              <span class="day-label" [ngClass]="{ 'today-day': isToday(jour.key) }">
+                {{ jour.label }}
+              </span>
+
+              <span class="hours-label" [ngClass]="{ 'today-hours': isToday(jour.key) }">
+                {{ getHorairesForDay(jour.key) }}
+              </span>
+            </div>
+          }
+        </div>
+
+        <!-- CATÉGORIE -->
+        <div class="category-section">
+          <div class="category-badge">
+            <i class="fas fa-tag"></i>
+            {{ getCategorieNom() }}
+          </div>
+        </div>
+      </div>
+
+      <!-- COLONNE DROITE : Image -->
+      <div class="right-column">
+        <div class="image-container">
+          @if (boutique.image?.url) {
+            <img [src]="boutique.image?.url" [alt]="boutique.nom" class="shop-image" />
+          } @else {
+            <!-- <div class="no-image">
+              <i class="fas fa-image"></i>
+              <p>Aucune image</p>
+            </div> -->
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION CONTACT (en bas) -->
+    <div class="contact-section">
+      <h3 class="section-title">Contact</h3>
+      <div class="contact-grid">
+        <div class="contact-item">
+          <i class="fas fa-envelope"></i>
+          <div class="contact-info">
+            <span class="contact-label">Email</span>
+            <a [href]="'mailto:' + boutique.contact.email" class="contact-value">
+              {{ boutique.contact.email || 'Non renseigné' }}
+            </a>
+          </div>
+        </div>
+        <div class="contact-item">
+          <i class="fas fa-phone"></i>
+          <div class="contact-info">
+            <span class="contact-label">Téléphone</span>
+            <a [href]="'tel:' + boutique.contact.tel" class="contact-value">
+              {{ boutique.contact.tel || 'Non renseigné' }}
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<app-footer></app-footer>
