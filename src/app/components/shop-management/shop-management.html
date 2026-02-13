@@ -1,0 +1,271 @@
+<!-- shop-management.component.html -->
+<div class="shop-management-container">
+  <!-- HEADER PAGE -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">ANNUAIRE DES BOUTIQUES</h1>
+      <p class="page-subtitle">Gestion des boutiques du centre commercial Akoor</p>
+    </div>
+    <button class="btn-add-shop" (click)="openCreateModal()">
+      <i class="fas fa-plus-circle"></i>
+      Ajouter une boutique
+    </button>
+  </div>
+
+  <!-- FILTRES ET RECHERCHE -->
+  <div class="filters-section">
+    <!-- Recherche -->
+    <div class="search-box">
+      <i class="fas fa-search search-icon"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="applyFilters()"
+        placeholder="Rechercher une boutique..."
+        class="search-input"
+      />
+    </div>
+
+    <!-- Filtres -->
+    <div class="filters-row">
+      <select [(ngModel)]="filterCategorie" (ngModelChange)="applyFilters()" class="filter-select">
+        <option value="">Toutes les catégories</option>
+        @for (cat of categories; track cat._id) {
+          <option [value]="cat._id">{{ cat.nom }}</option>
+        }
+      </select>
+
+      <select [(ngModel)]="filterEtage" (ngModelChange)="applyFilters()" class="filter-select">
+        <option value="">Tous les étages</option>
+        <option value="0">Rez-de-chaussée</option>
+        <option value="1">Étage 1</option>
+        <option value="2">Étage 2</option>
+        <option value="3">Étage 3</option>
+      </select>
+
+      <!-- OUVERTURE (ex-statut) -->
+      <select [(ngModel)]="filterOuvert" (ngModelChange)="applyFilters()" class="filter-select">
+        <option value="">Toutes les ouvertures</option>
+        <option value="true">Ouvertes maintenant</option>
+        <option value="false">Fermées maintenant</option>
+      </select>
+
+      <button class="btn-reset" (click)="resetFilters()">
+        <i class="fas fa-redo"></i>
+        Réinitialiser
+      </button>
+    </div>
+  </div>
+
+  <div class="limit-selector">
+    <label for="itemsPerPage">Afficher :</label>
+    <select
+      id="itemsPerPage"
+      [(ngModel)]="limit"
+      (ngModelChange)="page = 1; loadBoutiques()"
+      class="filter-select small"
+    >
+      <option [ngValue]="5">5 par page</option>
+      <option [ngValue]="10">10 par page</option>
+      <option [ngValue]="20">20 par page</option>
+      <option [ngValue]="50">50 par page</option>
+    </select>
+  </div>
+
+  <!-- TABLEAU BOUTIQUES -->
+  @if (!isLoading && !errorMessage) {
+    <div class="table-container">
+      <table class="shops-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nom</th>
+            <th>Catégorie</th>
+            <th>Étage</th>
+            <th>Ouverture</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (boutique of boutiques; track boutique._id) {
+            <tr>
+              <td class="td-image">
+                <img
+                  [src]="boutique.image?.url || ''"
+                  alt="Image de la boutique"
+                />
+              </td>
+
+              <td>{{ boutique.nom }}</td>
+
+              <td>{{ getCategorieNom(boutique) }}</td>
+
+              <td>Étage {{ boutique.etage }}</td>
+
+              <td>
+                <span
+                  class="badge"
+                  [class.open]="boutique.ouvertMaintenant"
+                  [class.closed]="!boutique.ouvertMaintenant"
+                >
+                  {{ boutique.ouvertMaintenant ? 'Ouvert' : 'Fermé' }}
+                </span>
+              </td>
+
+              <td class="actions-cell">
+                <button
+                  class="btn-action btn-details"
+                  [routerLink]="['/admin/boutique-details', boutique._id]"
+                  title="Voir les détails"
+                >
+                  <i class="fas fa-eye"></i>
+                </button>
+
+                <button
+                  class="btn-action btn-edit"
+                  (click)="openEditModal(boutique)"
+                  title="Modifier"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+
+                <button
+                  class="btn-action btn-delete"
+                  (click)="openDeleteConfirm(boutique)"
+                  title="Supprimer"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  <app-pagination
+    [currentPage]="page"
+    [totalPages]="totalPages"
+    [totalItems]="totalItems"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
+</div>
+
+@if (showModal) {
+  <div class="modal-overlay">
+    <div class="modal-content">
+      <!-- HEADER -->
+      <div class="modal-header">
+        <h2>
+          {{ modalMode === 'create' ? 'Ajouter une boutique' : 'Modifier la boutique' }}
+        </h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+        <form (ngSubmit)="saveBoutique()" #form="ngForm">
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" [(ngModel)]="currentBoutique.nom" name="nom" required />
+          </div>
+
+          <div class="form-group">
+            <label>Catégorie</label>
+            <select [(ngModel)]="currentBoutique.categorie" name="categorie" required>
+              @for (cat of categories; track cat._id) {
+                <option [value]="cat._id">{{ cat.nom }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Étage</label>
+            <select [(ngModel)]="currentBoutique.etage" name="etage">
+              <option [ngValue]="0">Rez-de-chaussée</option>
+              <option [ngValue]="1">Étage 1</option>
+              <option [ngValue]="2">Étage 2</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" [(ngModel)]="currentBoutique.contact.email" name="email" />
+          </div>
+
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="text" [(ngModel)]="currentBoutique.contact.tel" name="tel" />
+          </div>
+
+          <div class="form-group">
+            <label>Image</label>
+            <input type="file" (change)="onImageSelected($event)" />
+          </div>
+
+          <h3 class="form-section-title">Horaires</h3>
+
+          @for (jour of jours; track jour) {
+            <div class="form-row">
+              <label>{{ jour | titlecase }}</label>
+
+              <input
+                type="time"
+                [(ngModel)]="getHoraire(jour).ouverture"
+                [disabled]="getHoraire(jour).ferme"
+                name="ouverture-{{ jour }}"
+              />
+
+              <input
+                type="time"
+                [(ngModel)]="getHoraire(jour).fermeture"
+                [disabled]="getHoraire(jour).ferme"
+                name="fermeture-{{ jour }}"
+              />
+
+              <label>
+                <input
+                  type="checkbox"
+                  [(ngModel)]="getHoraire(jour).ferme"
+                  name="ferme-{{ jour }}"
+                />
+                Fermé
+              </label>
+            </div>
+          }
+
+          <!-- FOOTER -->
+          <div class="modal-footer">
+            <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+            <button type="submit" class="btn-submit" [disabled]="form.invalid">
+              {{ modalMode === 'create' ? 'Créer' : 'Enregistrer' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+@if (showDeleteConfirm && boutiqueToDelete) {
+  <div class="modal-overlay">
+    <div class="modal-content modal-small">
+      <div class="modal-header modal-danger">
+        <h2>Suppression</h2>
+        <button class="btn-close" (click)="closeDeleteConfirm()">×</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="danger-text">
+          Supprimer la boutique <strong>{{ boutiqueToDelete.nom }}</strong> ?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeDeleteConfirm()">Annuler</button>
+        <button class="btn-danger" (click)="deleteBoutique()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+}

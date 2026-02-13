@@ -1,0 +1,592 @@
+/* shop-detail-centre.component.css - STYLE WESTFIELD/ADIDAS - CORRIGÉ */
+
+/* ============================================
+   VARIABLES AKOOR
+   ============================================ */
+:root {
+  --primary-red: #de1c36;
+  --secondary-red: #831421;
+  --primary-beige: #faf7f2;
+  --forest-green: #2d5016;
+  --nature-green: #4a7c59;
+  --text-dark: #1a1a1a;
+  --text-medium: #4a4a4a;
+  --text-light: #888888;
+  --white: #ffffff;
+}
+
+/* ============================================
+   CONTAINER
+   ============================================ */
+.shop-detail-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 40px 60px 40px;
+  background: var(--white);
+  min-height: 100vh;
+}
+
+/* ============================================
+   HEADER NAVIGATION
+   ============================================ */
+.header-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.btn-back,
+.btn-edit {
+  padding: 12px 24px;
+  border: 2px solid #e0e0e0;
+  background: var(--white);
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dark);
+}
+
+.btn-back:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateX(-5px);
+}
+
+.btn-edit {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  color: var(--white);
+  border-color: var(--primary-red);
+}
+
+.btn-edit:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(222, 28, 54, 0.4);
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL (2 colonnes) - CORRIGÉ
+   ============================================ */
+.main-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* ✅ Égalité des colonnes */
+  gap: 40px; /* ✅ Gap réduit de 60px à 40px */
+  margin-bottom: 60px;
+  align-items: start; /* ✅ IMPORTANT : align au top */
+}
+
+/* ============================================
+   COLONNE GAUCHE
+   ============================================ */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 25px; /* ✅ Réduit de 30px à 25px */
+}
+
+/* NOM & MÉTADONNÉES */
+.shop-header {
+  padding-bottom: 20px;
+  border-bottom: 3px solid var(--primary-red);
+}
+
+.shop-name {
+  font-size: 2.5rem; /* ✅ Réduit de 3rem à 2.5rem */
+  font-weight: 900;
+  margin: 0 0 15px 0;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.shop-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.etage-badge,
+.porte-badge {
+  padding: 8px 18px;
+  background: var(--primary-beige);
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-action-secondary {
+  flex: 1;
+  min-width: 150px;
+  padding: 14px 20px;
+  background: var(--white);
+  border: 2px solid #e0e0e0;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-dark);
+}
+
+.btn-action-secondary:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateY(-2px);
+}
+
+.btn-action-favorite {
+  width: 50px;
+  height: 50px;
+  background: var(--white);
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dark);
+}
+
+.btn-action-favorite:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  background: rgba(222, 28, 54, 0.05);
+  transform: scale(1.1);
+}
+
+/* STATUT */
+.status-section {
+  display: flex;
+  align-items: center;
+}
+
+.status-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-open {
+  background: linear-gradient(135deg, var(--nature-green) 0%, var(--forest-green) 100%);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+}
+
+.status-closed {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  color: var(--white);
+  box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+/* HORAIRES - STYLE WESTFIELD */
+.schedule-section {
+  background: var(--white);
+  padding: 20px; /* ✅ Réduit de 25px à 20px */
+}
+
+.schedule-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0; /* ✅ Réduit de 15px à 12px */
+  border-bottom: 1px solid var(--primary-beige);
+}
+
+.schedule-row:last-child {
+  border-bottom: none;
+}
+
+.day-label {
+  font-weight: 700;
+  font-size: 0.9rem; /* ✅ Réduit de 0.95rem */
+  color: var(--text-dark);
+}
+
+.hours-label {
+  font-weight: 600;
+  font-size: 0.9rem; /* ✅ Réduit de 0.95rem */
+  color: var(--text-medium);
+}
+
+/* CATÉGORIE */
+.category-section {
+  display: flex;
+}
+
+.category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--primary-beige);
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+}
+
+.category-badge i {
+  color: var(--primary-red);
+  font-size: 1.1rem;
+}
+
+/* BOUTON APPEL */
+.btn-call {
+  width: 100%;
+  padding: 18px;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 20px rgba(222, 28, 54, 0.3);
+}
+
+.btn-call:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(222, 28, 54, 0.5);
+}
+
+.btn-call i {
+  font-size: 1.3rem;
+}
+
+/* ============================================
+   COLONNE DROITE - IMAGE CORRIGÉE
+   ============================================ */
+.right-column {
+  position: relative;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-height: 600px;
+  aspect-ratio: 2/3;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.shop-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.no-image {
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+  background: var(--primary-beige);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+}
+
+.no-image i {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  opacity: 0.3;
+}
+
+.no-image p {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* LOGO OVERLAY - STYLE ADIDAS */
+.logo-overlay {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+}
+
+.logo-box {
+  width: 120px;
+  height: 120px;
+  background: var(--white);
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.logo-box i {
+  font-size: 3.5rem;
+  color: var(--primary-red);
+}
+
+/* ============================================
+   JOUR ACTUEL (HIGHLIGHT)
+   ============================================ */
+
+.today-row {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.today-day {
+  color: var(--text-dark);
+  font-weight: 900;
+}
+
+.today-hours {
+  color: var(--text-dark);
+  font-weight: 800;
+}
+
+.schedule-row:not(.today-row) .day-label,
+.schedule-row:not(.today-row) .hours-label {
+  color: var(--text-light);
+}
+
+/* ============================================
+   SECTION CONTACT
+   ============================================ */
+.contact-section {
+  background: var(--primary-beige);
+  padding: 40px;
+  border-radius: 20px;
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin: 0 0 30px 0;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  background: var(--white);
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.contact-item > i {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  color: var(--white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+}
+
+.contact-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.contact-value:hover {
+  color: var(--primary-red);
+}
+
+/* ============================================
+   ÉTATS (Loading, Error)
+   ============================================ */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 100px 20px;
+  background: var(--primary-beige);
+  border-radius: 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 25px;
+  border: 6px solid var(--primary-beige);
+  border-top: 6px solid var(--primary-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state i {
+  font-size: 4.5rem;
+  color: var(--text-light);
+  margin-bottom: 25px;
+  opacity: 0.5;
+}
+
+.error-state p {
+  color: var(--text-medium);
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+  color: var(--white);
+  border: none;
+  padding: 16px 32px;
+  border-radius: 30px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(222, 28, 54, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 1rem;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(222, 28, 54, 0.5);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .main-layout {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .image-container {
+    max-height: 500px; /* ✅ Hauteur adaptée pour tablettes */
+  }
+}
+
+@media (max-width: 768px) {
+  .shop-detail-container {
+    padding: 100px 20px 40px 20px;
+  }
+
+  .shop-name {
+    font-size: 2rem; /* ✅ Encore plus petit sur mobile */
+  }
+
+  .header-nav {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-back,
+  .btn-edit {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .actions-row {
+    flex-direction: column;
+  }
+
+  .btn-action-secondary {
+    width: 100%;
+  }
+
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .image-container {
+    max-height: 350px; /* ✅ Hauteur réduite pour mobile */
+  }
+
+  .logo-box {
+    width: 80px;
+    height: 80px;
+  }
+
+  .logo-box i {
+    font-size: 2.5rem;
+  }
+
+  .schedule-section {
+    padding: 15px;
+  }
+
+  .schedule-row {
+    padding: 10px 0;
+  }
+}

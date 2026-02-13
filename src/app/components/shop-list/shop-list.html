@@ -4,36 +4,36 @@
 <section class="page-header">
   <div class="container-page">
     <h1 class="page-title">BOUTIQUES</h1>
-    <p class="page-subtitle">
-      Découvrez une belle sélection de marques pour toutes vos envies.
-    </p>
+    <p class="page-subtitle">Découvrez une belle sélection de marques pour toutes vos envies.</p>
 
     <!-- Filtres et vue (style Westfield) -->
     <div class="page-controls">
       <div class="controls-left">
-        <button class="btn-filter">
-          <i class="fas fa-filter"></i> Filtres
-        </button>
-        <span class="result-count">{{ shops.length }} boutique{{ shops.length > 1 ? 's' : '' }}</span>
+        <!-- SELECT CATÉGORIES (au lieu du bouton) -->
+        <div class="filter-group">
+          <i class="fas fa-filter filter-icon"></i>
+          <select
+            class="select-filter"
+            [(ngModel)]="filterCategorie"
+            (ngModelChange)="applyFilters()"
+          >
+            <option value="">FILTRES</option>
+            @for (cat of categories; track cat._id) {
+              <option [value]="cat._id">{{ cat.nom }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- CHECKBOX BOUTIQUES OUVERTES -->
+        <label class="checkbox-filter">
+          <input type="checkbox" [(ngModel)]="onlyOpen" (ngModelChange)="applyFilters()" />
+          <span class="checkbox-custom"></span>
+          <span class="checkbox-label">Ouvertes maintenant</span>
+        </label>
       </div>
 
-      <div class="controls-right">
-        <button class="view-toggle active">
-          <i class="fas fa-th"></i>
-        </button>
-        <button class="view-toggle">
-          <i class="fas fa-list"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Alphabet filter (style Westfield) -->
-    <div class="alphabet-filter">
-      @for (letter of ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','0-9']; track letter) {
-        <button class="letter-btn" [class.active]="letter === 'A'">
-          {{ letter }}
-        </button>
-      }
+      <!-- Compteur résultats -->
+      <span class="result-count"> {{ totalItems }} boutique{{ totalItems > 1 ? 's' : '' }} </span>
     </div>
   </div>
 </section>
@@ -45,6 +45,13 @@
     <p>Chargement des boutiques...</p>
   </div>
 }
+
+<app-pagination
+  [currentPage]="page"
+  [totalPages]="totalPages"
+  [totalItems]="totalItems"
+  (pageChange)="onPageChange($event)"
+></app-pagination>
 
 <!-- Grille des boutiques -->
 @if (!isLoading) {
@@ -60,7 +67,7 @@
   <div class="empty-state">
     <i class="fas fa-store-slash"></i>
     <h3>Aucune boutique disponible</h3>
-    <p>Revenez bientôt pour découvrir nos enseignes !</p>
+    <p>Essayez de modifier vos filtres !</p>
   </div>
 }
 
