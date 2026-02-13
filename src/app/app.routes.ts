@@ -6,6 +6,7 @@ import { ShopListComponent } from './components/shop-list/shop-list';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login';
 import { HomeComponent } from './components/home/home';
+import { MallMapComponent } from './components/mall-map/mall-map';
 import { ShopManagementComponent } from './components/shop-management/shop-management';
 import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
@@ -21,4 +22,5 @@ export const routes: Routes = [
   { path: 'admin/boutiques', component: ShopManagementComponent },
   { path: 'admin/boutique-details/:id', component: ShopDetailComponent },
   { path: '', component: HomeComponent },
+  { path: 'mall-map', component: MallMapComponent },
 ];

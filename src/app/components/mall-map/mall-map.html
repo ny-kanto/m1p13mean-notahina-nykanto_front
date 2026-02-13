@@ -1,0 +1,42 @@
+<div class="floor-switch">
+  <button [disabled]="currentFloor===0" (click)="currentFloor = 0">RDC</button>
+  <button [disabled]="currentFloor===1" (click)="currentFloor = 1">Étage 1</button>
+</div>
+
+<div class="map-container">
+  @if (currentFloor === 0) {
+    <app-floor-rdc (zoneClick)="onZoneClick($event)"></app-floor-rdc>
+  }
+
+  @if (currentFloor === 1) {
+    <app-floor-etage1 (shopClick)="onShopClick($event)"></app-floor-etage1>
+  }
+</div>
+
+@if (selectedZone) {
+  <div class="panel">
+    <h3>Zone : {{ selectedZone.zoneId }}</h3>
+
+    <select [(ngModel)]="selectedBoutiqueId">
+      <option [ngValue]="undefined">-- Zone libre --</option>
+      @for (b of boutiques; track b._id) {
+        <option [value]="b._id">{{ b.nom }}</option>
+      }
+    </select>
+
+    <button (click)="save()">Enregistrer</button>
+  </div>
+}
+
+@if (activeStore; as store) {
+  <div class="info">
+    <h3>{{ store.nom }}</h3>
+    <p>Catégorie : {{ store.categorie }}</p>
+    <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
+    <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
+    <p>Horaires : {{ store.horaires.ouverture }} - {{ store.horaires.fermeture }}</p>
+    <p>Statut : {{ store.statut }}</p>
+  </div>
+} @else {
+  <p class="info">Clique sur une boutique</p>
+}

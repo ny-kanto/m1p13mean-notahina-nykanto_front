@@ -15,7 +15,7 @@ export interface Boutique {
   horaires: Record<JourSemaine, HoraireJour>;
 
   ouvertMaintenant?: boolean;
-
+  
   created_at?: Date | string;
   image?: {
     url: string;

@@ -1,3 +1,7 @@
+
+import { Boutique } from "./boutique";
+import { Produit } from "./produit";
+import { ProduitFiltre } from "./produit-filtre";
 import { BoutiqueFiltre } from "./boutique-filtre";
 
 export interface PaginationReponse<T> {
@@ -14,4 +18,13 @@ export interface PaginationReponse<T> {
     prevPage: number | null;
   };
   filters: BoutiqueFiltre;
+}
+
+export interface PaginationReponse1<T> {
+  page: number;
+  limit: number;
+  skip: number;
+  data: T[];
+  totalPages: number;
+  totalItems: number;
 }
