@@ -6,6 +6,7 @@ import { ProductDetailBoutiqueComponent } from './components/product-detail-bout
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login';
 import { HomeComponent } from './components/home/home';
+import { MallMapComponent } from './components/mall-map/mall-map';
 
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
@@ -15,4 +16,5 @@ export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: '', component: HomeComponent },
+  { path: 'mall-map', component: MallMapComponent },
 ];

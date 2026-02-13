@@ -1,0 +1,70 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ZoneService } from '../../../../services/zone';
+import { Zone } from '../../../../interface/zone';
+import { Boutique } from '../../../../interface/boutique';
+import { BoutiqueService } from '../../../../services/boutique';
+import { forkJoin } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+
+@Component({
+  selector: 'app-floor-rdc',
+  standalone: true,
+  templateUrl: './floor-rdc.html',
+})
+export class FloorRdcComponent {
+
+  @Output() zoneClick = new EventEmitter<string>();
+
+  zones: Zone[] = [];
+  boutiques: Boutique[] = [];
+  zoneLabels: { [key: string]: string } = {};
+
+  constructor(
+      private zoneService: ZoneService,
+      private boutiqueService: BoutiqueService,
+      private cdr: ChangeDetectorRef
+  ) {}
+
+  ngOnInit() {
+    forkJoin({
+      zones: this.zoneService.getZones(),
+      boutiques: this.boutiqueService.getBoutiques()
+    }).subscribe(({ zones, boutiques }) => {
+
+      this.zones = zones;
+      this.boutiques = boutiques.data; // si pagination
+
+      console.log('Zones RDC:', this.zones);
+      console.log('Boutiques RDC:', this.boutiques);
+
+      this.buildLabels(); // ✅ ici
+      
+      this.cdr.detectChanges(); // 🔥 FORCE refresh
+    });
+  }
+
+  onClick(zoneId: string) {
+    this.zoneClick.emit(zoneId);
+  }
+
+  private buildLabels() {
+
+    const newLabels: { [key: string]: string } = {};
+
+    for (let i = 0; i < this.zones.length; i++) {
+
+      const zone = this.zones[i];
+
+      if (!zone.boutiqueId) {
+        newLabels[zone.zoneId] = 'Libre';
+      } else {
+        newLabels[zone.zoneId] = zone.boutiqueId.nom ?? 'Libre';
+      }
+    }
+
+    this.zoneLabels = newLabels; // 🔥 nouvelle référence
+
+    console.log('TAILLE DE ZONE LABEL:', this.zoneLabels);
+  }
+
+}
