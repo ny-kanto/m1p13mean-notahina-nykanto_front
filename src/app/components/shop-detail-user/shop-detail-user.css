@@ -1,20 +1,3 @@
-/* shop-detail-centre.component.css - STYLE WESTFIELD/ADIDAS - CORRIGÉ */
-
-/* ============================================
-   VARIABLES AKOOR
-   ============================================ */
-:root {
-  --primary-red: #de1c36;
-  --secondary-red: #831421;
-  --primary-beige: #faf7f2;
-  --forest-green: #2d5016;
-  --nature-green: #4a7c59;
-  --text-dark: #1a1a1a;
-  --text-medium: #4a4a4a;
-  --text-light: #888888;
-  --white: #ffffff;
-}
-
 /* ============================================
    CONTAINER
    ============================================ */
@@ -90,6 +73,15 @@
   gap: 25px; /* ✅ Réduit de 30px à 25px */
 }
 
+/* Ligne titre + cœur — même logique que header-info dans shop-card */
+.shop-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 15px;
+}
+
 /* NOM & MÉTADONNÉES */
 .shop-header {
   padding-bottom: 20px;
@@ -104,6 +96,100 @@
   text-transform: uppercase;
   letter-spacing: -2px;
   line-height: 1;
+}
+
+
+
+/* ============================================
+   BOUTON FAVORI INLINE
+============================================ */
+.favorite-btn {
+  flex-shrink: 0;
+  margin-top: 6px;
+  width: 45px;
+  height: 45px;
+  background: rgba(250, 247, 242, 0.95);
+  border: 2px solid #e0e0e0;
+  border-radius: 50%;
+  color: var(--primary-red);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Transition icône */
+.favorite-btn i {
+  transition: transform 0.3s ease;
+}
+
+/* ============================================
+   HOVER (si pas actif)
+============================================ */
+.favorite-btn:not(.active):hover {
+  background: var(--primary-red);
+  color: white;
+  transform: scale(1.15);
+}
+
+.favorite-btn:not(.active):hover i {
+  transform: scale(1.2);
+}
+
+
+/* ============================================
+   ÉTAT ACTIF (favori)
+============================================ */
+.favorite-btn.active {
+  background: var(--primary-red);
+  color: white;
+  box-shadow: 0 4px 16px rgba(222, 28, 54, 0.45);
+}
+
+/* Hover sur bouton déjà favori */
+.favorite-btn.active:hover {
+  background: var(--secondary-red);
+  transform: scale(1.15);
+}
+
+/* Animation rebond au moment du clic */
+.favorite-btn.active i {
+  animation: heartBeat 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes heartBeat {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.45); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+/* ============================================
+   ÉTAT TOGGLING (chargement)
+============================================ */
+.favorite-btn.toggling {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.favorite-btn.toggling i {
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+
+/* le h1 prend la place dispo */
+.shop-name {
+  flex: 1;
 }
 
 .shop-meta {

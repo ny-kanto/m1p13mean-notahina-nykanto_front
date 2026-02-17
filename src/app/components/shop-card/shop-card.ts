@@ -1,37 +1,113 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Router } from '@angular/router';
+
 import { Boutique } from '../../interface/boutique';
+import { AuthService } from '../../services/auth.service';
+import { FavorisService } from '../../services/favoris';
 
 @Component({
   selector: 'app-shop-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './shop-card.html',
-  styleUrls: ['./shop-card.css']
+  styleUrls: ['./shop-card.css'],
 })
-export class ShopCardComponent {
-  @Input() boutique!: Boutique;
+export class ShopCardComponent implements OnInit {
+  @Input({ required: true }) boutique!: Boutique;
 
-  /**
-   * Retourne la classe CSS pour le statut
-   */
-  getStatusClass(): string {
-    return this.boutique.statut === 'Ouvert' ? 'status-open' : 'status-closed';
+  // ✅ État favori local
+  isFavorite = false;
+  isToggling = false; // Empêche les doubles clics
+
+  constructor(
+    private authService: AuthService,
+    private favorisService: FavorisService,
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {}
+
+  ngOnInit(): void {
+    // ✅ Initialiser l'état favori si l'utilisateur est connecté
+    if (this.authService.isLoggedIn() && this.boutique?._id) {
+      this.favorisService.isFavori(this.boutique._id).subscribe({
+        next: (res) => {
+          this.isFavorite = res.isFavori;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.isFavorite = false;
+        },
+      });
+    }
+    this.cdr.markForCheck();
   }
 
-  /**
-   * Retourne l'image par défaut si aucune image
-   */
+  fallbackImage = 'https://images.unsplash.com/photo-1517816743773-6e0fd518b4a6?w=800&q=80';
+
   getShopImage(): string {
-    return this.boutique.image || 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=500';
+    const url = this.boutique?.image?.url?.trim();
+    return url ? url : this.fallbackImage;
   }
 
-  /**
-   * Navigation vers les produits de la boutique
-   */
-  viewProducts(): void {
-    console.log('Voir les produits de:', this.boutique.nom);
-    // TODO: Implémenter la navigation
-    // this.router.navigate(['/boutique', this.boutique._id, 'produits']);
+  getCategorieLabel(): string {
+    const cat = this.boutique?.categorie;
+    if (!cat) return 'N/A';
+    return typeof cat === 'string' ? cat : (cat.nom ?? 'N/A');
+  }
+
+  getEtageLabel(): string {
+    if (this.boutique?.etage === 0) return 'Rez-de-chaussée';
+    return `Étage ${this.boutique?.etage ?? 'N/A'}`;
+  }
+
+  getStatusClass(): string {
+    return this.boutique?.ouvertMaintenant ? 'open' : 'closed';
+  }
+
+  getStatusLabel(): string {
+    return this.boutique?.ouvertMaintenant ? 'Ouvert' : 'Fermé';
+  }
+
+  viewDetails(): void {
+    if (!this.boutique?._id) return;
+    this.router.navigate(['/boutique-details', this.boutique._id]);
+  }
+
+  toggleFavorite(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    // ✅ Pas connecté → redirect login
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { redirect: `/boutiques/${this.boutique._id}` },
+      });
+      return;
+    }
+
+    if (!this.boutique._id || this.isToggling) return;
+
+    // ✅ Optimistic update — changement immédiat de l'UI
+    this.isToggling = true;
+    this.isFavorite = !this.isFavorite;
+
+    this.cdr.markForCheck();
+    this.favorisService.toggleBoutique(this.boutique._id).subscribe({
+      next: (res) => {
+        const serverValue = res?.data?.isFavorite;
+        if (typeof serverValue === 'boolean') {
+          this.isFavorite = serverValue;
+        }
+        this.cdr.markForCheck();
+        this.isToggling = false;
+      },
+      error: (err) => {
+        console.error('Erreur toggle favoris', err);
+        this.isFavorite = !this.isFavorite;
+        this.isToggling = false;
+      },
+    });
   }
 }

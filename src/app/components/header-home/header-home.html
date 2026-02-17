@@ -1,6 +1,5 @@
 <header class="header" [class.scrolled]="isScrolled">
   <div class="header-container">
-
     <!-- Logo à gauche -->
     <div class="header-logo">
       <a routerLink="/" class="logo-link">
@@ -29,11 +28,7 @@
             (blur)="onSearchBlur()"
           />
           @if (searchQuery) {
-            <button
-              type="button"
-              class="search-clear"
-              (click)="clearSearch()"
-            >
+            <button type="button" class="search-clear" (click)="clearSearch()">
               <i class="fas fa-times"></i>
             </button>
           }
@@ -46,73 +41,30 @@
 
     <!-- Actions à droite -->
     <div class="header-actions">
-      <!-- Compte utilisateur -->
-      <a routerLink="/login" class="header-action-btn" title="Mon compte">
-        <i class="fas fa-user"></i>
-        <span class="action-text">Compte</span>
-      </a>
+      @if (!isLoggedIn) {
+        <a routerLink="/login" class="header-action-btn" title="Mon compte">
+          <i class="fas fa-user"></i>
+          <span class="action-text">Compte</span>
+        </a>
+      } @else {
+        <!-- ✅ SI CONNECTÉ -->
+        <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
+          <a href="#" class="header-action-btn" title="Mon compte" (click)="toggleUserMenu($event)">
+            <i class="fas fa-user"></i>
+            <span class="action-text">{{ userDisplayName }}</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem"></i>
+          </a>
 
-      <!-- Menu burger mobile -->
-      <button class="mobile-menu-btn" (click)="toggleMobileMenu()">
-        <i class="fas" [class.fa-bars]="!isMobileMenuOpen" [class.fa-times]="isMobileMenuOpen"></i>
-      </button>
+          @if (isUserMenuOpen) {
+            <div class="user-dropdown">
+              <button class="user-dropdown-item" (click)="logout($event)">
+                <i class="fas fa-sign-out-alt"></i>
+                Déconnexion
+              </button>
+            </div>
+          }
+        </div>
+      }
     </div>
-
   </div>
 </header>
-
-<!-- Menu mobile overlay -->
-@if (isMobileMenuOpen) {
-  <div class="mobile-menu-overlay" (click)="closeMobileMenu()">
-    <div class="mobile-menu" (click)="$event.stopPropagation()">
-
-      <!-- Barre de recherche mobile -->
-      <div class="mobile-search">
-        <form (submit)="onSearch(); closeMobileMenu(); $event.preventDefault()">
-          <div class="search-wrapper-mobile">
-            <i class="fas fa-search"></i>
-            <input
-              type="text"
-              placeholder="Rechercher..."
-              [(ngModel)]="searchQuery"
-              name="searchMobile"
-            />
-          </div>
-        </form>
-      </div>
-
-      <!-- Navigation mobile -->
-      <nav class="mobile-nav">
-        <a routerLink="/" class="mobile-nav-link" (click)="closeMobileMenu()">
-          <i class="fas fa-home"></i>
-          <span>Accueil</span>
-        </a>
-        <a routerLink="/boutiques" class="mobile-nav-link" (click)="closeMobileMenu()">
-          <i class="fas fa-store"></i>
-          <span>Boutiques</span>
-        </a>
-        <a routerLink="/services" class="mobile-nav-link" (click)="closeMobileMenu()">
-          <i class="fas fa-concierge-bell"></i>
-          <span>Services</span>
-        </a>
-        <a routerLink="/actualites" class="mobile-nav-link" (click)="closeMobileMenu()">
-          <i class="fas fa-newspaper"></i>
-          <span>Actualités</span>
-        </a>
-        <a routerLink="/contact" class="mobile-nav-link" (click)="closeMobileMenu()">
-          <i class="fas fa-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </nav>
-
-      <!-- Action mobile -->
-      <div class="mobile-actions">
-        <a routerLink="/login" class="mobile-action-btn" (click)="closeMobileMenu()">
-          <i class="fas fa-user"></i>
-          <span>Mon compte</span>
-        </a>
-      </div>
-
-    </div>
-  </div>
-}
