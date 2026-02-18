@@ -9,7 +9,7 @@
   }
 
   @if (currentFloor === 1) {
-    <app-floor-etage1 (shopClick)="onShopClick($event)"></app-floor-etage1>
+    <app-floor-etage1 (zoneClick)="onZoneClick($event)"></app-floor-etage1>
   }
 </div>
 
@@ -34,8 +34,7 @@
     <p>Catégorie : {{ store.categorie }}</p>
     <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
     <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
-    <p>Horaires : {{ store.horaires.ouverture }} - {{ store.horaires.fermeture }}</p>
-    <p>Statut : {{ store.statut }}</p>
+    <p>Statut : {{ store.ouvertMaintenant }}</p>
   </div>
 } @else {
   <p class="info">Clique sur une boutique</p>
