@@ -16,6 +16,7 @@ export interface PaginationReponse<T> {
     hasPrevPage: boolean;
     nextPage: number | null;
     prevPage: number | null;
+    totalItems: number;
   };
   filters: BoutiqueFiltre;
 }

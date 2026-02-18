@@ -9,7 +9,7 @@
 
     <!-- Badge statut (bottom left) -->
     <span class="status-badge" [ngClass]="getStatusClass()">
-      {{ boutique.statut }}
+      {{ boutique.ouvertMaintenant ? 'Ouvert' : 'Fermé' }}
     </span>
 
     <!-- Icône favori (top left) -->

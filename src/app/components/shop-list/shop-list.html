@@ -46,13 +46,6 @@
   </div>
 }
 
-<app-pagination
-  [currentPage]="page"
-  [totalPages]="totalPages"
-  [totalItems]="totalItems"
-  (pageChange)="onPageChange($event)"
-></app-pagination>
-
 <!-- Grille des boutiques -->
 @if (!isLoading) {
   <div class="shop-grid">

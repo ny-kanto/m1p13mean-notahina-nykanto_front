@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PaginationReponse } from '../../interface/pagination-reponse';
+import { PaginationReponse, PaginationReponse1 } from '../../interface/pagination-reponse';
 import { ProduitFiltre } from '../../interface/produit-filtre';
 
 @Component({
@@ -206,12 +206,12 @@ Math: any;
       .getProductsByBoutique(this.boutiqueId, this.currentPage, this.limit, this.filters)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response: PaginationReponse) => {
+        next: (response: PaginationReponse<Produit>) => {
           console.log('Produits récupérés:', response);
           this.products = response.data;
-          this.totalPages = response.totalPages;
-          this.totalItems = response.totalItems;
-          this.currentPage = response.page;
+          this.totalPages = response.pagination.totalPages;
+          this.totalItems = response.pagination.totalItems;
+          this.currentPage = response.pagination.page;
           this.isLoading = false;
           this.cdr.detectChanges();
         },

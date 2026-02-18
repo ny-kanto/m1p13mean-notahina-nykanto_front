@@ -22,7 +22,7 @@ export class ProduitService {
     page: number = 1,
     limit: number = 10,
     filters?: ProduitFiltre,
-  ): Observable<PaginationReponse> {
+  ): Observable<PaginationReponse<Produit>> {
     let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
 
     // Ajouter les filtres s'ils sont définis
@@ -52,7 +52,7 @@ export class ProduitService {
       }
     }
 
-    return this.http.get<PaginationReponse>(`${this.apiUrl}/boutique/${boutiqueId}`, { params });
+    return this.http.get<PaginationReponse<Produit>>(`${this.apiUrl}/boutique/${boutiqueId}`, { params });
   }
 
   /**
