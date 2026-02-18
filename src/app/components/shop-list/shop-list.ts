@@ -9,7 +9,6 @@ import { BoutiqueService } from '../../services/boutique';
 import { ShopCardComponent } from '../shop-card/shop-card';
 import { Footer } from '../footer/footer';
 import { HeaderHomeComponent } from '../header-home/header-home';
-import { PaginationComponent } from '../pagination/pagination';
 
 @Component({
   selector: 'app-shop-list',
@@ -20,7 +19,6 @@ import { PaginationComponent } from '../pagination/pagination';
     ShopCardComponent,
     Footer,
     HeaderHomeComponent,
-    PaginationComponent,
   ],
   templateUrl: './shop-list.html',
   styleUrl: './shop-list.css',

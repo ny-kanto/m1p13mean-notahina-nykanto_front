@@ -16,7 +16,6 @@ import { FavorisService } from '../../services/favoris';
 })
 export class ShopCardComponent implements OnInit {
   @Input({ required: true }) boutique!: Boutique;
-
   // ✅ État favori local
   isFavorite = false;
   isToggling = false; // Empêche les doubles clics
