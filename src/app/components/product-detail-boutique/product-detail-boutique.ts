@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, Injectable } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,6 +12,9 @@ import { Subject, takeUntil } from 'rxjs';
   imports: [CommonModule, FormsModule],
   templateUrl: './product-detail-boutique.html',
   styleUrl: './product-detail-boutique.css',
+})
+@Injectable({
+  providedIn: 'root' // Indispensable pour que le service soit disponible partout
 })
 export class ProductDetailBoutiqueComponent implements OnInit, OnDestroy {
   product: Produit | null = null;

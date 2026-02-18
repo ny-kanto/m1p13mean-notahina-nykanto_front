@@ -7,7 +7,7 @@ import { Zone } from '../../interface/zone';
 import { ZoneService } from '../../services/zone';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { PaginationReponse1 } from '../../interface/pagination-reponse';
+import { PaginationReponse, PaginationReponse1 } from '../../interface/pagination-reponse';
 
 @Component({
   selector: 'app-mall-map',
@@ -20,7 +20,7 @@ export class MallMapComponent {
 
   zones: Zone[] = [];
   boutiques: Boutique[] = [];
-  paginationResponse?: PaginationReponse1<Boutique>;
+  paginationResponse?: PaginationReponse<Boutique>;
 
   selectedZone?: Zone;
   selectedBoutiqueId: string = '';
@@ -33,7 +33,7 @@ export class MallMapComponent {
     private boutiqueService: BoutiqueService
   ) {
     this.zoneService.getZones().subscribe(z => this.zones = z);
-    this.boutiqueService.getBoutiques().subscribe(b => {this.paginationResponse = b;
+    this.boutiqueService.getAllBoutiques().subscribe(b => {this.paginationResponse = b;
       this.boutiques = this.paginationResponse?.data || [];
     });
   }

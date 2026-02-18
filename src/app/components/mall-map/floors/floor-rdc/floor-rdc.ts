@@ -28,7 +28,7 @@ export class FloorRdcComponent {
   ngOnInit() {
     forkJoin({
       zones: this.zoneService.getZones(),
-      boutiques: this.boutiqueService.getBoutiques()
+      boutiques: this.boutiqueService.getAllBoutiques()
     }).subscribe(({ zones, boutiques }) => {
 
       this.zones = zones;
