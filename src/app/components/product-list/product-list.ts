@@ -181,14 +181,14 @@ Math: any;
       .createProduct(formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (newProduct) => {
+        next: (newProduct: any) => {
           this.closeModal();
           alert('✅ Produit ajouté avec succès !');
           // Recharger la première page pour voir le nouveau produit
           this.currentPage = 1;
           this.loadProducts();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error(error);
           alert("❌ Erreur lors de l'ajout du produit");
         },
@@ -215,7 +215,7 @@ Math: any;
           this.isLoading = false;
           this.cdr.detectChanges();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Erreur:', error);
           this.errorMessage = 'Impossible de charger les produits.';
           this.isLoading = false;
@@ -233,7 +233,7 @@ Math: any;
       .updateProduct(this.selectedProduct._id, this.productForm)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (updatedProduct) => {
+        next: (updatedProduct: Produit) => {
           console.log('Produit modifié:', updatedProduct);
 
           const index = this.products.findIndex((p) => p._id === updatedProduct._id);
@@ -244,7 +244,7 @@ Math: any;
           this.closeModal();
           this.cdr.detectChanges();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Erreur:', error);
           alert('❌ Erreur lors de la modification');
         },

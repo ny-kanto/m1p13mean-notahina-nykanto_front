@@ -178,6 +178,10 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
     this.router.navigate(['/boutiques']);
   }
 
+  goToMap() : void {
+    this.router.navigate(['/mall-map']);
+  }
+
   getEtageLabel(): string {
     if (!this.boutique) return 'N/A';
     return this.boutique.etage === 0 ? 'Rez-de-chaussée' : `Étage ${this.boutique.etage}`;
