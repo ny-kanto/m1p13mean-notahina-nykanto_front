@@ -12,7 +12,6 @@
   padding: 20px 0;
 }
 
-/* État scrollé - fond beige */
 .header.scrolled {
   background: var(--primary-beige);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -30,7 +29,7 @@
 }
 
 /* ============================================
-   LOGO - GAUCHE
+   LOGO
    ============================================ */
 .header-logo {
   flex-shrink: 0;
@@ -75,33 +74,23 @@
 .logo-name {
   font-size: 1.5rem;
   font-weight: 900;
-  color: white;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: color 0.3s ease;
-}
-
-.header.scrolled .logo-name {
   background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
 .logo-subtitle {
   font-size: 0.75rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-light);
   text-transform: uppercase;
   letter-spacing: 2px;
-  transition: color 0.3s ease;
-}
-
-.header.scrolled .logo-subtitle {
-  color: var(--text-light);
 }
 
 /* ============================================
-   BARRE DE RECHERCHE - CENTRE
+   BARRE DE RECHERCHE
    ============================================ */
 .header-search {
   max-width: 600px;
@@ -137,7 +126,7 @@
 }
 
 .search-icon {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--primary-red);
   font-size: 1.1rem;
   margin-right: 15px;
   transition: color 0.3s ease;
@@ -165,7 +154,7 @@
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--primary-red);
   font-weight: 400;
 }
 
@@ -233,11 +222,12 @@
   backdrop-filter: blur(20px);
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50px;
-  color: white;
+  color: var(--primary-red);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.95rem;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .header.scrolled .header-action-btn {
@@ -260,6 +250,85 @@
 
 .action-text {
   font-weight: 700;
+}
+
+/* ============================================
+   MENU UTILISATEUR CONNECTÉ
+   ============================================ */
+
+/* Wrapper relatif pour positionner le dropdown */
+.user-menu-wrapper {
+  position: relative;
+}
+
+/* Dropdown panel */
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 200px;
+  background: var(--white, #ffffff);
+  border: 2px solid #f0ece6;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  animation: dropdownIn 0.2s ease;
+  z-index: 100;
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Petite flèche décorative au-dessus du dropdown */
+.user-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: #ffffff;
+  border-top: 2px solid #f0ece6;
+  border-left: 2px solid #f0ece6;
+  transform: rotate(45deg);
+}
+
+/* Bouton déconnexion */
+.user-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  color: #e74c3c;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+  font-family: inherit;
+  letter-spacing: 0.3px;
+}
+
+.user-dropdown-item i {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.user-dropdown-item:hover {
+  background: rgba(231, 76, 60, 0.08);
+  padding-left: 26px;
+  color: #c0392b;
 }
 
 /* ============================================
@@ -303,8 +372,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .mobile-menu {
@@ -419,6 +492,31 @@
   font-size: 1.3rem;
 }
 
+/* Bouton déconnexion mobile */
+.mobile-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  margin-top: 12px;
+  background: transparent;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  color: #e74c3c;
+  font-weight: 700;
+  font-size: 1.05rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.mobile-logout-btn:hover {
+  background: rgba(231, 76, 60, 0.08);
+  border-color: #e74c3c;
+}
+
 /* ============================================
    RESPONSIVE
    ============================================ */
@@ -470,6 +568,11 @@
   .mobile-menu {
     max-width: 100%;
   }
+
+  /* Dropdown fermé sur mobile — géré via menu mobile */
+  .user-dropdown {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -489,8 +592,4 @@
    ============================================ */
 body {
   padding-top: 90px;
-}
-
-.header.scrolled ~ * {
-  padding-top: 74px;
 }

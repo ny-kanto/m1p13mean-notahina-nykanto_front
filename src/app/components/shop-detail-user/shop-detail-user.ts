@@ -1,14 +1,19 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
+
 import { Footer } from '../footer/footer';
 import { HeaderHomeComponent } from '../header-home/header-home';
+
 import { Boutique } from '../../interface/boutique';
-import { Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BoutiqueService } from '../../services/boutique';
-import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { FavorisService } from '../../services/favoris';
 
 @Component({
   selector: 'app-shop-detail-user',
+  standalone: true,
   imports: [CommonModule, RouterModule, Footer, HeaderHomeComponent],
   templateUrl: './shop-detail-user.html',
   styleUrl: './shop-detail-user.css',
@@ -17,6 +22,10 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
   boutique: Boutique | null = null;
   isLoading = false;
   errorMessage = '';
+
+  // ✅ Favoris
+  isFavorite = false;
+  isToggling = false;
 
   // ⚠️ clés EXACTES du backend
   joursOrdered = [
@@ -35,14 +44,14 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private boutiqueService: BoutiqueService,
+    private authService: AuthService,
+    private favorisService: FavorisService,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadBoutique(id);
-    }
+    if (id) this.loadBoutique(id);
   }
 
   ngOnDestroy(): void {
@@ -60,8 +69,11 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (res) => {
           this.boutique = res.data;
-          this.cdr.markForCheck();
+
+          this.initFavoriteState();
+
           this.isLoading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.errorMessage = 'Impossible de charger les détails de la boutique.';
@@ -70,10 +82,79 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
       });
   }
 
+  private initFavoriteState(): void {
+    const boutiqueId = this.boutique?._id;
+    if (!boutiqueId) return;
+
+    // Pas connecté => pas besoin de call API
+    if (!this.authService.isLoggedIn()) {
+      this.isFavorite = false;
+      return;
+    }
+
+    this.favorisService
+      .isFavori(boutiqueId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          this.isFavorite = !!res.isFavori;
+          this.cdr.markForCheck();
+        },
+        error: () => {
+          this.isFavorite = false;
+        },
+      });
+  }
+
   getCategorieNom(): string {
     if (!this.boutique) return 'N/A';
     if (typeof this.boutique.categorie === 'string') return 'N/A';
     return this.boutique.categorie?.nom || 'N/A';
+  }
+
+  toggleFavorite(event: Event): void {
+    event.stopPropagation();
+    event.preventDefault();
+
+    const boutiqueId = this.boutique?._id;
+    if (!boutiqueId) return;
+
+    // ✅ Pas connecté → redirect login avec redirect vers la page actuelle
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { redirect: `/boutiques/${boutiqueId}` },
+      });
+      return;
+    }
+
+    if (this.isToggling) return;
+
+    // ✅ Optimistic update
+    this.isToggling = true;
+    this.isFavorite = !this.isFavorite;
+    this.cdr.markForCheck();
+
+    this.favorisService
+      .toggleBoutique(boutiqueId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (res) => {
+          // ⚠️ Backend => res.data.isFavorite
+          const serverValue = res?.data?.isFavorite;
+          if (typeof serverValue === 'boolean') {
+            this.isFavorite = serverValue;
+          }
+          this.isToggling = false;
+          this.cdr.markForCheck();
+        },
+        error: (err) => {
+          console.error('Erreur toggle favoris', err);
+          // rollback
+          this.isFavorite = !this.isFavorite;
+          this.isToggling = false;
+          this.cdr.markForCheck();
+        },
+      });
   }
 
   /**
@@ -88,9 +169,6 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
     return `${horaire.ouverture} — ${horaire.fermeture}`;
   }
 
-  /**
-   * Jour courant
-   */
   isToday(jourKey: string): boolean {
     const jours = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
     return jours[new Date().getDay()] === jourKey;
@@ -105,9 +183,6 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
     return this.boutique.etage === 0 ? 'Rez-de-chaussée' : `Étage ${this.boutique.etage}`;
   }
 
-  /**
-   * Statut basé sur ouvertMaintenant
-   */
   getStatutLabel(): string {
     return this.boutique?.ouvertMaintenant ? 'Ouvert' : 'Fermé';
   }

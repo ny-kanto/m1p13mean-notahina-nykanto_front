@@ -1,26 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class LoginComponent {
-
+export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-
   message: string = '';
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -32,16 +37,12 @@ export class LoginComponent {
 
     const payload = this.loginForm.value;
 
-    this.authService.login(payload)
-    .subscribe({
-      next: (res: any) => {
-          console.log('Login successful:', res);
-          this.message = res.message || 'Connexion réussie';
-        },
-        error: (err) => {
-          this.message = err.error?.message || 'Erreur lors de la connexion';
-        }
+    this.authService.login(payload).subscribe({
+      next: (res) => {
+        const redirectUrl = this.route.snapshot.queryParamMap.get('redirect') || '/boutiques';
+
+        this.router.navigateByUrl(redirectUrl);
+      },
     });
   }
-
 }
