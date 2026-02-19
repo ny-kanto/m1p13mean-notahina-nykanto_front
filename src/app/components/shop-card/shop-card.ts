@@ -88,7 +88,6 @@ export class ShopCardComponent implements OnInit {
 
     if (!this.boutique._id || this.isToggling) return;
 
-    // ✅ Optimistic update — changement immédiat de l'UI
     this.isToggling = true;
     this.isFavorite = !this.isFavorite;
 

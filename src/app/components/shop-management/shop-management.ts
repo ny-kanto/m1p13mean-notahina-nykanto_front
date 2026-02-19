@@ -7,12 +7,13 @@ import { Subject, takeUntil } from 'rxjs';
 import { BoutiqueService } from '../../services/boutique';
 import { Boutique } from '../../interface/boutique';
 import { Categorie } from '../../interface/categorie';
+import { PaginationComponent } from '../pagination/pagination';
 import { HoraireJour, JourSemaine } from '../../interface/horaire-jour';
 
 @Component({
   selector: 'app-shop-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, PaginationComponent, RouterLink],
   templateUrl: './shop-management.html',
   styleUrls: ['./shop-management.css'],
 })

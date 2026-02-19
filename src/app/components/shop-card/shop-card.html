@@ -1,4 +1,3 @@
-<!-- shop-card.component.html -->
 <a [routerLink]="['/boutiques', boutique._id]" class="shop-card-link">
   <div class="shop-card" tabindex="0" [class.is-favorite]="isFavorite">
 
@@ -8,7 +7,6 @@
         {{ getStatusLabel() }}
       </span>
 
-      <!-- ✅ Bouton favori avec état dynamique -->
       <button
         class="favorite-btn"
         [class.active]="isFavorite"

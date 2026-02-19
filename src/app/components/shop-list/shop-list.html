@@ -32,6 +32,13 @@
         </label>
       </div>
 
+      <!-- CHECKBOX BOUTIQUES FAVORITES -->
+      <label class="checkbox-filter">
+        <input type="checkbox" [(ngModel)]="onlyFavoris" (ngModelChange)="applyFilters()" />
+        <span class="checkbox-custom"></span>
+        <span class="checkbox-label">Mes favoris</span>
+      </label>
+
       <!-- Compteur résultats -->
       <span class="result-count"> {{ totalItems }} boutique{{ totalItems > 1 ? 's' : '' }} </span>
     </div>
@@ -45,6 +52,13 @@
     <p>Chargement des boutiques...</p>
   </div>
 }
+
+<app-pagination
+  [currentPage]="page"
+  [totalPages]="totalPages"
+  [totalItems]="totalItems"
+  (pageChange)="onPageChange($event)"
+></app-pagination>
 
 <!-- Grille des boutiques -->
 @if (!isLoading) {

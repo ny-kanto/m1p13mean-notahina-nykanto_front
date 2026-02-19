@@ -1,0 +1,33 @@
+@if (totalPages > 1) {
+  <div class="pagination-container">
+    <!-- Bouton Précédent -->
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="prevPage()">
+      <i class="fas fa-chevron-left"></i>
+      Précédent
+    </button>
+
+    <!-- Numéros de pages -->
+    <div class="pagination-numbers">
+      @for (pageNum of pageNumbers; track pageNum) {
+        <button
+          class="pagination-number"
+          [class.active]="pageNum === currentPage"
+          (click)="onPageChange(pageNum)"
+        >
+          {{ pageNum }}
+        </button>
+      }
+    </div>
+
+    <!-- Bouton Suivant -->
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="nextPage()">
+      Suivant
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
+    <!-- Info -->
+    <div class="pagination-info">
+      Page {{ currentPage }} sur {{ totalPages }} ({{ totalItems }} résultats)
+    </div>
+  </div>
+}

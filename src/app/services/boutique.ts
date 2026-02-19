@@ -11,10 +11,10 @@ import { Categorie } from '../interface/categorie';
   providedIn: 'root',
 })
 export class BoutiqueService {
-//   private apiUrl = 'http://localhost:3000/boutiques';
+  //   private apiUrl = 'http://localhost:3000/boutiques';
   private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
   private categoriesUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/categories';
-//   private categoriesUrl = 'http://localhost:3000/categories';
+  //   private categoriesUrl = 'http://localhost:3000/categories';
 
   constructor(private http: HttpClient) {}
 
@@ -26,10 +26,7 @@ export class BoutiqueService {
     page: number = 1,
     limit: number = 12, // cohérent avec le backend
   ): Observable<PaginationReponse<Boutique>> {
-
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
+    let params = new HttpParams().set('page', page.toString()).set('limit', limit.toString());
 
     if (filters.search) {
       params = params.set('search', filters.search);
@@ -46,6 +43,10 @@ export class BoutiqueService {
     if (filters.ouvert !== undefined && filters.ouvert !== '') {
       params = params.set('ouvert', String(filters.ouvert));
     }
+    
+    if (filters.favoris !== undefined && filters.favoris !== '') {
+      params = params.set('favoris', String(filters.favoris));
+    }
 
     if (filters.sortBy) {
       params = params.set('sortBy', filters.sortBy);
@@ -59,9 +60,7 @@ export class BoutiqueService {
   }
 
   getBoutiqueById(id: string): Observable<{ success: boolean; data: Boutique }> {
-    return this.http.get<{ success: boolean; data: Boutique }>(
-      `${this.apiUrl}/${id}`
-    );
+    return this.http.get<{ success: boolean; data: Boutique }>(`${this.apiUrl}/${id}`);
   }
 
   createBoutique(
@@ -69,7 +68,7 @@ export class BoutiqueService {
   ): Observable<{ success: boolean; data: Boutique; message: string }> {
     return this.http.post<{ success: boolean; data: Boutique; message: string }>(
       this.apiUrl,
-      formData
+      formData,
     );
   }
 
@@ -79,14 +78,12 @@ export class BoutiqueService {
   ): Observable<{ success: boolean; data: Boutique; message: string }> {
     return this.http.put<{ success: boolean; data: Boutique; message: string }>(
       `${this.apiUrl}/${id}`,
-      formData
+      formData,
     );
   }
 
   deleteBoutique(id: string): Observable<{ success: boolean; message: string }> {
-    return this.http.delete<{ success: boolean; message: string }>(
-      `${this.apiUrl}/${id}`
-    );
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/${id}`);
   }
 
   searchBoutiques(
@@ -94,7 +91,7 @@ export class BoutiqueService {
   ): Observable<{ success: boolean; data: Boutique[]; count: number }> {
     return this.http.post<{ success: boolean; data: Boutique[]; count: number }>(
       `${this.apiUrl}/search`,
-      criteria
+      criteria,
     );
   }
 

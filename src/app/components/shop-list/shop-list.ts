@@ -9,6 +9,9 @@ import { BoutiqueService } from '../../services/boutique';
 import { ShopCardComponent } from '../shop-card/shop-card';
 import { Footer } from '../footer/footer';
 import { HeaderHomeComponent } from '../header-home/header-home';
+import { PaginationComponent } from '../pagination/pagination';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-shop-list',
@@ -19,6 +22,7 @@ import { HeaderHomeComponent } from '../header-home/header-home';
     ShopCardComponent,
     Footer,
     HeaderHomeComponent,
+    PaginationComponent,
   ],
   templateUrl: './shop-list.html',
   styleUrl: './shop-list.css',
@@ -31,6 +35,7 @@ export class ShopListComponent implements OnInit {
   // filtres
   filterCategorie = '';
   onlyOpen = false;
+  onlyFavoris = false;
 
   // pagination
   page = 1;
@@ -39,6 +44,8 @@ export class ShopListComponent implements OnInit {
   totalItems = 0;
 
   constructor(
+    private router: Router,
+    private authService: AuthService,
     private boutiqueService: BoutiqueService,
     private cdr: ChangeDetectorRef,
   ) {}
@@ -63,8 +70,8 @@ export class ShopListComponent implements OnInit {
 
     const filters: any = {
       categorie: this.filterCategorie,
-      // ouvert doit être "true"/"" car ton backend attend des strings
       ouvert: this.onlyOpen ? 'true' : '',
+      favoris: this.onlyFavoris ? 'true' : '',
     };
 
     this.boutiqueService.getAllBoutiques(filters, this.page, this.limit).subscribe({
@@ -93,6 +100,11 @@ export class ShopListComponent implements OnInit {
   }
 
   applyFilters(): void {
+    if (this.onlyFavoris && !this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], { queryParams: { redirect: '/boutiques' } });
+      this.onlyFavoris = false;
+      return;
+    }
     this.page = 1;
     this.loadShops();
   }

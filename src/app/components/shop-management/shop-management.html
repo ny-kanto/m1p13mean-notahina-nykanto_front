@@ -144,6 +144,12 @@
       </table>
     </div>
   }
+  <app-pagination
+    [currentPage]="page"
+    [totalPages]="totalPages"
+    [totalItems]="totalItems"
+    (pageChange)="onPageChange($event)"
+  ></app-pagination>
 </div>
 
 @if (showModal) {
