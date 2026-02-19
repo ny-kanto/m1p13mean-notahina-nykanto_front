@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 :root {
   --primary-red: #de1c36;
   --secondary-red: #831421;
@@ -8,4 +10,13 @@
   --text-dark: #1a1a1a;
   --text-medium: #4a4a4a;
   --text-light: #888888;
+  --white: #ffffff;
 }
+
+.page-title {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+/* * {
+    font-family: Arial, Helvetica, sans-serif;
+} */
