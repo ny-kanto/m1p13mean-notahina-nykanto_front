@@ -178,8 +178,27 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
     this.router.navigate(['/boutiques']);
   }
 
-  goToMap() : void {
+  goToMap(): void {
     this.router.navigate(['/mall-map']);
+  }
+
+  visitShop(): void {
+    const boutiqueId = this.boutique?._id;
+    if (!boutiqueId) return;
+
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { redirect: `/boutiques/${boutiqueId}` },
+      });
+      return;
+    }
+
+    if (!this.authService.isAcheteur()) {
+      alert('Accès réservé aux acheteurs.');
+      return;
+    }
+
+    this.router.navigate(['/produits', boutiqueId]);
   }
 
   getEtageLabel(): string {

@@ -3,7 +3,9 @@ export interface Produit {
   nom: string;
   prix: number;
   description: string;
-  stock: number;
   boutiqueId: string;
-  images?: string[];
+  images: {
+    url: string;
+    public_id: string;
+  }[];
 }

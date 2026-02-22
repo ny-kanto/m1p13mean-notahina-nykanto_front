@@ -2,7 +2,6 @@ export interface ProduitFiltre {
   search?: string;
   minPrice?: number;
   maxPrice?: number;
-  stockStatus?: 'all' | 'empty' | 'low' | 'ok';
-  sortBy?: 'nom' | 'prix' | 'stock';
+  sortBy?: 'nom' | 'prix';
   sortOrder?: 'asc' | 'desc';
 }

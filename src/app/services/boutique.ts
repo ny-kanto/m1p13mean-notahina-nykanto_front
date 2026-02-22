@@ -11,10 +11,10 @@ import { Categorie } from '../interface/categorie';
   providedIn: 'root',
 })
 export class BoutiqueService {
-  //   private apiUrl = 'http://localhost:3000/boutiques';
-  private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
-  private categoriesUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/categories';
-  //   private categoriesUrl = 'http://localhost:3000/categories';
+    private apiUrl = 'http://localhost:3000/boutiques';
+//   private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/boutiques';
+//   private categoriesUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/categories';
+    private categoriesUrl = 'http://localhost:3000/categories';
 
   constructor(private http: HttpClient) {}
 
@@ -43,7 +43,7 @@ export class BoutiqueService {
     if (filters.ouvert !== undefined && filters.ouvert !== '') {
       params = params.set('ouvert', String(filters.ouvert));
     }
-    
+
     if (filters.favoris !== undefined && filters.favoris !== '') {
       params = params.set('favoris', String(filters.favoris));
     }

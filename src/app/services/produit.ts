@@ -11,6 +11,7 @@ import { ProduitFiltre } from '../interface/produit-filtre';
 })
 export class ProduitService {
   private apiUrl = 'http://localhost:3000/produits';
+//   private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/produits';
 
   constructor(private http: HttpClient) {}
   /**
@@ -36,10 +37,6 @@ export class ProduitService {
 
       if (filters.maxPrice !== undefined && filters.maxPrice !== null) {
         params = params.set('maxPrice', filters.maxPrice.toString());
-      }
-
-      if (filters.stockStatus && filters.stockStatus !== 'all') {
-        params = params.set('stockStatus', filters.stockStatus);
       }
 
       if (filters.sortBy) {
