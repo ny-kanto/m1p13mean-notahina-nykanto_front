@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class FavorisService {
-  private api = 'https://m1p13mean-notahina-nykanto-back.onrender.com/favoris';
-//   private api = 'http://localhost:3000/favoris';
+//   private api = 'https://m1p13mean-notahina-nykanto-back.onrender.com/favoris';
+  private api = 'http://localhost:3000/favoris';
 
   constructor(private http: HttpClient) {}
 

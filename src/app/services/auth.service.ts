@@ -7,8 +7,8 @@ type LoginResponse = { token: string; user?: any };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private API_URL = 'https://m1p13mean-notahina-nykanto-back.onrender.com/auth';
-//   private API_URL = 'http://localhost:3000/auth';
+  //   private API_URL = 'https://m1p13mean-notahina-nykanto-back.onrender.com/auth';
+  private API_URL = 'http://localhost:3000/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -44,5 +44,23 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('token');
+  }
+
+  getRoleFromToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload?.role ?? null;
+    } catch {
+      return null;
+    }
+  }
+
+  isAcheteur(): boolean {
+    // priorité user stocké, sinon token
+    const user = this.getUser();
+    return (user?.role ?? this.getRoleFromToken()) === 'acheteur';
   }
 }

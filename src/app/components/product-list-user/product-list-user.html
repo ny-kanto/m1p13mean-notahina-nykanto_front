@@ -1,0 +1,152 @@
+<app-header></app-header>
+
+<div class="product-list-container">
+  <!-- LAYOUT PRINCIPAL : SIDEBAR + CONTENU -->
+  <div class="main-layout">
+    <!-- ========== SIDEBAR FILTRES (GAUCHE) ========== -->
+    <aside class="filters-sidebar">
+      <!-- Header sidebar -->
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">
+          <i class="fas fa-filter"></i>
+          Filtres
+        </h2>
+        <button class="btn-reset-filters" (click)="resetFilters()">
+          <i class="fas fa-redo"></i>
+        </button>
+      </div>
+
+      <!-- RECHERCHE -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <i class="fas fa-search"></i>
+          Rechercher
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          [(ngModel)]="filters.search"
+          (ngModelChange)="applyFilters()"
+          placeholder="Nom du produit..."
+        />
+      </div>
+
+      <!-- PRIX -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <i class="fas fa-euro-sign"></i>
+          Prix
+        </label>
+        <div class="price-inputs">
+          <input
+            type="number"
+            class="filter-input price-input"
+            [(ngModel)]="filters.minPrice"
+            (ngModelChange)="applyFilters()"
+            placeholder="Min"
+            min="0"
+          />
+          <span class="price-separator">—</span>
+          <input
+            type="number"
+            class="filter-input price-input"
+            [(ngModel)]="filters.maxPrice"
+            (ngModelChange)="applyFilters()"
+            placeholder="Max"
+            min="0"
+          />
+        </div>
+      </div>
+
+      <!-- TRI -->
+      <div class="filter-section">
+        <label class="filter-label">
+          <i class="fas fa-sort"></i>
+          Trier par
+        </label>
+        <select class="filter-select" [(ngModel)]="filters.sortBy" (ngModelChange)="applyFilters()">
+          <option value="nom">Nom (A-Z)</option>
+          <option value="prix">Prix</option>
+        </select>
+
+        <div class="sort-direction">
+          <button
+            class="btn-sort"
+            [class.active]="filters.sortOrder === 'asc'"
+            (click)="setSortOrder('asc')"
+          >
+            <i class="fas fa-arrow-up"></i>
+            Croissant
+          </button>
+          <button
+            class="btn-sort"
+            [class.active]="filters.sortOrder === 'desc'"
+            (click)="setSortOrder('desc')"
+          >
+            <i class="fas fa-arrow-down"></i>
+            Décroissant
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========== CONTENU PRINCIPAL (DROITE) ========== -->
+    <main class="products-main">
+      <!-- Bouton retour boutique -->
+      <div class="back-to-shop">
+        <button class="btn-back" (click)="goBackToBoutique()">
+          <i class="fas fa-arrow-left"></i>
+          Retour à la boutique
+        </button>
+      </div>
+
+      <!-- Header avec compteur -->
+      <div class="products-header">
+        <h1 class="page-title">{{ boutiqueNom || 'Produits' }}</h1>
+        <span class="result-count"> {{ totalItems }} produit{{ totalItems > 1 ? 's' : '' }} </span>
+      </div>
+
+      <!-- État de chargement -->
+      @if (isLoading) {
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Chargement des produits...</p>
+        </div>
+      }
+
+      <!-- Pagination -->
+      @if (!isLoading && products.length > 0) {
+        <app-pagination
+          [currentPage]="page"
+          [totalPages]="totalPages"
+          [totalItems]="totalItems"
+          (pageChange)="onPageChange($event)"
+        ></app-pagination>
+      }
+
+      <!-- Grille des produits -->
+      @if (!isLoading && products.length > 0) {
+        <div class="products-grid">
+          @for (product of products; track product._id ?? $index) {
+            <app-product-card [product]="product"></app-product-card>
+          }
+        </div>
+      }
+
+      <!-- État vide -->
+      @if (!isLoading && products.length === 0) {
+        <div class="empty-state">
+          <i class="fas fa-box-open"></i>
+          <h3>Aucun produit trouvé</h3>
+          <p>Essayez de modifier vos filtres !</p>
+          <button class="btn-reset" (click)="resetFilters()">
+            <i class="fas fa-redo"></i>
+            Réinitialiser
+          </button>
+        </div>
+      }
+    </main>
+  </div>
+</div>
+
+<app-footer></app-footer>

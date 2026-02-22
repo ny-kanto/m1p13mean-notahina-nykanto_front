@@ -10,10 +10,12 @@ import { MallMapComponent } from './components/mall-map/mall-map';
 import { ShopManagementComponent } from './components/shop-management/shop-management';
 import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
+import { ProductListUserComponent } from './components/product-list-user/product-list-user';
 
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
   { path: 'boutiques/:id', component: ShopDetailUserComponent },
+  { path: 'produits/:id', component: ProductListUserComponent },
 //   { path: 'produits/boutique/:id', component: ProductListComponent },
 //   { path: 'produit-boutique/:id', component:  ProductDetailBoutiqueComponent},
 //   { path: 'produit/:id', component: ProductDetailComponent, },

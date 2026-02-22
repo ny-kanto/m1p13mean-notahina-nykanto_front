@@ -89,14 +89,6 @@
           <span class="currency">Ar</span>
         </div>
 
-        <!-- Disponibilité -->
-        <div class="availability">
-          <span class="availability-badge" [ngClass]="getStockClass()">
-            <i class="fas fa-box"></i>
-            {{ getStockText() }}
-          </span>
-        </div>
-
         <!-- Séparateur -->
         <hr class="divider">
 
@@ -117,10 +109,6 @@
             <li>
               <span class="detail-label">Référence :</span>
               <span class="detail-value">{{ product._id }}</span>
-            </li>
-            <li>
-              <span class="detail-label">Stock disponible :</span>
-              <span class="detail-value">{{ product.stock }} unités</span>
             </li>
             <li>
               <span class="detail-label">Prix unitaire :</span>

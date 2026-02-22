@@ -33,7 +33,6 @@ export class ProductDetailBoutiqueComponent implements OnInit, OnDestroy {
     nom: '',
     prix: 0,
     description: '',
-    stock: 0,
     boutiqueId: '',
     images: [],
   };
@@ -94,33 +93,6 @@ export class ProductDetailBoutiqueComponent implements OnInit, OnDestroy {
         },
       });
   }
-
-  /**
-   * Ajuster le stock
-   */
-  adjustStock(amount: number): void {
-    if (!this.product) return;
-
-    const newStock = Math.max(0, this.product.stock + amount);
-    this.editForm.stock = newStock;
-
-    if (this.product._id) {
-      this.productService
-        .updateProduct(this.product._id, { stock: newStock })
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (updated) => {
-            this.product = updated;
-            alert(`Stock mis à jour : ${newStock} unités`);
-          },
-          error: (error) => {
-            console.error('Erreur:', error);
-            alert('❌ Erreur lors de la mise à jour du stock');
-          },
-        });
-    }
-  }
-
   /**
    * Sélectionner une image
    */
@@ -151,23 +123,4 @@ export class ProductDetailBoutiqueComponent implements OnInit, OnDestroy {
     this.router.navigate(['/produits/boutique/', this.product?.boutiqueId]);
   }
 
-  /**
-   * Classe de stock
-   */
-  getStockClass(): string {
-    if (!this.product) return '';
-    if (this.product.stock === 0) return 'stock-empty';
-    if (this.product.stock < 10) return 'stock-low';
-    return 'stock-ok';
-  }
-
-  /**
-   * Statut du stock
-   */
-  getStockStatus(): string {
-    if (!this.product) return '';
-    if (this.product.stock === 0) return 'Rupture de stock';
-    if (this.product.stock < 10) return 'Stock faible';
-    return 'En stock';
-  }
 }

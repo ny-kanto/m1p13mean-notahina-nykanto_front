@@ -75,7 +75,7 @@
         <div class="card">
           <div class="card-header">
             <h2><i class="fas fa-images"></i> Galerie d'images</h2>
-            <span class="badge-count">{{ product.images?.length || 0 }} image(s)</span>
+            <span class="badge-count">{{ product.images.length || 0 }} image(s)</span>
           </div>
           <div class="card-body">
 
@@ -124,64 +124,6 @@
             <h2><i class="fas fa-boxes"></i> Gestion du stock</h2>
           </div>
           <div class="card-body">
-
-            <!-- Stock actuel -->
-            <div class="stock-display">
-              <span class="stock-label">Stock actuel</span>
-              <div class="stock-value" [ngClass]="getStockClass()">
-                <span class="stock-number">{{ product.stock }}</span>
-                <span class="stock-unit">unités</span>
-              </div>
-              <span class="stock-status" [ngClass]="getStockClass()">
-                {{ getStockStatus() }}
-              </span>
-            </div>
-
-            <!-- Actions rapides sur le stock -->
-            <div class="stock-actions">
-              <p class="action-label">Ajustement rapide :</p>
-              <div class="action-buttons">
-                <button class="btn-stock-adjust" (click)="adjustStock(-10)">
-                  <i class="fas fa-minus"></i>
-                  -10
-                </button>
-                <button class="btn-stock-adjust" (click)="adjustStock(-5)">
-                  <i class="fas fa-minus"></i>
-                  -5
-                </button>
-                <button class="btn-stock-adjust" (click)="adjustStock(-1)">
-                  <i class="fas fa-minus"></i>
-                  -1
-                </button>
-                <button class="btn-stock-adjust primary" (click)="adjustStock(1)">
-                  <i class="fas fa-plus"></i>
-                  +1
-                </button>
-                <button class="btn-stock-adjust primary" (click)="adjustStock(5)">
-                  <i class="fas fa-plus"></i>
-                  +5
-                </button>
-                <button class="btn-stock-adjust primary" (click)="adjustStock(10)">
-                  <i class="fas fa-plus"></i>
-                  +10
-                </button>
-              </div>
-            </div>
-
-            <!-- Alerte stock faible -->
-            @if (product.stock < 10 && product.stock > 0) {
-              <div class="alert alert-warning">
-                <i class="fas fa-exclamation-triangle"></i>
-                Attention : Stock faible ! Pensez à réapprovisionner.
-              </div>
-            }
-
-            @if (product.stock === 0) {
-              <div class="alert alert-danger">
-                <i class="fas fa-times-circle"></i>
-                Rupture de stock ! Le produit n'est plus disponible à la vente.
-              </div>
-            }
 
           </div>
         </div>

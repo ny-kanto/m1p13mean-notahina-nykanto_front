@@ -8,8 +8,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ZoneService {
 
-    private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/zones';
-    // private apiUrl = 'http://localhost:3000/zones';
+    // private apiUrl = 'https://m1p13mean-notahina-nykanto-back.onrender.com/zones';
+    private apiUrl = 'http://localhost:3000/zones';
 
     constructor(private http: HttpClient) {}
 

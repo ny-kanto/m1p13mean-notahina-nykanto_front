@@ -3,7 +3,21 @@ export interface Produit {
   nom: string;
   prix: number;
   description: string;
-  stock: number;
   boutiqueId: string;
-  images?: string[];
+  images: {
+    url: string;
+    public_id: string;
+  }[];
 }
+
+export interface ProduitApi {
+  _id?: string;
+  nom: string;
+  prix: number;
+  description: string;
+  boutique: string; // champ réel du backend
+  images: { url: string; public_id: string }[];
+  noteMoyenne?: number;
+  noteCompte?: number;
+}
+

@@ -210,6 +210,18 @@
   letter-spacing: 0.5px;
 }
 
+.actions-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.actions-row > button {
+  flex: 0 0 auto;
+  width: auto;
+}
+
+
 .btn-action-secondary {
   flex: 1;
   min-width: 150px;

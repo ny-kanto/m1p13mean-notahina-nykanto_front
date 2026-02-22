@@ -34,7 +34,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     search: '',
     minPrice: undefined,
     maxPrice: undefined,
-    stockStatus: 'all',
     sortBy: undefined,
     sortOrder: 'asc',
   };
@@ -58,7 +57,6 @@ export class ProductListComponent implements OnInit, OnDestroy {
     nom: '',
     prix: 0,
     description: '',
-    stock: 0,
     boutiqueId: '',
     images: [],
   };
@@ -122,7 +120,6 @@ Math: any;
       nom: '',
       prix: 0,
       description: '',
-      stock: 0,
       boutiqueId: '',
       images: [],
     };
@@ -169,7 +166,6 @@ Math: any;
     formData.append('nom', this.productForm.nom);
     formData.append('prix', this.productForm.prix.toString());
     formData.append('description', this.productForm.description);
-    formData.append('stock', this.productForm.stock.toString());
     formData.append('boutiqueId', this.boutiqueId);
 
     // Images optionnelles
@@ -360,7 +356,6 @@ Math: any;
       search: '',
       minPrice: undefined,
       maxPrice: undefined,
-      stockStatus: 'all',
       sortBy: undefined,
       sortOrder: 'asc',
     };
@@ -378,7 +373,7 @@ Math: any;
   /**
    * Changer le tri
    */
-  changeSorting(sortBy: 'nom' | 'prix' | 'stock'): void {
+  changeSorting(sortBy: 'nom' | 'prix'): void {
     if (this.filters.sortBy === sortBy) {
       // Inverser l'ordre si on clique sur le même champ
       this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -397,8 +392,7 @@ Math: any;
     return !!(
       this.filters.search ||
       this.filters.minPrice !== undefined ||
-      this.filters.maxPrice !== undefined ||
-      (this.filters.stockStatus && this.filters.stockStatus !== 'all')
+      this.filters.maxPrice !== undefined
     );
   }
 

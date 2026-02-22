@@ -101,24 +101,4 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   goBack(): void {
     this.router.navigate(['/boutiques', this.product?.boutiqueId, 'produits']);
   }
-
-  /**
-   * Obtenir la classe de stock
-   */
-  getStockClass(): string {
-    if (!this.product) return '';
-    if (this.product.stock === 0) return 'stock-empty';
-    if (this.product.stock < 10) return 'stock-low';
-    return 'stock-ok';
-  }
-
-  /**
-   * Obtenir le texte de disponibilité
-   */
-  getStockText(): string {
-    if (!this.product) return '';
-    if (this.product.stock === 0) return 'Rupture de stock';
-    if (this.product.stock < 10) return `Dernières pièces (${this.product.stock} restantes)`;
-    return `En stock (${this.product.stock} disponibles)`;
-  }
 }
