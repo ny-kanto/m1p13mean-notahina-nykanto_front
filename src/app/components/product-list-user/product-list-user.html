@@ -1,13 +1,10 @@
 <app-header></app-header>
 
 <div class="product-list-container">
-
   <!-- LAYOUT PRINCIPAL : SIDEBAR + CONTENU -->
   <div class="main-layout">
-
     <!-- ========== SIDEBAR FILTRES (GAUCHE) ========== -->
     <aside class="filters-sidebar">
-
       <!-- Header sidebar -->
       <div class="sidebar-header">
         <h2 class="sidebar-title">
@@ -67,14 +64,9 @@
           <i class="fas fa-sort"></i>
           Trier par
         </label>
-        <select
-          class="filter-select"
-          [(ngModel)]="filters.sortBy"
-          (ngModelChange)="applyFilters()"
-        >
+        <select class="filter-select" [(ngModel)]="filters.sortBy" (ngModelChange)="applyFilters()">
           <option value="nom">Nom (A-Z)</option>
           <option value="prix">Prix</option>
-          <option value="stock">Stock</option>
         </select>
 
         <div class="sort-direction">
@@ -96,18 +88,22 @@
           </button>
         </div>
       </div>
-
     </aside>
 
     <!-- ========== CONTENU PRINCIPAL (DROITE) ========== -->
     <main class="products-main">
+      <!-- Bouton retour boutique -->
+      <div class="back-to-shop">
+        <button class="btn-back" (click)="goBackToBoutique()">
+          <i class="fas fa-arrow-left"></i>
+          Retour à la boutique
+        </button>
+      </div>
 
       <!-- Header avec compteur -->
       <div class="products-header">
         <h1 class="page-title">{{ boutiqueNom || 'Produits' }}</h1>
-        <span class="result-count">
-          {{ totalItems }} produit{{ totalItems > 1 ? 's' : '' }}
-        </span>
+        <span class="result-count"> {{ totalItems }} produit{{ totalItems > 1 ? 's' : '' }} </span>
       </div>
 
       <!-- État de chargement -->
@@ -149,11 +145,8 @@
           </button>
         </div>
       }
-
     </main>
-
   </div>
-
 </div>
 
 <app-footer></app-footer>

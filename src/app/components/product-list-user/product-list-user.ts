@@ -1,8 +1,7 @@
-// product-list.component.ts
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { Produit } from '../../interface/produit';
 import { ProduitFiltre } from '../../interface/produit-filtre';
@@ -52,7 +51,9 @@ export class ProductListUserComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private produitService: ProduitService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +86,7 @@ export class ProductListUserComponent implements OnInit {
           }
 
           console.log('Produits chargés:', this.products);
-
+          this.cdr.markForCheck();
           this.isLoading = false;
         },
         error: (error) => {
@@ -101,6 +102,12 @@ export class ProductListUserComponent implements OnInit {
   applyFilters(): void {
     this.page = 1; // Reset à la page 1
     this.loadProducts();
+  }
+
+  goBackToBoutique(): void {
+    if (!this.boutiqueId) return;
+
+    this.router.navigate(['/boutiques', this.boutiqueId]);
   }
 
   /**

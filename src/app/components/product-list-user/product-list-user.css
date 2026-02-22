@@ -24,6 +24,34 @@
   padding-top: 80px; /* Space for fixed header */
 }
 
+.back-to-shop {
+  margin-bottom: 20px;
+}
+
+.btn-back,
+.btn-edit {
+  padding: 12px 24px;
+  border: 2px solid #e0e0e0;
+  background: var(--white);
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dark);
+}
+
+.btn-back:hover {
+  border-color: var(--primary-red);
+  color: var(--primary-red);
+  transform: translateX(-5px);
+}
+
 /* ============================================
    LAYOUT : SIDEBAR + CONTENU
    ============================================ */
@@ -206,7 +234,7 @@
   background: rgba(222, 28, 54, 0.05);
 }
 
-.radio-option input[type="radio"] {
+.radio-option input[type='radio'] {
   display: none;
 }
 
@@ -220,12 +248,12 @@
   transition: all 0.3s ease;
 }
 
-.radio-option input[type="radio"]:checked + .radio-custom {
+.radio-option input[type='radio']:checked + .radio-custom {
   border-color: var(--primary-red);
   background: var(--white);
 }
 
-.radio-option input[type="radio"]:checked + .radio-custom::after {
+.radio-option input[type='radio']:checked + .radio-custom::after {
   content: '';
   position: absolute;
   top: 50%;
@@ -362,8 +390,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-state p {

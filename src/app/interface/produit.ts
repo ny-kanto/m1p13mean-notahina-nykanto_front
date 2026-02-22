@@ -9,3 +9,15 @@ export interface Produit {
     public_id: string;
   }[];
 }
+
+export interface ProduitApi {
+  _id?: string;
+  nom: string;
+  prix: number;
+  description: string;
+  boutique: string; // champ réel du backend
+  images: { url: string; public_id: string }[];
+  noteMoyenne?: number;
+  noteCompte?: number;
+}
+
