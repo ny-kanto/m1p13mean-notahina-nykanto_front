@@ -8,6 +8,8 @@ export interface Produit {
     url: string;
     public_id: string;
   }[];
+  noteMoyenne?: number;
+  noteCompte?: number;
 }
 
 export interface ProduitApi {
@@ -20,4 +22,3 @@ export interface ProduitApi {
   noteMoyenne?: number;
   noteCompte?: number;
 }
-

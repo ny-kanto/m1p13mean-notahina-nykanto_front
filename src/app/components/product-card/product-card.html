@@ -16,7 +16,7 @@
       <!-- Nom -->
       <h3 class="product-name">{{ product.nom }}</h3>
 
-      <!-- Description -->
+      <!-- Description
       @if (product.description) {
         <p class="product-description">
           {{
@@ -25,7 +25,7 @@
               : product.description
           }}
         </p>
-      }
+      } -->
 
       <!-- Footer : Prix + Stock -->
       <div class="product-footer">
@@ -34,6 +34,25 @@
           <span class="price-value">{{ product.prix }} Ar</span>
         </div>
       </div>
+
+
+
+        <!-- ✅ Note moyenne -->
+        <div class="card-rating" *ngIf="(product.noteCompte ?? 0) > 0;">
+          <div class="card-stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <ng-container [ngSwitch]="getStarType(star, product.noteMoyenne)">
+                <i *ngSwitchCase="'full'" class="fas fa-star star-full"></i>
+                <i *ngSwitchCase="'half'" class="fas fa-star-half-alt star-half"></i>
+                <i *ngSwitchDefault class="far fa-star star-empty"></i>
+              </ng-container>
+            }
+          </div>
+
+          <span class="card-rating-text">
+            {{ product.noteMoyenne | number: '1.1-1' }} ({{ product.noteCompte }})
+          </span>
+        </div>
     </div>
   </div>
 </a>

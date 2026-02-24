@@ -82,6 +82,32 @@
           <span class="price-amount">{{ product.prix }}</span>
           <span class="currency">Ar</span>
         </div>
+        <div
+          class="product-rating"
+          *ngIf="product.noteCompte && product.noteCompte > 0; else noRating"
+        >
+          <div class="rating-stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+              <ng-container [ngSwitch]="getStarType(star, product.noteMoyenne)">
+                <i *ngSwitchCase="'full'" class="fas fa-star star-full"></i>
+
+                <i *ngSwitchCase="'half'" class="fas fa-star-half-alt star-half"></i>
+
+                <i *ngSwitchDefault class="far fa-star star-empty"></i>
+              </ng-container>
+            }
+          </div>
+
+          <span class="rating-summary">
+            {{ product.noteMoyenne || 0 | number: '1.1-1' }}/5 ({{ product.noteCompte }} avis)
+          </span>
+        </div>
+
+        <ng-template #noRating>
+          <div class="product-rating">
+            <span class="rating-summary">Aucun avis</span>
+          </div>
+        </ng-template>
 
         <hr class="divider" />
 
@@ -223,7 +249,7 @@
                       @for (star of [1, 2, 3, 4, 5]; track star) {
                         <i
                           class="fas fa-star"
-                          [class.star-filled]="star <= a.note"
+                          [class.star-full]="star <= a.note"
                           [class.star-empty]="star > a.note"
                         ></i>
                       }

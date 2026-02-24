@@ -41,6 +41,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   sendSuccess = '';
 
   hover = 0;
+  Math: any;
 
   setNote(note: number) {
     this.myNote = note;
@@ -181,6 +182,22 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   userName(a: AvisApi): string {
     return typeof a.user === 'string' ? a.user : a.user?.nom || 'Utilisateur';
   }
+
+  roundedAvg(value?: number | null): number {
+    return Math.round(Number(value ?? 0));
+  }
+
+  getStarType(star: number, rating?: number): 'full' | 'half' | 'empty' {
+  const value = Number(rating ?? 0);
+  const floor = Math.floor(value);
+  const decimal = value - floor;
+
+  if (star <= floor) return 'full';
+
+  if (star === floor + 1 && decimal >= 0.5) return 'half';
+
+  return 'empty';
+}
 
   // images
   selectImage(index: number): void {

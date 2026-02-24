@@ -19,8 +19,10 @@ export class ProduitService {
       nom: p.nom,
       prix: p.prix,
       description: p.description ?? '',
-      boutiqueId: p.boutique, // ✅ clé du fix
+      boutiqueId: p.boutique,
       images: p.images ?? [],
+      noteMoyenne: p.noteMoyenne ?? 0,
+      noteCompte: p.noteCompte ?? 0,
     };
   }
 
