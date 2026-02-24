@@ -1,6 +1,6 @@
-<!-- product-detail.component.html -->
-<div class="product-detail-container">
+<app-header></app-header>
 
+<div class="product-detail-container">
   <!-- Bouton retour -->
   <button class="btn-back" (click)="goBack()">
     <i class="fas fa-arrow-left"></i>
@@ -30,25 +30,22 @@
   <!-- Détails du produit -->
   @if (product && !isLoading && !errorMessage) {
     <div class="product-detail-content">
-
-      <!-- Colonne gauche : Galerie d'images -->
+      <!-- ========== COLONNE GAUCHE : Galerie d'images ========== -->
       <div class="product-gallery">
-
         <!-- Image principale -->
         <div class="main-image-container">
           @if (product.images && product.images.length > 0) {
             <img
-              [src]="product.images[selectedImageIndex]"
+              [src]="product.images[selectedImageIndex]?.url"
               [alt]="product.nom"
               class="main-image"
-            >
+            />
 
-            <!-- Boutons navigation -->
             @if (product.images.length > 1) {
-              <button class="nav-btn prev-btn" (click)="previousImage()">
+              <button type="button" class="nav-btn prev-btn" (click)="previousImage()">
                 <i class="fas fa-chevron-left"></i>
               </button>
-              <button class="nav-btn next-btn" (click)="nextImage()">
+              <button type="button" class="nav-btn next-btn" (click)="nextImage()">
                 <i class="fas fa-chevron-right"></i>
               </button>
             }
@@ -57,7 +54,7 @@
               src="https://via.placeholder.com/600x600?text=Aucune+image"
               alt="Pas d'image"
               class="main-image"
-            >
+            />
           }
         </div>
 
@@ -70,29 +67,24 @@
                 [class.active]="selectedImageIndex === $index"
                 (click)="selectImage($index)"
               >
-                <img [src]="image" [alt]="product.nom + ' - Image ' + ($index + 1)">
+                <img [src]="image.url" [alt]="product.nom + ' - Image ' + ($index + 1)" />
               </div>
             }
           </div>
         }
       </div>
 
-      <!-- Colonne droite : Informations -->
+      <!-- ========== COLONNE DROITE : Informations ========== -->
       <div class="product-info">
-
-        <!-- Nom du produit -->
         <h1 class="product-name">{{ product.nom }}</h1>
 
-        <!-- Prix -->
         <div class="product-price">
           <span class="price-amount">{{ product.prix }}</span>
           <span class="currency">Ar</span>
         </div>
 
-        <!-- Séparateur -->
-        <hr class="divider">
+        <hr class="divider" />
 
-        <!-- Description -->
         <div class="product-description">
           <h3><i class="fas fa-align-left"></i> Description</h3>
           @if (product.description) {
@@ -102,7 +94,6 @@
           }
         </div>
 
-        <!-- Détails techniques -->
         <div class="product-details">
           <h3><i class="fas fa-info-circle"></i> Détails</h3>
           <ul class="details-list">
@@ -117,40 +108,150 @@
           </ul>
         </div>
 
-        <!-- Séparateur -->
-        <hr class="divider">
+        <hr class="divider" />
 
-        <!-- Actions -->
-        <div class="product-actions">
-          <button class="btn-primary">
-            <i class="fas fa-shopping-cart"></i>
-            Ajouter au panier
-          </button>
-          <button class="btn-secondary">
-            <i class="fas fa-heart"></i>
-            Ajouter aux favoris
+        <!-- ========== FORMULAIRE AVIS ========== -->
+        <div class="review-section">
+          <h3><i class="fas fa-star"></i> Donnez votre avis</h3>
+
+          <!-- Messages succès/erreur -->
+          @if (sendSuccess) {
+            <div class="alert alert-success">
+              <i class="fas fa-check-circle"></i>
+              {{ sendSuccess }}
+            </div>
+          }
+          @if (sendError) {
+            <div class="alert alert-error">
+              <i class="fas fa-exclamation-circle"></i>
+              {{ sendError }}
+            </div>
+          }
+
+          <!-- Sélection note (étoiles) -->
+          <div class="rating-container">
+            <label class="rating-label">Votre note :</label>
+            <div class="stars-rating">
+              @for (star of [1, 2, 3, 4, 5]; track star) {
+                <button
+                  type="button"
+                  class="star-btn"
+                  [class.on]="star <= (hover || myNote)"
+                  [class.off]="star > (hover || myNote)"
+                  (click)="setNote(star)"
+                  (mouseenter)="setHover(star)"
+                  (mouseleave)="setHover(0)"
+                  aria-label="Donner {{ star }} étoile(s)"
+                >
+                  <span class="star">&#9733;</span>
+                </button>
+              }
+            </div>
+            <span class="rating-text">{{ myNote }} / 5</span>
+          </div>
+
+          <!-- Commentaire -->
+          <div class="comment-container">
+            <label class="comment-label" for="myCommentaire">Votre commentaire :</label>
+            <textarea
+              id="myCommentaire"
+              class="comment-textarea"
+              [(ngModel)]="myCommentaire"
+              placeholder="Partagez votre expérience avec ce produit..."
+              rows="4"
+              maxlength="500"
+            ></textarea>
+            <div class="comment-info">
+              <span class="char-count">{{ myCommentaire.length }} / 500</span>
+            </div>
+          </div>
+
+          <!-- Bouton soumettre -->
+          <button
+            class="btn-submit-review"
+            type="button"
+            (click)="submitAvis()"
+            [disabled]="sendingAvis || myCommentaire.trim() === ''"
+          >
+            @if (sendingAvis) {
+              <i class="fas fa-spinner fa-spin"></i>
+              Envoi en cours...
+            } @else {
+              <i class="fas fa-paper-plane"></i>
+              Publier mon avis
+            }
           </button>
         </div>
 
-        <!-- Informations supplémentaires -->
-        <div class="additional-info">
-          <div class="info-item">
-            <i class="fas fa-truck"></i>
-            <span>Livraison disponible</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-undo"></i>
-            <span>Retour sous 7 jours</span>
-          </div>
-          <div class="info-item">
-            <i class="fas fa-shield-alt"></i>
-            <span>Paiement sécurisé</span>
-          </div>
-        </div>
+        <hr class="divider" />
 
+        <!-- ========== LISTE DES AVIS ========== -->
+        <div class="reviews-list-section">
+          <h3><i class="fas fa-comments"></i> Avis des clients</h3>
+
+          @if (avisLoading) {
+            <div class="avis-loading">
+              <div class="spinner-small"></div>
+              <p>Chargement des avis...</p>
+            </div>
+          }
+
+          @if (avisError && !avisLoading) {
+            <div class="alert alert-error">
+              <i class="fas fa-exclamation-triangle"></i>
+              {{ avisError }}
+            </div>
+          }
+
+          @if (!avisLoading && avis.length === 0) {
+            <div class="no-reviews">
+              <i class="fas fa-inbox"></i>
+              <p>Aucun avis pour le moment. Soyez le premier à donner votre avis !</p>
+            </div>
+          }
+
+          @if (!avisLoading && avis.length > 0) {
+            <div class="reviews-list">
+              @for (a of avis; track a._id) {
+                <div class="review-item">
+                  <div class="review-header">
+                    <div class="review-user">
+                      <i class="fas fa-user-circle"></i>
+                      <span class="user-name">{{ userName(a) }}</span>
+                    </div>
+                    <div class="review-rating">
+                      @for (star of [1, 2, 3, 4, 5]; track star) {
+                        <i
+                          class="fas fa-star"
+                          [class.star-filled]="star <= a.note"
+                          [class.star-empty]="star > a.note"
+                        ></i>
+                      }
+                    </div>
+                  </div>
+                  <div class="review-content">
+                    <p>{{ a.commentaire }}</p>
+                  </div>
+                  <div class="review-footer">
+                    <span class="review-date">{{ a.created_at | date: 'dd/MM/yyyy' }}</span>
+                    <!-- Bouton supprimer (si c'est l'auteur) -->
+                    <button
+                      type="button"
+                      class="btn-delete-review"
+                      (click)="deleteAvis(a._id)"
+                      title="Supprimer"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
       </div>
-
     </div>
   }
-
 </div>
+
+<app-footer></app-footer>

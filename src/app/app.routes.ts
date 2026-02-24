@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 // import { ProductListComponent } from './components/product-list/product-list';
 import { ShopListComponent } from './components/shop-list/shop-list';
-// import { ProductDetailComponent } from './components/product-detail/product-detail';
+import { ProductDetailComponent } from './components/product-detail/product-detail';
 // import { ProductDetailBoutiqueComponent } from './components/product-detail-boutique/product-detail-boutique';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login';
@@ -18,7 +18,7 @@ export const routes: Routes = [
   { path: 'produits/:id', component: ProductListUserComponent },
 //   { path: 'produits/boutique/:id', component: ProductListComponent },
 //   { path: 'produit-boutique/:id', component:  ProductDetailBoutiqueComponent},
-//   { path: 'produit/:id', component: ProductDetailComponent, },
+  { path: 'produit/:id', component: ProductDetailComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin/boutiques', component: ShopManagementComponent },

@@ -54,8 +54,15 @@ export class ProduitService {
   }
 
   getProductById(id: string): Observable<Produit> {
-    return this.http.get<ProduitApi>(`${this.apiUrl}/${id}`).pipe(
-      map((p) => this.mapProduit(p)),
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map((raw) => {
+        console.log('RAW API RESPONSE:', raw);
+
+        // si ton API renvoie { data: produit } ou { produit: produit }
+        const p = raw?.data ?? raw?.produit ?? raw;
+
+        return this.mapProduit(p as ProduitApi);
+      }),
       catchError(this.handleError),
     );
   }
@@ -82,9 +89,9 @@ export class ProduitService {
   }
 
   deleteProduct(id: string): Observable<{ success?: boolean; message?: string }> {
-    return this.http.delete<{ success?: boolean; message?: string }>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError),
-    );
+    return this.http
+      .delete<{ success?: boolean; message?: string }>(`${this.apiUrl}/${id}`)
+      .pipe(catchError(this.handleError));
   }
 
   // Optionnel si tu as une route /produits/search

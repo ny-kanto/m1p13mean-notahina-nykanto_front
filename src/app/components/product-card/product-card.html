@@ -1,4 +1,4 @@
-<a [routerLink]="['/produits', product._id]" class="product-card-link">
+<a [routerLink]="['/produit', product._id]" class="product-card-link">
   <div class="product-card">
     <!-- Image -->
     <div class="product-image">
@@ -34,12 +34,6 @@
           <span class="price-value">{{ product.prix }} Ar</span>
         </div>
       </div>
-
-      <!-- Bouton -->
-      <button class="btn-view" type="button">
-        <span>Voir détail</span>
-        <i class="fas fa-arrow-right"></i>
-      </button>
     </div>
   </div>
 </a>
