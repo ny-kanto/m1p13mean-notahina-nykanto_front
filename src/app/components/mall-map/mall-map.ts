@@ -43,6 +43,17 @@ export class MallMapComponent {
     this.selectedBoutiqueId = this.selectedZone?.boutiqueId?._id || '';
   }
 
+  onBoutiqueChange(event: any){
+
+    console.log('ON BOUTIQUE CHANGE');
+
+    this.selectedBoutiqueId = event.target.value;
+
+    this.activeStore = this.boutiques.find(b => b._id === this.selectedBoutiqueId);
+
+    console.log('ACTIVE STORE : ', this.activeStore);
+  }
+
   save() {
     if (!this.selectedZone) {
       console.log('NO ZONE SELECTED DANS SAVE');
@@ -50,6 +61,8 @@ export class MallMapComponent {
     }
 
     console.log('TAFIDITRA SAVE', this.selectedZone.zoneId, this.selectedBoutiqueId);
+
+    this.updateBoutique();
 
     this.zoneService.assignZone(
       this.selectedZone.zoneId,
@@ -70,6 +83,40 @@ export class MallMapComponent {
         console.error('Erreur lors de l\'assignation de la zone :', err);
       }
     });
+  }
+
+  /**
+  * UPDATE
+  */
+  updateBoutique(): void {
+    if (!this.activeStore?._id) return;
+
+    const formData = this.buildFormData();
+
+    console.log('FormData à envoyer :' , Array.from(formData.entries()));
+
+    this.boutiqueService
+      .updateBoutique(this.activeStore._id, formData)
+      .subscribe({
+        next: () => {
+          alert('✅ Boutique modifiée');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la modification de la boutique :', err);
+        },
+      });
+  }
+
+  buildFormData(): FormData {
+    const fd = new FormData();
+
+    if (!this.activeStore) {
+      return fd;
+    }
+
+    fd.append('etage', this.currentFloor.toString());
+
+    return fd;
   }
 
   getBoutiqueName(zoneId: string): string {
