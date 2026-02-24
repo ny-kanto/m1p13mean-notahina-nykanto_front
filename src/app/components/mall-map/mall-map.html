@@ -17,7 +17,7 @@
   <div class="panel">
     <h3>Zone : {{ selectedZone.zoneId }}</h3>
 
-    <select [(ngModel)]="selectedBoutiqueId">
+    <select [(ngModel)]="selectedBoutiqueId" (change)="onBoutiqueChange($event)">
       <option [ngValue]="undefined">-- Zone libre --</option>
       @for (b of boutiques; track b._id) {
         <option [value]="b._id">{{ b.nom }}</option>
