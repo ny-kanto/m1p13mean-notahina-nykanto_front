@@ -11,7 +11,7 @@
 
   <!-- Hyper -->
   <rect
-    class="store anchor"
+    [attr.class]="isSelected('store-hyper') ? 'store anchor selected' : 'store anchor'"
     x="900"
     y="50"
     width="250"
@@ -23,24 +23,29 @@
   </text>
 
   <!-- Boutiques haut -->
-  <rect class="store" x="220" y="80" width="140" height="160"
+  <rect [attr.class]="'store' + (isSelected('shop-101') ? ' selected' : '')"
+        x="220" y="80" width="140" height="160"
         (click)="onClick('shop-101')" />
   <text x="290" y="170" class="label">{{ zoneLabels['shop-101'] }}</text>
 
-  <rect class="store" x="380" y="80" width="160" height="160"
+  <rect [attr.class]="'store' + (isSelected('shop-102') ? ' selected' : '')"
+        x="380" y="80" width="160" height="160"
         (click)="onClick('shop-102')" />
   <text x="460" y="170" class="label">{{ zoneLabels['shop-102'] }}</text>
 
-  <rect class="store" x="560" y="80" width="160" height="160"
+  <rect [attr.class]="'store' + (isSelected('shop-103') ? ' selected' : '')"
+        x="560" y="80" width="160" height="160"
         (click)="onClick('shop-103')" />
   <text x="640" y="170" class="label">{{ zoneLabels['shop-103'] }}</text>
 
   <!-- Boutiques bas -->
-  <rect class="store" x="220" y="460" width="180" height="160"
+  <rect [attr.class]="'store' + (isSelected('shop-201') ? ' selected' : '')"
+        x="220" y="460" width="180" height="160"
         (click)="onClick('shop-201')" />
   <text x="310" y="550" class="label">{{ zoneLabels['shop-201'] }}</text>
 
-  <rect class="store" x="420" y="460" width="200" height="160"
+  <rect [attr.class]="'store' + (isSelected('shop-202') ? ' selected' : '')"
+        x="420" y="460" width="200" height="160"
         (click)="onClick('shop-202')" />
   <text x="520" y="550" class="label">{{ zoneLabels['shop-202'] }}</text>
 
@@ -78,6 +83,11 @@
 
   .service {
     fill: #b3e5fc;
+  }
+
+  /* zone sélectionnée */
+  .selected {
+    fill: red !important;
   }
 
   .label {
