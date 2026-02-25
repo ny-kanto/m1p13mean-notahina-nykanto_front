@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { BoutiqueService } from '../../services/boutique';
 import { Boutique } from '../../interface/boutique';
 import { FloorRdcComponent } from './floors/floor-rdc/floor-rdc';
@@ -8,6 +9,9 @@ import { ZoneService } from '../../services/zone';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PaginationReponse, PaginationReponse1 } from '../../interface/pagination-reponse';
+import { DataService } from '../../services/data-service';
+import { ColdObservable } from 'rxjs/internal/testing/ColdObservable';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-mall-map',
@@ -28,15 +32,57 @@ export class MallMapComponent {
   currentFloor = 0;
   activeStore?: Boutique;
 
+  zoneTrouvee?: Zone ;
+
+  paramId?: string;
+  paramEtage?: string;
+
   constructor(
     private zoneService: ZoneService,
-    private boutiqueService: BoutiqueService
-  ) {
-    this.zoneService.getZones().subscribe(z => this.zones = z);
-    this.boutiqueService.getAllBoutiques().subscribe(b => {this.paginationResponse = b;
-      this.boutiques = this.paginationResponse?.data || [];
-    });
+    private boutiqueService: BoutiqueService,
+    private activatedRoute: ActivatedRoute,
+    private dataService: DataService
+  ) {}
+
+  sendData(boutiqueId?: string) {
+      this.zones.map(zone => {
+        if (zone.boutiqueId?._id === boutiqueId) {
+          this.zoneTrouvee = zone;
+        }
+      });
+      console.log("ZONE TROUVEE : ", this.zoneTrouvee);
+
+      this.dataService.changeData(this.zoneTrouvee);
   }
+
+  ngOnInit(): void {
+
+    this.activatedRoute.queryParams.subscribe(params => {
+
+      this.paramId = params['boutiqueId'];
+      this.paramEtage = params['etage'];
+
+      this.currentFloor = this.paramEtage ? parseInt(this.paramEtage, 10) : 0;
+      console.log("CURRENT FLOOR DANS MALL MAP : ", this.currentFloor);
+
+    });
+
+    forkJoin({
+      zones: this.zoneService.getZones(),
+      boutiques: this.boutiqueService.getAllBoutiques()
+    }).subscribe(({ zones, boutiques }) => {
+
+      console.log("BOUTIQUES DANS MALL MAP : ", boutiques);
+      this.zones = zones;
+      this.boutiques = boutiques.data;
+
+      this.sendData(this.paramId);
+
+    });
+
+  }
+
+
 
   onZoneClick(zoneId: string) {
     this.selectedZone = this.zones.find(z => z.zoneId === zoneId);

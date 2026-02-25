@@ -179,7 +179,7 @@ export class ShopDetailUserComponent implements OnInit, OnDestroy {
   }
 
   goToMap(): void {
-    this.router.navigate(['/mall-map']);
+    this.router.navigate(['/mall-map'], this.boutique?._id ? { queryParams: { boutiqueId: this.boutique._id , etage : this.boutique.etage } } : undefined);
   }
 
   visitShop(): void {

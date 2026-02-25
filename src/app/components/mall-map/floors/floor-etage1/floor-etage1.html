@@ -8,27 +8,32 @@
   <rect x="200" y="280" width="800" height="140" class="corridor" />
 
   <!-- Food Court -->
-  <rect class="store anchor" x="900" y="100" width="250" height="500"
+  <rect [attr.class]="'store anchor' + (isSelected('food-court') ? ' selected' : '')"
+        x="900" y="100" width="250" height="500" id="food-court"
         (click)="onClick('food-court')" />
   <text x="1025" y="350" class="label" font-weight="bold">
     {{ zoneLabels['food-court'] }}
   </text>
 
   <!-- Boutiques -->
-  <rect class="store" x="240" y="90" width="180" height="140"
+  <rect [attr.class]="'store' + (isSelected('shop-301') ? ' selected' : '')"
+        x="240" y="90" width="180" height="140" id="shop-301"
         (click)="onClick('shop-301')" />
   <text x="330" y="165" class="label">{{ zoneLabels['shop-301'] }}</text>
 
-  <rect class="store" x="450" y="90" width="200" height="140"
+  <rect [attr.class]="'store' + (isSelected('shop-302') ? ' selected' : '')"
+        x="450" y="90" width="200" height="140" id="shop-302"
         (click)="onClick('shop-302')" />
   <text x="550" y="165" class="label">{{ zoneLabels['shop-302'] }}</text>
 
-  <rect class="store" x="680" y="90" width="180" height="140"
+  <rect [attr.class]="'store' + (isSelected('shop-303') ? ' selected' : '')"
+        x="680" y="90" width="180" height="140" id="shop-303"
         (click)="onClick('shop-303')" />
   <text x="770" y="165" class="label">{{ zoneLabels['shop-303'] }}</text>
 
   <!-- Descente -->
-  <rect class="service" x="760" y="470" width="90" height="90"
+  <rect [attr.class]="'service' + (isSelected('stairs-down') ? ' selected' : '')"
+        x="760" y="470" width="90" height="90"
         (click)="onClick('stairs-down')" />
   <text x="805" y="525" class="label">Descendre</text>
 
@@ -57,6 +62,11 @@
 
   .service {
     fill: #b3e5fc;
+  }
+
+  /* zone sélectionnée */
+  .selected {
+    fill: red !important;
   }
 
   .label {
