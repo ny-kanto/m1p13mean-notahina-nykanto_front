@@ -12,7 +12,9 @@ import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
 import { ProductListUserComponent } from './components/product-list-user/product-list-user';
 import { MallMapAdmin } from './components/mall-map-admin/mall-map-admin';
-
+import { EventManagementComponent } from './components/event-management/event-management';
+import { LoginAdminComponent } from './components/login-admin/login-admin';
+import { PromotionComponent } from './components/promotion/promotion';
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
   { path: 'boutiques/:id', component: ShopDetailUserComponent },
@@ -20,10 +22,13 @@ export const routes: Routes = [
 //   { path: 'produits/boutique/:id', component: ProductListComponent },
 //   { path: 'produit-boutique/:id', component:  ProductDetailBoutiqueComponent},
   { path: 'produit/:id', component: ProductDetailComponent },
+  { path: 'promotions', component: PromotionComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'admin/login', component: LoginAdminComponent },
   { path: 'admin/boutiques', component: ShopManagementComponent },
   { path: 'admin/boutique-details/:id', component: ShopDetailComponent },
+  { path: 'admin/evenements', component: EventManagementComponent },
   { path: '', component: HomeComponent },
   { path: 'mall-map', component: MallMapComponent },
   { path: 'mall-map-admin', component: MallMapAdmin },
