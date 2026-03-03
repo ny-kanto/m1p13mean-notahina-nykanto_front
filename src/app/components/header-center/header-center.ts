@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header-center',
@@ -9,27 +10,71 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header-center.html',
   styleUrl: './header-center.css',
 })
-export class HeaderCenter {
-  // Nom du centre commercial (tu peux le récupérer depuis un service)
-  centreName = 'Akoor Shopping Center';
+export class HeaderCenterComponent {
+  isScrolled = false;
+  searchQuery = '';
+  isSearchFocused = false;
+  isMobileMenuOpen = false;
 
-  // Menu items pour l'admin du centre
-  menuItems = [
-    { label: 'Tableau de bord', route: '/centre/dashboard', icon: 'fas fa-tachometer-alt' },
-    { label: 'Boutiques', route: '/centre/boutiques', icon: 'fas fa-store' },
-    { label: 'Statistiques', route: '/centre/stats', icon: 'fas fa-chart-bar' },
-    { label: 'Utilisateurs', route: '/centre/users', icon: 'fas fa-users' },
-  ];
+  // ✅ auth UI
+  isLoggedIn = false;
+  userDisplayName = '';
+  isUserMenuOpen = false;
 
-  // Menu utilisateur
-  showUserMenu = false;
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
-  toggleUserMenu() {
-    this.showUserMenu = !this.showUserMenu;
+  ngOnInit(): void {
+    this.checkScroll();
   }
 
-  logout() {
-    // TODO: Implémenter la déconnexion
-    console.log('Déconnexion');
+  /** Détecte le scroll */
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.checkScroll();
+  }
+
+  private checkScroll(): void {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.isScrolled = scrollPosition > 50;
+  }
+
+  onSearch(): void {
+    if (this.searchQuery.trim()) {
+      console.log('Recherche:', this.searchQuery);
+    }
+  }
+
+  onSearchFocus(): void { this.isSearchFocused = true; }
+  onSearchBlur(): void { this.isSearchFocused = false; }
+  clearSearch(): void { this.searchQuery = ''; }
+
+  toggleMobileMenu(): void { this.isMobileMenuOpen = !this.isMobileMenuOpen; }
+  closeMobileMenu(): void { this.isMobileMenuOpen = false; }
+
+
+  @HostListener('document:click')
+  closeUserMenu(): void {
+    this.isUserMenuOpen = false;
+  }
+
+  // ✅ User menu
+  toggleUserMenu(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  logout(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    this.auth.logout();
+    this.isUserMenuOpen = false;
+    this.closeMobileMenu();
+
+    this.router.navigate(['/login']);
   }
 }

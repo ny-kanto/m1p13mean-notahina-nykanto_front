@@ -1,0 +1,36 @@
+<div class="login-container">
+  <div class="blob"></div>
+  <div class="blob second"></div>
+
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Bienvenue</h1>
+      <p>Connectez-vous à votre univers</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <input type="email" formControlName="email" required placeholder=" ">
+        <label>Email</label>
+        <div class="bar"></div>
+      </div>
+
+      <div class="input-group">
+        <input type="password" formControlName="password" placeholder=" ">
+        <label>Mot de passe</label>
+        <div class="bar"></div>
+      </div>
+
+      <button type="submit" class="btn-login">
+        <span>Se connecter</span>
+        <div class="btn-blob"></div>
+      </button>
+    </form>
+
+    <p *ngIf="message" class="status-message">{{ message }}</p>
+
+    <div class="login-footer">
+      <a href="#">Mot de passe oublié ?</a>
+    </div>
+  </div>
+</div>
