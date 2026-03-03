@@ -5,13 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProduitService } from '../../services/produit';
 import { Produit } from '../../interface/produit';
 import { Subject, takeUntil } from 'rxjs';
-import { HeaderBoutique } from "../header-boutique/header-boutique";
+import { HeaderBoutiqueComponent } from "../header-boutique/header-boutique";
 import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-product-detail-boutique',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderBoutique, Footer],
+  imports: [CommonModule, FormsModule, HeaderBoutiqueComponent, Footer],
   templateUrl: './product-detail-boutique.html',
   styleUrl: './product-detail-boutique.css',
 })
