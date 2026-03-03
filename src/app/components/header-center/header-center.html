@@ -2,7 +2,7 @@
   <div class="header-container">
     <!-- Logo à gauche -->
     <div class="header-logo">
-      <a routerLink="/" class="logo-link">
+      <a routerLink="#" class="logo-link">
         <div class="logo-icon">
           <i class="fas fa-shopping-bag"></i>
         </div>
@@ -13,23 +13,38 @@
       </a>
     </div>
 
+    <nav class="header-nav">
+      <a routerLink="/admin/boutiques" routerLinkActive="active" class="nav-link">
+        <span>Boutiques</span>
+      </a>
+      <a routerLink="/admin/evenements" routerLinkActive="active" class="nav-link">
+        <span>Événements</span>
+      </a>
+    </nav>
 
-        <!-- ✅ SI CONNECTÉ -->
-        <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
-          <a href="#" class="header-action-btn" title="Mon compte" (click)="toggleUserMenu($event)">
-            <i class="fas fa-user"></i>
-            <span class="action-text">{{ userDisplayName }}</span>
-            <i class="fas fa-chevron-down" style="font-size: 0.8rem"></i>
-          </a>
+    <!-- ✅ SI CONNECTÉ -->
+    @if (isLoggedIn) {
+      <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
+        <a href="#" class="header-action-btn" title="Mon compte" (click)="toggleUserMenu($event)">
+          <i class="fas fa-user"></i>
+          <span class="action-text">{{ userDisplayName }}</span>
+          <i class="fas fa-chevron-down" style="font-size: 0.8rem"></i>
+        </a>
 
-          @if (isUserMenuOpen) {
-            <div class="user-dropdown">
-              <button class="user-dropdown-item" (click)="logout($event)">
-                <i class="fas fa-sign-out-alt"></i>
-                Déconnexion
-              </button>
-            </div>
-          }
-        </div>
-    </div>
+        @if (isUserMenuOpen) {
+          <div class="user-dropdown">
+            <button class="user-dropdown-item" (click)="logout($event)">
+              <i class="fas fa-sign-out-alt"></i>
+              Déconnexion
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <a routerLink="/admin/login" class="header-action-btn">
+        <i class="fas fa-sign-in-alt"></i>
+        <span class="action-text">Se connecter</span>
+      </a>
+    }
+  </div>
 </header>

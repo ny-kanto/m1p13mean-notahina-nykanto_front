@@ -13,7 +13,7 @@ import { HomeService } from '../../services/home';
 // ✅ récupère l’utilisateur connecté (et donc son boutiqueId)
 import { AuthService } from '../../services/auth.service';
 
-import { HeaderCenterComponent } from '../header-center/header-center';
+import { HeaderBoutiqueComponent } from '../header-boutique/header-boutique';
 import { Footer } from '../footer/footer';
 import { PaginationComponent } from '../../components/pagination/pagination';
 
@@ -42,7 +42,7 @@ type ProduitLite = {
     CommonModule,
     RouterModule,
     FormsModule,
-    HeaderCenterComponent,
+    HeaderBoutiqueComponent,
     Footer,
     PaginationComponent,
     HeaderBoutique

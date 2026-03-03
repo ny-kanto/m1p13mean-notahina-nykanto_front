@@ -18,13 +18,14 @@
   padding: 12px 0;
 }
 
+
 .header-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 40px;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  position: relative;
   gap: 40px;
 }
 
@@ -93,6 +94,7 @@
    ACTIONS - DROITE
    ============================================ */
 .header-actions {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -139,6 +141,31 @@
   font-weight: 700;
 }
 
+
+
+.header-nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 5px;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;       /* supprime le soulignement */
+  color: inherit;              /* supprime la couleur bleue par défaut */
+  outline: none;
+}
+
+.nav-link.active {
+  background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
+  color: white;
+}
+
 /* ============================================
    MENU UTILISATEUR CONNECTÉ
    ============================================ */
@@ -146,8 +173,7 @@
 /* Wrapper relatif pour positionner le dropdown */
 .user-menu-wrapper {
   position: relative;
-  justify-self: end;
-  max-width: 100px;
+  margin-left: auto;    /* colle à droite même sans .header-actions wrapper */
 }
 
 /* Dropdown panel */
