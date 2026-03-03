@@ -13,6 +13,8 @@ import { DataService } from '../../services/data-service';
 import { forkJoin } from 'rxjs';
 import { RDC_NAVIGATION_MAP } from '../../interface/rdc-navigation-map';
 import { PathfindingService } from '../../services/pathfinding-service';
+import { HeaderHomeComponent } from "../header-home/header-home";
+import { Footer } from "../footer/footer";
 
 interface PathPoint {
   x: number;
@@ -23,7 +25,7 @@ interface PathPoint {
 @Component({
   selector: 'app-mall-map',
   standalone: true,
-  imports: [FloorRdcComponent, FloorEtage1Component, FormsModule, CommonModule],
+  imports: [FloorRdcComponent, FloorEtage1Component, FormsModule, CommonModule, HeaderHomeComponent, Footer],
   templateUrl: './mall-map.html',
   styleUrls: ['./mall-map.css'],
 })

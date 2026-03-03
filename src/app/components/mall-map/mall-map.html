@@ -1,36 +1,61 @@
-<div class="floor-switch">
-  <button [disabled]="currentFloor===0" (click)="currentFloor = 0">RDC</button>
-  <button [disabled]="currentFloor===1" (click)="currentFloor = 1">Étage 1</button>
-</div>
+<app-header></app-header>
 
-<div class="map-container">
-  @if (currentFloor === 0) {
-    <app-floor-rdc (zoneClick)="onZoneClick($event)"></app-floor-rdc>
-  }
+<div class="map-page">
 
-  @if (currentFloor === 1) {
-    <app-floor-etage1 (zoneClick)="onZoneClick($event)"></app-floor-etage1>
-  }
-</div>
+  <div class="map-content">
 
-@if (activeStore; as store) {
-  <div class="info">
-    <h3>{{ store.nom }}</h3>
-    <p>Catégorie : {{ store.categorie }}</p>
-    <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
-    <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
-    <p>Statut : {{ store.ouvertMaintenant }}</p>
+    <!-- SWITCH ÉTAGE -->
+    <div class="floor-switch">
+      <button
+        [disabled]="currentFloor===0"
+        [class.active]="currentFloor===0"
+        (click)="currentFloor = 0">
+        RDC
+      </button>
+
+      <button
+        [disabled]="currentFloor===1"
+        [class.active]="currentFloor===1"
+        (click)="currentFloor = 1">
+        Étage 1
+      </button>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-container">
+      @if (currentFloor === 0) {
+        <app-floor-rdc (zoneClick)="onZoneClick($event)"></app-floor-rdc>
+      }
+
+      @if (currentFloor === 1) {
+        <app-floor-etage1 (zoneClick)="onZoneClick($event)"></app-floor-etage1>
+      }
+    </div>
+
+    <!-- INFO BOUTIQUE -->
+    @if (activeStore; as store) {
+      <div class="info">
+        <h3>{{ store.nom }}</h3>
+        <p>Catégorie : {{ store.categorie }}</p>
+        <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
+        <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
+        <p>Statut : {{ store.ouvertMaintenant }}</p>
+      </div>
+    } @else {
+      <p class="info empty">Clique sur une boutique</p>
+    }
+
+    <!-- ACTION -->
+    <div class="actions">
+      <button class="route-btn" (click)="openRouteModal()">
+        Itinéraire
+      </button>
+    </div>
+
   </div>
-} @else {
-  <p class="info">Clique sur une boutique</p>
-}
-
-<div class="actions">
-  <button class="route-btn" (click)="openRouteModal()">
-    Itinéraire
-  </button>
 </div>
 
+<!-- MODAL -->
 @if (showRouteModal) {
   <div class="modal-backdrop" (click)="closeRouteModal()"></div>
 
@@ -57,3 +82,5 @@
     </div>
   </div>
 }
+
+<app-footer></app-footer>

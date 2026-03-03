@@ -11,10 +11,12 @@ import { PaginationReponse, PaginationReponse1 } from '../../interface/paginatio
 import { DataService } from '../../services/data-service';
 import { forkJoin } from 'rxjs';
 import { FloorEtage1Admin } from './floors/floor-etage1-admin/floor-etage1-admin';
+import { HeaderCenterComponent } from "../header-center/header-center";
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-mall-map-admin',
-  imports: [FloorRdcAmdin, FloorEtage1Admin, FormsModule, CommonModule],
+  imports: [FloorRdcAmdin, FloorEtage1Admin, FormsModule, CommonModule, HeaderCenterComponent, Footer],
   templateUrl: './mall-map-admin.html',
   styleUrl: './mall-map-admin.css',
 })
