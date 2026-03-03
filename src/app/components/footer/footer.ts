@@ -13,8 +13,8 @@ export class Footer {
 
   // Vos noms complets
   students = [
-    { name: 'Notahina ANDRIAMANANJARA', role: 'Développeur Frontend & Backend' },
-    { name: 'Ny Kanto RANDRIAMBOLOLONA', role: 'Développeur Frontend & Backend' },
+    { name: 'Notahina ANDRIAMANANJARA', role: 'Développeur Frontend & Backend', etu: '1750' },
+    { name: 'Ny Kanto RANDRIAMBOLOLONA', role: 'Développeur Frontend & Backend', etu: '1862' },
   ];
 
   // Liens utiles
