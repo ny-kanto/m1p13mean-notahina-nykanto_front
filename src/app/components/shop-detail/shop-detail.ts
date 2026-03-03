@@ -4,11 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BoutiqueService } from '../../services/boutique';
 import { Boutique } from '../../interface/boutique';
 import { Subject, takeUntil } from 'rxjs';
+import { HeaderBoutique } from "../header-boutique/header-boutique";
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-shop-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HeaderBoutique, Footer],
   templateUrl: './shop-detail.html',
   styleUrls: ['./shop-detail.css'],
 })

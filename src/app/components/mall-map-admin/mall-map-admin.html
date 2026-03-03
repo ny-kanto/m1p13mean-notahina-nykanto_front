@@ -1,41 +1,70 @@
-<div class="floor-switch">
-  <button [disabled]="currentFloor===0" (click)="currentFloor = 0">RDC</button>
-  <button [disabled]="currentFloor===1" (click)="currentFloor = 1">Étage 1</button>
-</div>
+<app-header-center></app-header-center>
 
-<div class="map-container">
-  @if (currentFloor === 0) {
-    <app-floor-rdc-amdin (zoneClick)="onZoneClick($event)"></app-floor-rdc-amdin>
-  }
+<div class="admin-map-page">
 
-  @if (currentFloor === 1) {
-    <app-floor-etage1-admin (zoneClick)="onZoneClick($event)"></app-floor-etage1-admin>
-  }
-</div>
+  <div class="admin-map-content">
 
-@if (selectedZone) {
-  <div class="panel">
-    <h3>Zone : {{ selectedZone.zoneId }}</h3>
+    <!-- SWITCH ÉTAGE -->
+    <div class="floor-switch">
+      <button
+        [disabled]="currentFloor===0"
+        [class.active]="currentFloor===0"
+        (click)="currentFloor = 0">
+        RDC
+      </button>
 
-    <select [(ngModel)]="selectedBoutiqueId" (change)="onBoutiqueChange($event)">
-      <option [ngValue]="undefined">-- Zone libre --</option>
-      @for (b of boutiques; track b._id) {
-        <option [value]="b._id">{{ b.nom }}</option>
+      <button
+        [disabled]="currentFloor===1"
+        [class.active]="currentFloor===1"
+        (click)="currentFloor = 1">
+        Étage 1
+      </button>
+    </div>
+
+    <!-- MAP -->
+    <div class="map-container">
+      @if (currentFloor === 0) {
+        <app-floor-rdc-amdin (zoneClick)="onZoneClick($event)"></app-floor-rdc-amdin>
       }
-    </select>
 
-    <button (click)="save()">Enregistrer</button>
-  </div>
-}
+      @if (currentFloor === 1) {
+        <app-floor-etage1-admin (zoneClick)="onZoneClick($event)"></app-floor-etage1-admin>
+      }
+    </div>
 
-@if (activeStore; as store) {
-  <div class="info">
-    <h3>{{ store.nom }}</h3>
-    <p>Catégorie : {{ store.categorie }}</p>
-    <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
-    <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
-    <p>Statut : {{ store.ouvertMaintenant ? 'ouvert' : 'fermé' }}</p>
+    <!-- PANEL ADMIN -->
+    @if (selectedZone) {
+      <div class="panel">
+        <h3>Zone : {{ selectedZone.zoneId }}</h3>
+
+        <select [(ngModel)]="selectedBoutiqueId"
+                (change)="onBoutiqueChange($event)">
+          <option [ngValue]="undefined">-- Zone libre --</option>
+          @for (b of boutiques; track b._id) {
+            <option [value]="b._id">{{ b.nom }}</option>
+          }
+        </select>
+
+        <button class="save-btn" (click)="save()">
+          Enregistrer
+        </button>
+      </div>
+    }
+
+    <!-- INFO BOUTIQUE -->
+    @if (activeStore; as store) {
+      <div class="info">
+        <h3>{{ store.nom }}</h3>
+        <p>Catégorie : {{ store.categorie }}</p>
+        <p>Étage : {{ store.etage === 0 ? 'RDC' : 'Étage 1' }}</p>
+        <p>Contact : {{ store.contact.email }} | {{ store.contact.tel }}</p>
+        <p>Statut : {{ store.ouvertMaintenant ? 'ouvert' : 'fermé' }}</p>
+      </div>
+    } @else {
+      <p class="info empty">Clique sur une boutique</p>
+    }
+
   </div>
-} @else {
-  <p class="info">Clique sur une boutique</p>
-}
+</div>
+
+<app-footer></app-footer>

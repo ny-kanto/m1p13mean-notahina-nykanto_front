@@ -18,6 +18,7 @@ import { Footer } from '../footer/footer';
 import { PaginationComponent } from '../../components/pagination/pagination';
 
 import { ProduitService } from '../../services/produit';
+import { HeaderBoutique } from "../header-boutique/header-boutique";
 
 type PromotionScope = 'ALL_PRODUCTS' | 'PRODUCTS';
 
@@ -44,7 +45,8 @@ type ProduitLite = {
     HeaderBoutiqueComponent,
     Footer,
     PaginationComponent,
-  ],
+    HeaderBoutique
+],
   templateUrl: './promotion.html',
   styleUrls: ['./promotion.css'],
 })
