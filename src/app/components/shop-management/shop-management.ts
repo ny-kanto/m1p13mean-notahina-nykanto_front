@@ -9,11 +9,13 @@ import { Boutique } from '../../interface/boutique';
 import { Categorie } from '../../interface/categorie';
 import { PaginationComponent } from '../pagination/pagination';
 import { HoraireJour, JourSemaine } from '../../interface/horaire-jour';
+import { HeaderCenterComponent } from "../header-center/header-center";
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-shop-management',
   standalone: true,
-  imports: [CommonModule, FormsModule, PaginationComponent, RouterLink],
+  imports: [CommonModule, FormsModule, PaginationComponent, RouterLink, HeaderCenterComponent, Footer],
   templateUrl: './shop-management.html',
   styleUrls: ['./shop-management.css'],
 })

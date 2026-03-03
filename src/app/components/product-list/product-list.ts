@@ -8,11 +8,13 @@ import { Produit } from '../../interface/produit';
 import { ProduitService } from '../../services/produit';
 import { PaginationReponse } from '../../interface/pagination-reponse';
 import { ProduitFiltre } from '../../interface/produit-filtre';
+import { HeaderBoutique } from "../header-boutique/header-boutique";
+import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HeaderBoutique, Footer],
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.css'], // ✅ important
 })
