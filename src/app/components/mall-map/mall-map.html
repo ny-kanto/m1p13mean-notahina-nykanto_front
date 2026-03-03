@@ -13,21 +13,6 @@
   }
 </div>
 
-@if (selectedZone) {
-  <div class="panel">
-    <h3>Zone : {{ selectedZone.zoneId }}</h3>
-
-    <select [(ngModel)]="selectedBoutiqueId" (change)="onBoutiqueChange($event)">
-      <option [ngValue]="undefined">-- Zone libre --</option>
-      @for (b of boutiques; track b._id) {
-        <option [value]="b._id">{{ b.nom }}</option>
-      }
-    </select>
-
-    <button (click)="save()">Enregistrer</button>
-  </div>
-}
-
 @if (activeStore; as store) {
   <div class="info">
     <h3>{{ store.nom }}</h3>
@@ -38,4 +23,37 @@
   </div>
 } @else {
   <p class="info">Clique sur une boutique</p>
+}
+
+<div class="actions">
+  <button class="route-btn" (click)="openRouteModal()">
+    Itinéraire
+  </button>
+</div>
+
+@if (showRouteModal) {
+  <div class="modal-backdrop" (click)="closeRouteModal()"></div>
+
+  <div class="modal">
+    <h3>Calculer un itinéraire</h3>
+
+    <label>Point de départ</label>
+    <select [(ngModel)]="routeStart">
+      @for (store of boutiques; track store._id) {
+        <option [value]="store._id">{{ store.nom }}</option>
+      }
+    </select>
+
+    <label>Point d'arrivée</label>
+    <select [(ngModel)]="routeEnd">
+      @for (store of boutiques; track store._id) {
+        <option [value]="store._id">{{ store.nom }}</option>
+      }
+    </select>
+
+    <div class="modal-actions">
+      <button (click)="calculateRoute()">Afficher</button>
+      <button class="secondary" (click)="closeRouteModal()">Annuler</button>
+    </div>
+  </div>
 }

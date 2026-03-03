@@ -7,11 +7,14 @@ import { combineLatest } from 'rxjs';
 import { DataService } from '../../../../services/data-service';
 
 @Component({
-  selector: 'app-floor-etage1',
+  selector: 'app-floor-etage1-admin',
+  imports: [],
   standalone: true,
-  templateUrl: './floor-etage1.html',
+  templateUrl: './floor-etage1-admin.html',
+  styleUrl: './floor-etage1-admin.css',
 })
-export class FloorEtage1Component {
+export class FloorEtage1Admin {
+
   @Output() zoneClick = new EventEmitter<string>();
 
   zones: Zone[] = [];
@@ -19,8 +22,6 @@ export class FloorEtage1Component {
   zoneLabels: { [key: string]: string } = {};
   receivedData: Zone | undefined;
   selectedZoneId?: string;          // id de la zone reçue
-
-  pathRdc?: string;
 
   constructor(
       private zoneService: ZoneService,
@@ -47,11 +48,6 @@ export class FloorEtage1Component {
         this.buildLabels(); // ✅ ici
         
         this.cdr.detectChanges(); // 🔥 FORCE refresh
-      });
-
-      this.dataService.pathEtage1$.subscribe(path => {
-        this.pathRdc = path;
-        this.cdr.detectChanges();
       });
 
   }
@@ -84,4 +80,5 @@ export class FloorEtage1Component {
 
     console.log('TAILLE DE ZONE LABEL:', this.zoneLabels);
   }
+
 }

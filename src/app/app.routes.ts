@@ -11,10 +11,10 @@ import { ShopManagementComponent } from './components/shop-management/shop-manag
 import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
 import { ProductListUserComponent } from './components/product-list-user/product-list-user';
+import { MallMapAdmin } from './components/mall-map-admin/mall-map-admin';
 import { EventManagementComponent } from './components/event-management/event-management';
 import { LoginAdminComponent } from './components/login-admin/login-admin';
 import { PromotionComponent } from './components/promotion/promotion';
-
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
   { path: 'boutiques/:id', component: ShopDetailUserComponent },
@@ -31,4 +31,5 @@ export const routes: Routes = [
   { path: 'admin/evenements', component: EventManagementComponent },
   { path: '', component: HomeComponent },
   { path: 'mall-map', component: MallMapComponent },
+  { path: 'mall-map-admin', component: MallMapAdmin },
 ];

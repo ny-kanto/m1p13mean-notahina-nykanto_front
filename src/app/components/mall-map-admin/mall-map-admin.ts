@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BoutiqueService } from '../../services/boutique';
 import { Boutique } from '../../interface/boutique';
-import { FloorRdcComponent } from './floors/floor-rdc/floor-rdc';
-import { FloorEtage1Component } from './floors/floor-etage1/floor-etage1';
+import { FloorRdcAmdin } from './floors/floor-rdc-amdin/floor-rdc-amdin';
 import { Zone } from '../../interface/zone';
 import { ZoneService } from '../../services/zone';
 import { FormsModule } from '@angular/forms';
@@ -11,23 +10,15 @@ import { CommonModule } from '@angular/common';
 import { PaginationReponse, PaginationReponse1 } from '../../interface/pagination-reponse';
 import { DataService } from '../../services/data-service';
 import { forkJoin } from 'rxjs';
-import { RDC_NAVIGATION_MAP } from '../../interface/rdc-navigation-map';
-import { PathfindingService } from '../../services/pathfinding-service';
-
-interface PathPoint {
-  x: number;
-  y: number;
-  floor: number; // 0 = RDC, 1 = étage 1
-}
+import { FloorEtage1Admin } from './floors/floor-etage1-admin/floor-etage1-admin';
 
 @Component({
-  selector: 'app-mall-map',
-  standalone: true,
-  imports: [FloorRdcComponent, FloorEtage1Component, FormsModule, CommonModule],
-  templateUrl: './mall-map.html',
-  styleUrls: ['./mall-map.css'],
+  selector: 'app-mall-map-admin',
+  imports: [FloorRdcAmdin, FloorEtage1Admin, FormsModule, CommonModule],
+  templateUrl: './mall-map-admin.html',
+  styleUrl: './mall-map-admin.css',
 })
-export class MallMapComponent {
+export class MallMapAdmin {
 
   zones: Zone[] = [];
   boutiques: Boutique[] = [];
@@ -44,46 +35,11 @@ export class MallMapComponent {
   paramId?: string;
   paramEtage?: string;
 
-  showRouteModal = false;
-
-  routeStart: string | null = null;
-  routeEnd: string | null = null;
-
-  // ⚡ Nouveau : chemins à afficher sur SVG
-  pathRdc: PathPoint[] = [];
-  pathEtage1: PathPoint[] = [];
-
-  private boutiqueToDoor: Record<string, string> = {
-    // RDC
-    'shop-101': 'door-101',
-    'shop-102': 'door-102',
-    'shop-103': 'door-103',
-    'shop-201': 'door-201',
-    'shop-202': 'door-202',
-    'store-hyper': 'door-hyper',
-
-    // Étage 1
-    'shop-301': 'door-301',
-    'shop-302': 'door-302',
-    'shop-303': 'door-303',
-    'food-court': 'door-food-court'
-  };
-
-  private getDoorNodeFromBoutiqueId(boutiqueId: string): string | null {
-
-    const zone = this.zones.find(z => z.boutiqueId?._id === boutiqueId);
-    if (!zone) return null;
-
-    return this.boutiqueToDoor[zone.zoneId] ?? null;
-  }
-
-
   constructor(
     private zoneService: ZoneService,
     private boutiqueService: BoutiqueService,
     private activatedRoute: ActivatedRoute,
-    private dataService: DataService,
-    private pathfindingService: PathfindingService
+    private dataService: DataService
   ) {}
 
   sendData(boutiqueId?: string) {
@@ -130,11 +86,82 @@ export class MallMapComponent {
     this.selectedZone = this.zones.find(z => z.zoneId === zoneId);
     this.selectedBoutiqueId = this.selectedZone?.boutiqueId?._id || '';
     this.activeStore = this.boutiques.find(b => b._id === this.selectedBoutiqueId);
-    if (zoneId === 'stairs-up') {
-      this.currentFloor = 1;
-    }else if (zoneId === 'stairs-down') {
-      this.currentFloor = 0;
+  }
+
+  onBoutiqueChange(event: any){
+
+    console.log('ON BOUTIQUE CHANGE');
+
+    this.selectedBoutiqueId = event.target.value;
+
+    this.activeStore = this.boutiques.find(b => b._id === this.selectedBoutiqueId);
+
+    console.log('ACTIVE STORE : ', this.activeStore);
+  }
+
+  save() {
+    if (!this.selectedZone) {
+      console.log('NO ZONE SELECTED DANS SAVE');
+      return;
     }
+
+    console.log('TAFIDITRA SAVE', this.selectedZone.zoneId, this.selectedBoutiqueId);
+
+    this.updateBoutique();
+
+    this.zoneService.assignZone(
+      this.selectedZone.zoneId,
+      this.selectedBoutiqueId || null
+    ).subscribe({
+      next: updatedZone => {
+        console.log('Zone mise à jour depuis le serveur :', updatedZone);
+
+        // Mettre à jour localement la zone
+        const index = this.zones.findIndex(z => z.zoneId === updatedZone.zoneId);
+        if (index !== -1) this.zones[index] = updatedZone;
+
+        // Réinitialiser la sélection
+        this.selectedZone = undefined;
+        this.selectedBoutiqueId = '';
+      },
+      error: err => {
+        console.error('Erreur lors de l\'assignation de la zone :', err);
+      }
+    });
+  }
+
+  /**
+  * UPDATE
+  */
+  updateBoutique(): void {
+    if (!this.activeStore?._id) return;
+
+    const formData = this.buildFormData();
+
+    console.log('FormData à envoyer :' , Array.from(formData.entries()));
+
+    this.boutiqueService
+      .updateBoutique(this.activeStore._id, formData)
+      .subscribe({
+        next: () => {
+          alert('✅ Boutique modifiée');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la modification de la boutique :', err);
+        },
+      });
+  }
+
+  buildFormData(): FormData {
+    const fd = new FormData();
+
+    if (!this.activeStore) {
+      return fd;
+    }
+
+    fd.append('etage', this.currentFloor.toString());
+
+    return fd;
   }
 
   getBoutiqueName(zoneId: string): string {
@@ -146,6 +173,8 @@ export class MallMapComponent {
   }
 
   onShopClick(id: string) {
+
+    
 
     if (id === 'stairs-up') {
       this.currentFloor = 1;
@@ -159,48 +188,6 @@ export class MallMapComponent {
       return;
     }
 
-  }
-
-  openRouteModal() {
-    this.showRouteModal = true;
-  }
-
-  closeRouteModal() {
-    this.showRouteModal = false;
-  }
-
-  /** 🔹 Calculer l’itinéraire entre deux boutiques */
-  calculateRoute() {
-    if (!this.routeStart || !this.routeEnd) return;
-
-    const startNode = this.getDoorNodeFromBoutiqueId(this.routeStart);
-    const endNode = this.getDoorNodeFromBoutiqueId(this.routeEnd);
-
-    if (!startNode || !endNode) {
-      console.error('Impossible de trouver les portes correspondantes');
-      return;
-    }
-
-    console.log('Route nodes:', startNode, '→', endNode);
-
-    const path: PathPoint[] = this.pathfindingService.findPath(startNode, endNode);
-
-    console.log('Chemin complet calculé :', path);
-
-    const pathRdc = path
-      .filter(p => p.floor === 0)
-      .map(p => `${p.x},${p.y}`)
-      .join(' ');
-
-    const pathEtage1 = path
-      .filter(p => p.floor === 1)
-      .map(p => `${p.x},${p.y}`)
-      .join(' ');
-
-    this.dataService.changePath(pathRdc);
-    this.dataService.changePathEtage1(pathEtage1);
-
-    this.closeRouteModal();
   }
 
 }
