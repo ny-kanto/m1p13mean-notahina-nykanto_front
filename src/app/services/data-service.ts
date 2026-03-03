@@ -15,4 +15,19 @@ export class DataService {
     this.dataSubject.next(zone);
   }
 
+  // 🔹 Pour le chemin à tracer dans le SVG
+  private pathSubject = new BehaviorSubject<string | undefined>(undefined);
+  path$ = this.pathSubject.asObservable();
+
+  changePath(path: string | undefined) {
+    this.pathSubject.next(path);
+  }
+
+  private pathEtage1Subject = new BehaviorSubject<string | undefined>(undefined);
+  pathEtage1$ = this.pathEtage1Subject.asObservable();
+
+  changePathEtage1(path: string | undefined) {
+    this.pathEtage1Subject.next(path);
+  }
+
 }

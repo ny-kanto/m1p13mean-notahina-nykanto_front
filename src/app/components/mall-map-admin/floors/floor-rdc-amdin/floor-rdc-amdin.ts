@@ -7,13 +7,14 @@ import { combineLatest, forkJoin } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { DataService } from '../../../../services/data-service';
 
-
 @Component({
-  selector: 'app-floor-rdc',
+  selector: 'app-floor-rdc-amdin',
+  imports: [],
   standalone: true,
-  templateUrl: './floor-rdc.html',
+  templateUrl: './floor-rdc-amdin.html',
+  styleUrl: './floor-rdc-amdin.css',
 })
-export class FloorRdcComponent {
+export class FloorRdcAmdin {
 
   @Output() zoneClick = new EventEmitter<string>();
 
@@ -22,8 +23,6 @@ export class FloorRdcComponent {
   zoneLabels: { [key: string]: string } = {};
   receivedData: Zone | undefined;
   selectedZoneId?: string;    
-
-  pathRdc?: string;
 
   constructor(
       private zoneService: ZoneService,
@@ -52,13 +51,6 @@ export class FloorRdcComponent {
       
       this.cdr.detectChanges(); // 🔥 FORCE refresh
     });
-
-    // 🔹 Abonnement au chemin envoyé par MallMapComponent
-    this.dataService.path$.subscribe(path => {
-      this.pathRdc = path; // reçoit le string "x1,y1 x2,y2 ..."
-      this.cdr.detectChanges(); // rafraîchit immédiatement le SVG
-    });
-
   }
 
   onClick(zoneId: string) {
@@ -88,5 +80,5 @@ export class FloorRdcComponent {
 
     console.log('TAILLE DE ZONE LABEL:', this.zoneLabels);
   }
-
+  
 }

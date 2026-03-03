@@ -11,6 +11,7 @@ import { ShopManagementComponent } from './components/shop-management/shop-manag
 import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
 import { ProductListUserComponent } from './components/product-list-user/product-list-user';
+import { MallMapAdmin } from './components/mall-map-admin/mall-map-admin';
 
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
@@ -25,4 +26,5 @@ export const routes: Routes = [
   { path: 'admin/boutique-details/:id', component: ShopDetailComponent },
   { path: '', component: HomeComponent },
   { path: 'mall-map', component: MallMapComponent },
+  { path: 'mall-map-admin', component: MallMapAdmin },
 ];
