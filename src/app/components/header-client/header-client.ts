@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-header-client',
@@ -9,27 +10,70 @@ import { RouterModule } from '@angular/router';
   templateUrl: './header-client.html',
   styleUrl: './header-client.css',
 })
-export class HeaderClient {
-  centreName = 'Akoor Shopping';
+export class HeaderClientComponent {
+  isScrolled = false;
+  searchQuery = '';
+  isSearchFocused = false;
+  isMobileMenuOpen = false;
 
-  // Menu items pour le client
-  menuItems = [
-    { label: 'Accueil', route: '/home', icon: 'fas fa-home' },
-    { label: 'Boutiques', route: '/boutiques', icon: 'fas fa-store' },
-    { label: 'Promotions', route: '/promotions', icon: 'fas fa-tags' },
-    { label: 'Contact', route: '/contact', icon: 'fas fa-envelope' },
-  ];
+  // ✅ auth UI
+  isLoggedIn = false;
+  userDisplayName = '';
+  isUserMenuOpen = false;
 
-  // Panier
-  cartItemsCount = 3;
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
-  showUserMenu = false;
+  ngOnInit(): void {
+    this.checkScroll();
 
-  toggleUserMenu() {
-    this.showUserMenu = !this.showUserMenu;
+    this.isLoggedIn = this.auth.isLoggedIn();
+
+    const user = this.auth.getUser?.();
+    this.userDisplayName = user?.nom + " " + user?.prenom || '';
   }
 
-  logout() {
-    console.log('Déconnexion');
+  /** Détecte le scroll */
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.checkScroll();
+  }
+
+  private checkScroll(): void {
+    const scrollPosition =
+      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.isScrolled = scrollPosition > 50;
+  }
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
+
+  @HostListener('document:click')
+  closeUserMenu(): void {
+    this.isUserMenuOpen = false;
+  }
+
+  // ✅ User menu
+  toggleUserMenu(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  logout(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    this.auth.logout();
+    this.isUserMenuOpen = false;
+    this.closeMobileMenu();
+
+    this.router.navigate(['/login']);
   }
 }

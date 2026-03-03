@@ -13,32 +13,6 @@
       </a>
     </div>
 
-    <!-- Barre de recherche au centre -->
-    <div class="header-search">
-      <form class="search-form" (submit)="onSearch(); $event.preventDefault()">
-        <div class="search-wrapper" [class.focused]="isSearchFocused">
-          <i class="fas fa-search search-icon"></i>
-          <input
-            type="text"
-            class="search-input"
-            placeholder="Que recherchez-vous aujourd'hui ?"
-            [(ngModel)]="searchQuery"
-            name="search"
-            (focus)="onSearchFocus()"
-            (blur)="onSearchBlur()"
-          />
-          @if (searchQuery) {
-            <button type="button" class="search-clear" (click)="clearSearch()">
-              <i class="fas fa-times"></i>
-            </button>
-          }
-          <button type="submit" class="search-submit">
-            <i class="fas fa-arrow-right"></i>
-          </button>
-        </div>
-      </form>
-    </div>
-
     <!-- Actions à droite -->
     <div class="header-actions">
       @if (!isLoggedIn) {
@@ -47,7 +21,6 @@
           <span class="action-text">Compte</span>
         </a>
       } @else {
-        <!-- ✅ SI CONNECTÉ -->
         <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
           <a href="#" class="header-action-btn" title="Mon compte" (click)="toggleUserMenu($event)">
             <i class="fas fa-user"></i>

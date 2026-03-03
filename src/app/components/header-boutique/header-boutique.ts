@@ -1,33 +1,79 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth.service'; // ✅ adapte le path
 
 @Component({
-  selector: 'app-header-boutique',
+  selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header-boutique.html',
-  styleUrl: './header-boutique.css',
+  styleUrl: './header-boutique.css'
 })
-export class HeaderBoutique {
-  // Nom de la boutique (à récupérer depuis un service)
-  shopName = 'Zara';
+export class HeaderBoutiqueComponent implements OnInit {
+  isScrolled = false;
+  isMobileMenuOpen = false;
 
-  // Menu items pour le propriétaire de boutique
-  menuItems = [
-    { label: 'Mes produits', route: '/boutique/produits', icon: 'fas fa-box' },
-    { label: 'Commandes', route: '/boutique/commandes', icon: 'fas fa-shopping-cart' },
-    { label: 'Statistiques', route: '/boutique/stats', icon: 'fas fa-chart-line' },
-    { label: 'Mon profil', route: '/boutique/profil', icon: 'fas fa-store-alt' },
-  ];
+  // ✅ auth UI
+  isLoggedIn = false;
+  userDisplayName = '';
+  isUserMenuOpen = false;
 
-  showUserMenu = false;
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
-  toggleUserMenu() {
-    this.showUserMenu = !this.showUserMenu;
+  ngOnInit(): void {
+    this.checkScroll();
+    this.refreshAuthState();
   }
 
-  logout() {
-    console.log('Déconnexion');
+  private refreshAuthState(): void {
+    this.isLoggedIn = this.auth.isLoggedIn();
+    const user = this.auth.getUser();
+
+    this.userDisplayName = user?.prenom
+      ? `${user.prenom} ${user.nom ?? ''}`.trim()
+      : (user?.email ?? 'Utilisateur');
+  }
+
+  /** Détecte le scroll */
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    this.checkScroll();
+  }
+
+  private checkScroll(): void {
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.isScrolled = scrollPosition > 50;
+  }
+
+  toggleMobileMenu(): void { this.isMobileMenuOpen = !this.isMobileMenuOpen; }
+  closeMobileMenu(): void { this.isMobileMenuOpen = false; }
+
+  // ✅ User menu
+  toggleUserMenu(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+  }
+
+  @HostListener('document:click')
+  closeUserMenu(): void {
+    this.isUserMenuOpen = false;
+  }
+
+  logout(event?: Event): void {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    this.auth.logout();
+    this.refreshAuthState();
+    this.isUserMenuOpen = false;
+    this.closeMobileMenu();
+
+    this.router.navigate(['/login']);
   }
 }

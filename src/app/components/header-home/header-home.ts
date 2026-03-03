@@ -13,8 +13,6 @@ import { AuthService } from '../../services/auth.service'; // ✅ adapte le path
 })
 export class HeaderHomeComponent implements OnInit {
   isScrolled = false;
-  searchQuery = '';
-  isSearchFocused = false;
   isMobileMenuOpen = false;
 
   // ✅ auth UI
@@ -36,7 +34,6 @@ export class HeaderHomeComponent implements OnInit {
     this.isLoggedIn = this.auth.isLoggedIn();
     const user = this.auth.getUser();
 
-    // si tu as user => nom prenom ; sinon fallback
     this.userDisplayName = user?.prenom
       ? `${user.prenom} ${user.nom ?? ''}`.trim()
       : (user?.email ?? 'Utilisateur');
@@ -52,16 +49,6 @@ export class HeaderHomeComponent implements OnInit {
     const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.isScrolled = scrollPosition > 50;
   }
-
-  onSearch(): void {
-    if (this.searchQuery.trim()) {
-      console.log('Recherche:', this.searchQuery);
-    }
-  }
-
-  onSearchFocus(): void { this.isSearchFocused = true; }
-  onSearchBlur(): void { this.isSearchFocused = false; }
-  clearSearch(): void { this.searchQuery = ''; }
 
   toggleMobileMenu(): void { this.isMobileMenuOpen = !this.isMobileMenuOpen; }
   closeMobileMenu(): void { this.isMobileMenuOpen = false; }

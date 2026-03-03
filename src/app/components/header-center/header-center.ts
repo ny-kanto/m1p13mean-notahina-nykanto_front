@@ -28,6 +28,11 @@ export class HeaderCenterComponent {
 
   ngOnInit(): void {
     this.checkScroll();
+
+    this.isLoggedIn = this.auth.isLoggedIn();
+
+    const user = this.auth.getUser?.();
+    this.userDisplayName = user?.nom + " " + user?.prenom || '';
   }
 
   /** Détecte le scroll */
@@ -37,23 +42,17 @@ export class HeaderCenterComponent {
   }
 
   private checkScroll(): void {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const scrollPosition =
+      window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     this.isScrolled = scrollPosition > 50;
   }
 
-  onSearch(): void {
-    if (this.searchQuery.trim()) {
-      console.log('Recherche:', this.searchQuery);
-    }
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
   }
-
-  onSearchFocus(): void { this.isSearchFocused = true; }
-  onSearchBlur(): void { this.isSearchFocused = false; }
-  clearSearch(): void { this.searchQuery = ''; }
-
-  toggleMobileMenu(): void { this.isMobileMenuOpen = !this.isMobileMenuOpen; }
-  closeMobileMenu(): void { this.isMobileMenuOpen = false; }
-
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen = false;
+  }
 
   @HostListener('document:click')
   closeUserMenu(): void {

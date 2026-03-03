@@ -1,71 +1,52 @@
-<!-- header-boutique.component.html -->
-<header class="header header-boutique">
+<header class="header" [class.scrolled]="isScrolled">
   <div class="header-container">
-
-    <!-- Logo et nom de la boutique -->
-    <div class="header-left">
-      <div class="logo">
-        <i class="fas fa-store"></i>
-      </div>
-      <div class="brand">
-        <h1>{{ shopName }}</h1>
-        <span class="role-badge">Boutique</span>
-      </div>
+    <!-- Logo à gauche -->
+    <div class="header-logo">
+      <a routerLink="/" class="logo-link">
+        <div class="logo-icon">
+          <i class="fas fa-shopping-bag"></i>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">AKOOR</span>
+          <span class="logo-subtitle">Shopping</span>
+        </div>
+      </a>
     </div>
 
-    <!-- Navigation principale -->
     <nav class="header-nav">
-      @for (item of menuItems; track item.route) {
-        <a
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          class="nav-link"
-        >
-          <i [class]="item.icon"></i>
-          <span>{{ item.label }}</span>
-        </a>
-      }
+      <a routerLink="/produits-boutique" routerLinkActive="active" class="nav-link">
+        <span>Produits</span>
+      </a>
+      <a routerLink="/promotions" routerLinkActive="active" class="nav-link">
+        <span>Promotions</span>
+      </a>
     </nav>
 
-    <!-- Actions utilisateur -->
-    <div class="header-right">
-
-      <!-- Notifications -->
-      <button class="btn-icon" title="Notifications">
-        <i class="fas fa-bell"></i>
-        <span class="badge">5</span>
-      </button>
-
-      <!-- Menu utilisateur -->
-      <div class="user-menu-container">
-        <button class="user-button" (click)="toggleUserMenu()">
-          <div class="user-avatar">
+    <!-- Actions à droite -->
+    <div class="header-actions">
+      @if (!isLoggedIn) {
+        <a routerLink="/login" class="header-action-btn" title="Mon compte">
+          <i class="fas fa-user"></i>
+          <span class="action-text">Compte</span>
+        </a>
+      } @else {
+        <div class="user-menu-wrapper" (click)="$event.stopPropagation()">
+          <a href="#" class="header-action-btn" title="Mon compte" (click)="toggleUserMenu($event)">
             <i class="fas fa-user"></i>
-          </div>
-          <span class="user-name">Gérant</span>
-          <i class="fas fa-chevron-down"></i>
-        </button>
+            <span class="action-text">{{ userDisplayName }}</span>
+            <i class="fas fa-chevron-down" style="font-size: 0.8rem"></i>
+          </a>
 
-        <!-- Dropdown -->
-        @if (showUserMenu) {
-          <div class="user-dropdown">
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-user-circle"></i>
-              Mon profil
-            </a>
-            <a href="#" class="dropdown-item">
-              <i class="fas fa-cog"></i>
-              Paramètres
-            </a>
-            <hr class="dropdown-divider">
-            <button class="dropdown-item" (click)="logout()">
-              <i class="fas fa-sign-out-alt"></i>
-              Déconnexion
-            </button>
-          </div>
-        }
-      </div>
+          @if (isUserMenuOpen) {
+            <div class="user-dropdown">
+              <button class="user-dropdown-item" (click)="logout($event)">
+                <i class="fas fa-sign-out-alt"></i>
+                Déconnexion
+              </button>
+            </div>
+          }
+        </div>
+      }
     </div>
-
   </div>
 </header>

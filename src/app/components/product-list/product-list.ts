@@ -8,6 +8,7 @@ import { Produit } from '../../interface/produit';
 import { ProduitService } from '../../services/produit';
 import { PaginationReponse } from '../../interface/pagination-reponse';
 import { ProduitFiltre } from '../../interface/produit-filtre';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -67,20 +68,23 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   constructor(
     private productService: ProduitService,
+    private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
     private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    // ✅ boutiqueId dynamique (si l'URL change)
-    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.boutiqueId = params.get('id') ?? '';
-      this.currentPage = 1;
-      this.loadProducts();
-    });
+    const user = this.auth.getUser(); // ou decode token
+    this.boutiqueId = user?.boutiqueId ?? '';
 
-    // ✅ debounce recherche
+    if (!this.boutiqueId) {
+      this.router.navigate(['/login']); // ou page erreur
+      return;
+    }
+
+    this.loadProducts();
+
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
