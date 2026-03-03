@@ -4,13 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { BoutiqueService } from '../../services/boutique';
 import { Boutique } from '../../interface/boutique';
 import { Subject, takeUntil } from 'rxjs';
-import { HeaderBoutique } from "../header-boutique/header-boutique";
 import { Footer } from "../footer/footer";
+import { HeaderCenterComponent } from "../header-center/header-center";
 
 @Component({
   selector: 'app-shop-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeaderBoutique, Footer],
+  imports: [CommonModule, RouterModule, Footer, HeaderCenterComponent],
   templateUrl: './shop-detail.html',
   styleUrls: ['./shop-detail.css'],
 })
@@ -99,6 +99,13 @@ export class ShopDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/admin/boutiques']);
+  }
+
+  map(): void {
+    if (!this.boutique) return;
+    this.router.navigate(['/mall-map-admin'], {
+      queryParams: { boutiqueId: this.boutique._id },
+     });
   }
 
   getEtageLabel(): string {
