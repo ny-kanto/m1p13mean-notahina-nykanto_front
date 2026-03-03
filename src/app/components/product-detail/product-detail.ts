@@ -82,6 +82,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           this.product = data;
+          console.log('PRODUCT IN COMPONENT:', this.product);
           this.selectedImageIndex = 0;
           this.isLoading = false;
 

@@ -17,7 +17,15 @@ export class ProduitService {
     return {
       _id: p._id,
       nom: p.nom,
-      prix: p.prix,
+
+      // on garde prix = prixFinal si présent (fallback prix)
+      prix: (p.prixFinal ?? p.prix) as number,
+
+      // nouveaux champs pour affichage promo
+      prixOriginal: p.prixOriginal ?? p.prix,
+      prixFinal: p.prixFinal ?? p.prix,
+      promotion: p.promotion ?? null,
+
       description: p.description ?? '',
       boutiqueId: p.boutique,
       images: p.images ?? [],
@@ -60,10 +68,30 @@ export class ProduitService {
       map((raw) => {
         console.log('RAW API RESPONSE:', raw);
 
-        // si ton API renvoie { data: produit } ou { produit: produit }
-        const p = raw?.data ?? raw?.produit ?? raw;
+        const p = (raw?.data ?? raw?.produit ?? raw) as ProduitApi;
 
-        return this.mapProduit(p as ProduitApi);
+        const prixBase = Number((p as any).prix ?? 0);
+        const prixOriginal = Number((p as any).prixOriginal ?? prixBase);
+        const prixFinal = Number((p as any).prixFinal ?? prixBase);
+        const promotion = (p as any).promotion ?? null;
+
+        return {
+          _id: p._id,
+          nom: p.nom,
+
+          // prix affiché principal
+          prix: prixFinal,
+
+          prixOriginal,
+          prixFinal,
+          promotion,
+
+          description: p.description ?? '',
+          boutiqueId: (p as any).boutique ?? (p as any).boutiqueId, // au cas où
+          images: p.images ?? [],
+          noteMoyenne: (p as any).noteMoyenne ?? 0,
+          noteCompte: (p as any).noteCompte ?? 0,
+        } as Produit;
       }),
       catchError(this.handleError),
     );

@@ -16,43 +16,44 @@
       <!-- Nom -->
       <h3 class="product-name">{{ product.nom }}</h3>
 
-      <!-- Description
-      @if (product.description) {
-        <p class="product-description">
-          {{
-            product.description.length > 80
-              ? (product.description | slice: 0 : 80) + '...'
-              : product.description
-          }}
-        </p>
-      } -->
-
-      <!-- Footer : Prix + Stock -->
+      <!-- Footer : Prix -->
       <div class="product-footer">
         <div class="price-section">
           <span class="price-label">Prix</span>
-          <span class="price-value">{{ product.prix }} Ar</span>
+
+          @if (
+            product.promotion &&
+            product.prixFinal != null &&
+            product.prixOriginal != null &&
+            product.prixFinal < product.prixOriginal
+          ) {
+            <div class="price-row">
+              <span class="price-value">{{ product.prixFinal }} Ar</span>
+              <span class="price-old">{{ product.prixOriginal }} Ar</span>
+              <span class="promo-badge">-{{ product.promotion.pourcentage }}%</span>
+            </div>
+          } @else {
+            <span class="price-value">{{ product.prix }} Ar</span>
+          }
         </div>
       </div>
 
-
-
-        <!-- ✅ Note moyenne -->
-        <div class="card-rating" *ngIf="(product.noteCompte ?? 0) > 0;">
-          <div class="card-stars">
-            @for (star of [1, 2, 3, 4, 5]; track star) {
-              <ng-container [ngSwitch]="getStarType(star, product.noteMoyenne)">
-                <i *ngSwitchCase="'full'" class="fas fa-star star-full"></i>
-                <i *ngSwitchCase="'half'" class="fas fa-star-half-alt star-half"></i>
-                <i *ngSwitchDefault class="far fa-star star-empty"></i>
-              </ng-container>
-            }
-          </div>
-
-          <span class="card-rating-text">
-            {{ product.noteMoyenne | number: '1.1-1' }} ({{ product.noteCompte }})
-          </span>
+      <!-- ✅ Note moyenne -->
+      <div class="card-rating" *ngIf="(product.noteCompte ?? 0) > 0;">
+        <div class="card-stars">
+          @for (star of [1, 2, 3, 4, 5]; track star) {
+            <ng-container [ngSwitch]="getStarType(star, product.noteMoyenne)">
+              <i *ngSwitchCase="'full'" class="fas fa-star star-full"></i>
+              <i *ngSwitchCase="'half'" class="fas fa-star-half-alt star-half"></i>
+              <i *ngSwitchDefault class="far fa-star star-empty"></i>
+            </ng-container>
+          }
         </div>
+
+        <span class="card-rating-text">
+          {{ product.noteMoyenne | number: '1.1-1' }} ({{ product.noteCompte }})
+        </span>
+      </div>
     </div>
   </div>
 </a>

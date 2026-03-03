@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-// import { ProductListComponent } from './components/product-list/product-list';
 import { ShopListComponent } from './components/shop-list/shop-list';
 import { ProductDetailComponent } from './components/product-detail/product-detail';
-// import { ProductDetailBoutiqueComponent } from './components/product-detail-boutique/product-detail-boutique';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login';
 import { HomeComponent } from './components/home/home';
@@ -15,12 +13,15 @@ import { MallMapAdmin } from './components/mall-map-admin/mall-map-admin';
 import { EventManagementComponent } from './components/event-management/event-management';
 import { LoginAdminComponent } from './components/login-admin/login-admin';
 import { PromotionComponent } from './components/promotion/promotion';
+import { ProductDetailBoutiqueComponent } from './components/product-detail-boutique/product-detail-boutique';
+import { ProductListComponent } from './components/product-list/product-list';
+
 export const routes: Routes = [
   { path: 'boutiques', component: ShopListComponent },
   { path: 'boutiques/:id', component: ShopDetailUserComponent },
   { path: 'produits/:id', component: ProductListUserComponent },
-//   { path: 'produits/boutique/:id', component: ProductListComponent },
-//   { path: 'produit-boutique/:id', component:  ProductDetailBoutiqueComponent},
+  { path: 'produits/boutique/:id', component: ProductListComponent },
+  { path: 'produit-boutique/:id', component:  ProductDetailBoutiqueComponent},
   { path: 'produit/:id', component: ProductDetailComponent },
   { path: 'promotions', component: PromotionComponent },
   { path: 'signup', component: SignupComponent },

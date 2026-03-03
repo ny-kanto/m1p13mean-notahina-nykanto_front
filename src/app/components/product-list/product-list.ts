@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+
 import { Produit } from '../../interface/produit';
 import { ProduitService } from '../../services/produit';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { PaginationReponse, PaginationReponse1 } from '../../interface/pagination-reponse';
+import { PaginationReponse } from '../../interface/pagination-reponse';
 import { ProduitFiltre } from '../../interface/produit-filtre';
 
 @Component({
@@ -13,21 +14,21 @@ import { ProduitFiltre } from '../../interface/produit-filtre';
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './product-list.html',
-  styleUrl: './product-list.css',
+  styleUrls: ['./product-list.css'], // ✅ important
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   products: Produit[] = [];
-  boutiqueId: string = '';
+  boutiqueId = '';
 
   // États
-  isLoading: boolean = false;
-  errorMessage: string = '';
+  isLoading = false;
+  errorMessage = '';
 
   // Pagination
-  currentPage: number = 1;
-  limit: number = 10;
-  totalPages: number = 0;
-  totalItems: number = 0;
+  currentPage = 1;
+  limit = 10;
+  totalPages = 0;
+  totalItems = 0;
 
   // Filtres
   filters: ProduitFiltre = {
@@ -38,21 +39,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
     sortOrder: 'asc',
   };
 
-  // Subject pour le debounce de la recherche
-  private searchSubject = new Subject<string>();
-
-  // Affichage des filtres
-  showFilters: boolean = false;
+  // UI
+  showFilters = false;
 
   // Modal
-  showModal: boolean = false;
+  showModal = false;
   modalMode: 'add' | 'edit' = 'add';
   selectedProduct: Produit | null = null;
 
-  // Images sélectionnées
+  // Images
   selectedFiles: File[] = [];
 
-  // Formulaire
+  // Form
   productForm: Produit = {
     nom: '',
     prix: 0,
@@ -61,31 +59,35 @@ export class ProductListComponent implements OnInit, OnDestroy {
     images: [],
   };
 
-  // Pour désinscription
+  // Pour template (pagination-info)
+  Math = Math;
+
   private destroy$ = new Subject<void>();
-Math: any;
+  private searchSubject = new Subject<string>();
 
   constructor(
     private productService: ProduitService,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
-    // Récupérer l'ID depuis l'URL
-    this.boutiqueId = this.route.snapshot.params['id'];
+    // ✅ boutiqueId dynamique (si l'URL change)
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.boutiqueId = params.get('id') ?? '';
+      this.currentPage = 1;
+      this.loadProducts();
+    });
 
-    // Configurer le debounce pour la recherche (300ms)
+    // ✅ debounce recherche
     this.searchSubject
       .pipe(debounceTime(300), distinctUntilChanged(), takeUntil(this.destroy$))
       .subscribe((searchTerm) => {
         this.filters.search = searchTerm;
-        this.currentPage = 1; // Retour à la première page
+        this.currentPage = 1;
         this.loadProducts();
       });
-
-    this.loadProducts();
   }
 
   ngOnDestroy(): void {
@@ -93,12 +95,8 @@ Math: any;
     this.destroy$.complete();
   }
 
-  /**
-   * Gestion de la sélection multiple d'images
-   */
   onImagesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-
     if (!input.files) return;
 
     const files = Array.from(input.files);
@@ -111,90 +109,72 @@ Math: any;
     this.selectedFiles = files;
   }
 
-  /**
-   * Ouvrir la modal pour ajouter
-   */
   openAddModal(): void {
     this.modalMode = 'add';
+    this.selectedProduct = null;
     this.productForm = {
       nom: '',
       prix: 0,
       description: '',
-      boutiqueId: '',
+      boutiqueId: this.boutiqueId, // ✅ cohérent
       images: [],
     };
     this.selectedFiles = [];
     this.showModal = true;
   }
 
-  /**
-   * Ouvrir la modal pour modifier
-   */
   openEditModal(product: Produit): void {
     this.modalMode = 'edit';
     this.selectedProduct = product;
     this.productForm = { ...product };
+    this.selectedFiles = [];
     this.showModal = true;
   }
 
-  /**
-   * Fermer la modal
-   */
   closeModal(): void {
     this.showModal = false;
     this.selectedProduct = null;
     this.selectedFiles = [];
   }
 
-  /**
-   * Soumettre le formulaire (Ajout ou Modification)
-   */
   submitForm(): void {
-    if (this.modalMode === 'add') {
-      this.addProduct();
-    } else {
-      this.editProduct();
-    }
+    if (this.modalMode === 'add') this.addProduct();
+    else this.editProduct();
   }
 
-  /**
-   * Ajouter un produit
-   */
   addProduct(): void {
-    const formData = new FormData();
+    if (!this.boutiqueId) {
+      alert("❌ Boutique introuvable dans l'URL");
+      return;
+    }
 
+    const formData = new FormData();
     formData.append('nom', this.productForm.nom);
-    formData.append('prix', this.productForm.prix.toString());
-    formData.append('description', this.productForm.description);
+    formData.append('prix', String(this.productForm.prix ?? 0));
+    formData.append('description', this.productForm.description ?? '');
     formData.append('boutiqueId', this.boutiqueId);
 
-    // Images optionnelles
-    this.selectedFiles.forEach((file) => {
-      formData.append('images', file);
-    });
+    this.selectedFiles.forEach((file) => formData.append('images', file));
 
     this.productService
       .createProduct(formData)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (newProduct: any) => {
+        next: () => {
           this.closeModal();
-          alert('✅ Produit ajouté avec succès !');
-          // Recharger la première page pour voir le nouveau produit
           this.currentPage = 1;
           this.loadProducts();
         },
-        error: (error: any) => {
-          console.error(error);
+        error: (err) => {
+          console.error(err);
           alert("❌ Erreur lors de l'ajout du produit");
         },
       });
   }
 
-  /**
-   * Charger tous les produits avec pagination et filtres
-   */
   loadProducts(): void {
+    if (!this.boutiqueId) return;
+
     this.isLoading = true;
     this.errorMessage = '';
 
@@ -203,13 +183,16 @@ Math: any;
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: PaginationReponse<Produit>) => {
-          console.log('Produits récupérés:', response);
-          this.products = response.data;
-          this.totalPages = response.pagination.totalPages;
-          this.totalItems = response.pagination.totalItems;
-          this.currentPage = response.pagination.page;
+          this.products = response.data ?? [];
+          this.totalPages = response.pagination?.totalPages ?? 0;
+
+          // ✅ correction: backend = total
+          this.totalItems = (response.pagination as any)?.total ?? 0;
+
+          this.currentPage = response.pagination?.page ?? this.currentPage;
           this.isLoading = false;
-          this.cdr.detectChanges();
+
+          this.cdr.markForCheck();
         },
         error: (error: any) => {
           console.error('Erreur:', error);
@@ -219,9 +202,6 @@ Math: any;
       });
   }
 
-  /**
-   * Modifier un produit
-   */
   editProduct(): void {
     if (!this.selectedProduct?._id) return;
 
@@ -230,15 +210,9 @@ Math: any;
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedProduct: Produit) => {
-          console.log('Produit modifié:', updatedProduct);
-
           const index = this.products.findIndex((p) => p._id === updatedProduct._id);
-          if (index !== -1) {
-            this.products[index] = updatedProduct;
-          }
-
+          if (index !== -1) this.products[index] = updatedProduct;
           this.closeModal();
-          this.cdr.detectChanges();
         },
         error: (error: any) => {
           console.error('Erreur:', error);
@@ -247,110 +221,61 @@ Math: any;
       });
   }
 
-  /**
-   * Voir les détails
-   */
   viewDetails(product: Produit): void {
-    console.log('Navigation vers détails de:', product);
     this.router.navigate(['/produit-boutique', product._id]);
   }
 
-  /**
-   * Obtenir la classe de stock
-   */
-  getStockClass(stock: number): string {
-    if (stock === 0) return 'stock-empty';
-    if (stock < 10) return 'stock-low';
-    return 'stock-ok';
-  }
-
-  /**
-   * MÉTHODES DE PAGINATION
-   */
-
-  /**
-   * Aller à une page spécifique
-   */
+  // Pagination
   goToPage(page: number): void {
     if (page < 1 || page > this.totalPages) return;
     this.currentPage = page;
     this.loadProducts();
   }
 
-  /**
-   * Page précédente
-   */
   previousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.loadProducts();
-    }
+    if (this.currentPage <= 1) return;
+    this.currentPage--;
+    this.loadProducts();
   }
 
-  /**
-   * Page suivante
-   */
   nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.loadProducts();
-    }
+    if (this.currentPage >= this.totalPages) return;
+    this.currentPage++;
+    this.loadProducts();
   }
 
-  /**
-   * Générer le tableau des numéros de pages à afficher
-   */
   getPageNumbers(): number[] {
     const pages: number[] = [];
     const maxPagesToShow = 5;
 
     if (this.totalPages <= maxPagesToShow) {
-      for (let i = 1; i <= this.totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, this.currentPage - 2);
-      const endPage = Math.min(this.totalPages, this.currentPage + 2);
-
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
+      for (let i = 1; i <= this.totalPages; i++) pages.push(i);
+      return pages;
     }
 
+    const startPage = Math.max(1, this.currentPage - 2);
+    const endPage = Math.min(this.totalPages, this.currentPage + 2);
+
+    for (let i = startPage; i <= endPage; i++) pages.push(i);
     return pages;
   }
 
-  /**
-   * Changer le nombre d'éléments par page
-   */
   changeLimit(newLimit: number): void {
-    this.limit = newLimit;
+    this.limit = Number(newLimit);
     this.currentPage = 1;
     this.loadProducts();
   }
 
-  /**
-   * MÉTHODES DE FILTRAGE
-   */
-
-  /**
-   * Recherche avec debounce
-   */
+  // Filtres
   onSearchChange(searchTerm: string): void {
     this.searchSubject.next(searchTerm);
   }
 
-  /**
-   * Appliquer les filtres
-   */
   applyFilters(): void {
-    this.currentPage = 1; // Retour à la première page
+    this.currentPage = 1;
     this.loadProducts();
   }
 
-  /**
-   * Réinitialiser les filtres
-   */
   resetFilters(): void {
     this.filters = {
       search: '',
@@ -363,19 +288,12 @@ Math: any;
     this.loadProducts();
   }
 
-  /**
-   * Basculer l'affichage des filtres
-   */
   toggleFilters(): void {
     this.showFilters = !this.showFilters;
   }
 
-  /**
-   * Changer le tri
-   */
   changeSorting(sortBy: 'nom' | 'prix'): void {
     if (this.filters.sortBy === sortBy) {
-      // Inverser l'ordre si on clique sur le même champ
       this.filters.sortOrder = this.filters.sortOrder === 'asc' ? 'desc' : 'asc';
     } else {
       this.filters.sortBy = sortBy;
@@ -385,20 +303,14 @@ Math: any;
     this.loadProducts();
   }
 
-  /**
-   * Vérifier si des filtres sont actifs
-   */
   hasActiveFilters(): boolean {
     return !!(
-      this.filters.search ||
+      (this.filters.search && this.filters.search.trim()) ||
       this.filters.minPrice !== undefined ||
       this.filters.maxPrice !== undefined
     );
   }
 
-  /**
-   * Obtenir l'icône de tri
-   */
   getSortIcon(field: string): string {
     if (this.filters.sortBy !== field) return 'fas fa-sort';
     return this.filters.sortOrder === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
