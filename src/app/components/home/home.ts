@@ -1,5 +1,5 @@
 // home-v2.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeaderHomeComponent } from '../header-home/header-home';
@@ -37,7 +37,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private intervalId: any;
 
-  constructor(private homeApi: HomeService) {}
+  constructor(
+    private homeApi: HomeService,
+    private cdr: ChangeDetectorRef,
+  ) {}
 
   // ✅ 4 events max
   get evenementsHome(): any[] {
@@ -52,21 +55,23 @@ export class HomeComponent implements OnInit, OnDestroy {
     return this.evenementsHome.slice(1);
   }
 
-  // ✅ Slides hero = promotions actives (max 5)
   get heroSlides(): HeroSlide[] {
     const promos = (this.promotionsActives || []).filter((p: any) => this.isPromoDisplayable(p));
 
-    const slides = promos.slice(0, 5).map((p: any) => ({
-      title: `-${p.pourcentage}% • ${p.boutique?.nom ?? 'Boutique'}`,
-      subtitle: p.titre ?? 'Promotion en cours',
-      image:
-        p.boutique?.image?.url ||
-        p.image?.url || // au cas où tu ajoutes image promo plus tard
-        'https://via.placeholder.com/1920x900?text=Promotion',
-      buttonText: 'Voir la promotion',
-      buttonLink: ['/promotions'],
-      // alternative: buttonLink: p.boutique?._id ? ['/boutiques', p.boutique._id] : ['/promotions']
-    }));
+    const slides = promos.slice(0, 5).map((p: any) => {
+      const boutiqueId = p?.boutique?._id;
+
+      return {
+        title: `-${p.pourcentage}% • ${p.boutique?.nom ?? 'Boutique'}`,
+        subtitle: p.titre ?? 'Promotion en cours',
+        image:
+          p.boutique?.image?.url ||
+          p.image?.url ||
+          'https://via.placeholder.com/1920x900?text=Promotion',
+        buttonText: 'Voir la promotion',
+        buttonLink: ['/produits', boutiqueId]
+      };
+    });
 
     if (!slides.length) {
       return [
@@ -146,6 +151,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.currentSlide = 0;
 
           this.isLoadingHomeFeed = false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.homeFeedError = err?.message || 'Erreur chargement home feed';

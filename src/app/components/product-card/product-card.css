@@ -145,24 +145,28 @@
   line-height: 1;
 }
 
-.stock-section {
+.price-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: var(--primary-beige);
-  border-radius: 20px;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.stock-section i {
-  color: var(--primary-red);
-  font-size: 1.1rem;
+.price-old {
+  font-weight: 700;
+  color: #888;
+  text-decoration: line-through;
+  font-size: 0.95rem;
 }
 
-.stock-value {
-  font-size: 1.1rem;
-  font-weight: 800;
-  color: var(--text-dark);
+.promo-badge {
+  background: #de1c36;
+  color: #fff;
+  font-weight: 900;
+  font-size: 0.8rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  line-height: 1;
 }
 
 /* ============================================

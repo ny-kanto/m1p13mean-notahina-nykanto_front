@@ -9,33 +9,6 @@
         Votre centre commercial de référence à Madagascar.
         Découvrez nos boutiques, nos promotions et vivez une expérience shopping unique.
       </p>
-      <div class="social-links">
-        @for (social of socialLinks; track social.url) {
-          <a
-            [href]="social.url"
-            [title]="social.label"
-            class="social-icon"
-            target="_blank"
-          >
-            <i [class]="social.icon"></i>
-          </a>
-        }
-      </div>
-    </div>
-
-    <!-- Section 2 : Liens rapides -->
-    <div class="footer-section">
-      <h3><i class="fas fa-link"></i> Liens rapides</h3>
-      <ul class="footer-links">
-        @for (link of quickLinks; track link.route) {
-          <li>
-            <a [routerLink]="link.route">
-              <i class="fas fa-chevron-right"></i>
-              {{ link.label }}
-            </a>
-          </li>
-        }
-      </ul>
     </div>
 
     <!-- Section 3 : Contact -->
