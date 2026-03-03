@@ -9,13 +9,13 @@ import { ProduitService } from '../../services/produit';
 import { PaginationReponse } from '../../interface/pagination-reponse';
 import { ProduitFiltre } from '../../interface/produit-filtre';
 import { AuthService } from '../../services/auth.service';
-import { HeaderBoutique } from "../header-boutique/header-boutique";
+import { HeaderBoutiqueComponent } from "../header-boutique/header-boutique";
 import { Footer } from "../footer/footer";
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [FormsModule, CommonModule, HeaderBoutique, Footer],
+  imports: [FormsModule, CommonModule, HeaderBoutiqueComponent, Footer],
   templateUrl: './product-list.html',
   styleUrls: ['./product-list.css'], // ✅ important
 })

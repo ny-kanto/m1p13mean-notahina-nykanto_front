@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service'; // ✅ adapte le path
 
 @Component({
-  selector: 'app-header',
+  selector: 'app-header-boutique',
   standalone: true,
   imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './header-boutique.html',
