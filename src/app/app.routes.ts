@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
-// import { ProductListComponent } from './components/product-list/product-list';
 import { ShopListComponent } from './components/shop-list/shop-list';
 import { ProductDetailComponent } from './components/product-detail/product-detail';
-// import { ProductDetailBoutiqueComponent } from './components/product-detail-boutique/product-detail-boutique';
 import { SignupComponent } from './components/signup/signup.component';
 import { LoginComponent } from './components/login/login';
 import { HomeComponent } from './components/home/home';
@@ -11,6 +9,7 @@ import { ShopManagementComponent } from './components/shop-management/shop-manag
 import { ShopDetailComponent } from './components/shop-detail/shop-detail';
 import { ShopDetailUserComponent } from './components/shop-detail-user/shop-detail-user';
 import { ProductListUserComponent } from './components/product-list-user/product-list-user';
+import { MallMapAdmin } from './components/mall-map-admin/mall-map-admin';
 import { EventManagementComponent } from './components/event-management/event-management';
 import { LoginAdminComponent } from './components/login-admin/login-admin';
 import { PromotionComponent } from './components/promotion/promotion';
@@ -33,4 +32,5 @@ export const routes: Routes = [
   { path: 'admin/evenements', component: EventManagementComponent },
   { path: '', component: HomeComponent },
   { path: 'mall-map', component: MallMapComponent },
+  { path: 'mall-map-admin', component: MallMapAdmin },
 ];
